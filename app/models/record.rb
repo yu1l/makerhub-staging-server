@@ -11,11 +11,15 @@
 
 # Record
 class Record < ActiveRecord::Base
+  belongs_to :user
+
   def url
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
+    bucket.acl = :public_read
     obj = bucket.objects["#{path}"]
-    "https://#{obj.url_for(:public_read).host}/#{path}"
+    obj.acl = :public_read
+    obj.public_url.to_param
   end
 
   before_create do

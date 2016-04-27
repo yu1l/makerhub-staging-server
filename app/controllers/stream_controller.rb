@@ -1,30 +1,39 @@
 # Streaming
 class StreamController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:record_done]
-  def record_done
+  skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish]
+
+  def on_publish
+    @user = User.find_by(streaming_key: params[:name])
+    @user.update(live: true)
+    render nothing: true, status: 200
+  end
+
+  def on_record_done
     flv = FFMPEG::Movie.new(params[:path])
-    name = params[:name]
+    @user = User.find_by(streaming_key: params[:name])
     options = '-vcodec copy -acodec copy'
-    flv.transcode("tmp/#{name}.mp4", options) do |progress|
+    mp4_path = "tmp/#{@user.streaming_key}.mp4"
+    flv.transcode(mp4_path, options) do |progress|
       puts progress
     end
-    save_record(name, "tmp/#{name}.mp4")
+    save_record(@user, mp4_path)
     File.delete(params[:path])
-    File.delete("tmp/#{name}.mp4")
+    File.delete(mp4_path)
     render nothing: true, status: 200
   end
 
   private
 
-  def save_record(name, mp4_path)
-    record = Record.create
-    upload_to_s3(record, name, mp4_path)
+  def save_record(user, mp4_path)
+    record = user.records.create
+    upload_to_s3(user, record, mp4_path)
   end
 
-  def upload_to_s3(record, name, mp4_path)
+  def upload_to_s3(user, record, mp4_path)
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
-    obj = bucket.objects["yhoshino11/records/#{record.id}/#{name}.mp4"]
+    obj = bucket.objects["#{user.uid}/records/#{record.uuid}.mp4"]
+    obj.acl = :public_read
     obj.write(File.open(mp4_path))
     record.update(path: obj.key)
   end

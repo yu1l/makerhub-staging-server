@@ -15,14 +15,35 @@
 #  last_sign_in_ip        :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  provider               :string
+#  uid                    :string
+#  twitter_nickname       :string
+#  twitter_image_url      :string
+#  twitter_name           :string
+#  twitter_url            :string
+#  twitter_description    :string
+#  twitter_location       :string
+#  streaming_key          :string
+#  title                  :string
+#  live                   :boolean
+#  description            :text
 #
 
 # User
 class User < ActiveRecord::Base
+  has_many :records
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+
+  before_create do
+    self.streaming_key = ((0..9).to_a.sample(8) +
+                          ('a'..'z').to_a.sample(20) +
+                          ('A'..'Z').to_a.sample(20)
+                         ).shuffle.join
+  end
 
   def self.find_or_create_from_twitter(auth)
     provider = auth[:provider]
@@ -39,12 +60,13 @@ class User < ActiveRecord::Base
       pass = Devise.friendly_token(8)
       user.password = pass
       user.password_confirmation = pass
-      user.nickname = nickname
-      user.image_url = image_url
-      user.name = name
+      user.name = nickname
+      user.twitter_nickname = nickname
+      user.twitter_image_url = image_url
+      user.twitter_name = name
       user.twitter_url = twitter_url
-      user.description = description
-      user.location = location
+      user.twitter_description = description
+      user.twitter_location = location
     end
   end
 end
