@@ -13,3 +13,4 @@ gem 'annotate'
 gem 'aws-sdk-v1'
 
 gem 'devise'
+gem 'omniauth-twitter'
