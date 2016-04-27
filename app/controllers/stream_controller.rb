@@ -17,7 +17,7 @@ class StreamController < ApplicationController
       puts progress
     end
     save_record(@user, mp4_path)
-    File.delete(params[:path])
+    File.delete("/usr/local/nginx/html/hls/#{@user.streaming_key}.flv")
     File.delete(mp4_path)
     render nothing: true, status: 200
   end
