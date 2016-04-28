@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
+# Basic
 gem 'rails'
-gem 'sqlite3'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'
@@ -14,3 +14,10 @@ gem 'aws-sdk-v1'
 
 gem 'devise'
 gem 'omniauth-twitter'
+
+group :development do
+  gem 'sqlite3'
+end
+
+group :production do
+end
