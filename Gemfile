@@ -15,6 +15,10 @@ gem 'aws-sdk-v1'
 gem 'devise'
 gem 'omniauth-twitter'
 
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'daemons'
+
 group :development do
   gem 'sqlite3'
 end

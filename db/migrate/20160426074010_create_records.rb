@@ -4,6 +4,7 @@ class CreateRecords < ActiveRecord::Migration
       t.string :video_path
       t.string :screenshot_path
       t.string :uuid
+      t.boolean :uploaded
       t.references :user, index: true, foreign_key: true
 
       t.timestamps null: false
