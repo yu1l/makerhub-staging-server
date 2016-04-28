@@ -1,0 +1,5 @@
+$('.editDescription').toggle()
+$('#editDescription').text('Edit');
+$('#editDescription').toggleClass('show');
+$('.cancel').toggle()
+$('.description').html('<%= escape_javascript(@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe) %>')

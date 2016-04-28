@@ -22,6 +22,10 @@ gem 'daemons'
 gem 'bower-rails'
 gem 'font-awesome-rails'
 
+gem 'html-pipeline'
+gem 'github-markdown'
+gem 'pushould'
+
 group :development do
   gem 'sqlite3'
 end

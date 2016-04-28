@@ -1,0 +1,5 @@
+<ul style='padding-bottom: 4px;'>
+  <% chats.each do |chat| %>
+    <li><%= "#{chat.sender}: #{chat.text}"%></li>
+  <% end %>
+</ul>

@@ -1,0 +1,130 @@
+<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
+
+  <!-- Stream Header -->
+  <div class="streamTitle">
+    <h1 class="title" style="margin-bottom: 0px;"><%= "#{@user.title || 'Anonymous'}" %></h1>
+  </div>
+
+  <% if current_user == @user %>
+    <%= link_to profile_path(name: @user.name), target: '_blank' do %>
+      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px;"><%= @user.name %></h2>
+    <% end %>
+    <a style="display:none;" class="saveTitle button is-info"><%= t('user.cancel') %></a>
+    <a class="editTitle button is-info"><%= t('user.edit_title') %></a>
+  <% else %>
+    <%= link_to profile_path(name: @user.name), target: '_blank' do %>
+      <h2 class="subtitle" style="margin-bottom: 10px;"><%= @user.name %></h2>
+    <% end %>
+  <% end %>
+
+  <!-- Stream Main -->
+  <div class="columns">
+
+    <!-- Media Player -->
+    <div class="column is-8">
+      <div class="main" style="margin-top: 0px;">
+        <%= render partial: 'player', locals: { user: @user } %>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="column is-4">
+      <div id="chat" style="padding-bottom:4px; height:330px; overflow-y:scroll;">
+        <%= render partial: 'chat', locals: { chats: @chats } %>
+      </div>
+      <% if user_signed_in? %>
+        <%= form_tag("/#{@user.name}/chat", remote: true, format: :js) do %>
+          <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;', required: false %>
+        <% end %>
+        <h2 class="subtitle msg-error" style="display:none;">Message can't be empty.</h2>
+      <% else %>
+        <%= link_to 'Sign in to chat', new_user_session_path, class: 'button is-primary is-inverted', style: 'width: 100%;' %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Description Tab -->
+  <div class="tabs">
+    <ul>
+      <li class="is-active"><a>Description</a></li>
+    </ul>
+  </div>
+
+  <!-- Description Main -->
+  <section class="hero is-info">
+    <% if current_user == @user %>
+      <div class="hero-header" style="margin-bottom: 10px;">
+        <a style="display:none;" class="cancel button is-info"><%= t('user.cancel') %></a>
+        <a class="editDescription button is-info"><%= t('user.edit_description') %></a>
+      </div>
+    <% end %>
+    <div class="container description">
+      <%= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe %>
+    </div>
+  </section>
+</div>
+
+<!-- Record -->
+<%= render partial: 'records/all', locals: { records: @user.records } %>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
+<script src='https://s3-ap-northeast-1.amazonaws.com/pushould-static-files/v0.0.2/pushould.min.js'></script>
+<script>
+  $(function() {
+    $('.message').keypress(function(e) {
+      if (e.which == 13) {
+        var _text = jQuery.trim($('.message').val());
+        if (_text.length == 0) {
+          $('.message').val('');
+          $('.msg-error').show();
+          return false;
+        }
+        $('.msg-error').hide();
+        $('#chat > ul').append('<li><% if user_signed_in? %><%= current_user.name %><% end %> : ' + $('.message').val() + '</li>')
+        $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+        $.ajax({
+          type: 'POST',
+          url: "/<%= @user.name %>/chat",
+          data: {
+            chat: {
+              text: $('.message').val()
+            }
+          },
+        });
+        $('.message').val('');
+        return false;
+      }
+    });
+    $('.editTitle').on('click', function() {
+      $(this).toggle();
+      $('.saveTitle').toggle();
+      var _title = jQuery.trim($('.streamTitle').text());
+      $('.saveTitle').attr('title', _title);
+      $('.streamTitle').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_title"><input type="text" name="user[title]" class="input updateTitle" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>')
+    });
+    $('.saveTitle').on('click', function() {
+      $(this).toggle();
+      $('#titleForm').html('<h1 class="title">' + $(this).attr('title') + '</h1>')
+      $('.editTitle').toggle();
+    });
+    $('.editDescription').on('click', function() {
+      $(this).toggle();
+      $('.cancel').toggle()
+      $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_description"><textarea class="textarea" name="user[description]"><%= escape_javascript(@user.description) %></textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
+    });
+    $('.cancel').on('click', function() {
+      $(this).toggle();
+      $('.editDescription').toggle()
+      $('.description').html('<%= escape_javascript(@content.gsub(/<h1/, "<h1 class=\"title\"").gsub(/<h2/, "<h2 class=\"subtitle\"").html_safe) %>');
+    });
+
+    $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
+    var channel = pushould.subscribe('<%= @channel %>');
+    channel.bind('send', function(msg) {
+      $('#chat > ul').append('<li>' + msg.dummy + '</li>')
+      $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    });
+  });
+</script>
