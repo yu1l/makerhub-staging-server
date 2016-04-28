@@ -38,3 +38,4 @@
                 .media
                   .media-content
                     p.title.is-5 style="color: #000;"= live_user[3].name
+= render partial: 'all', locals: { records: Record.all }

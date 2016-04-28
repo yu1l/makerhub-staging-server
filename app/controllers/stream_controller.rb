@@ -31,7 +31,7 @@ class StreamController < ApplicationController
   end
 
   def all
-    @users = User.all
+    @users = User.where(live: true)
   end
 
   def on_publish
