@@ -13,11 +13,7 @@
   <% end %>
   <div class="columns">
     <div class="column is-8">
-      <% if @record.uploaded? %>
-        <%= render partial: 'player', locals: { record: @record } %>
-      <% else %>
-        <h1>Work in progress...</h1>
-      <% end %>
+      <%= render partial: 'player', locals: { record: @record } %>
     </div>
     <div class="column is-4">
     </div>

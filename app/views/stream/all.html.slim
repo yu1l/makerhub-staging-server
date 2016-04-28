@@ -8,7 +8,7 @@
     .columns
       - unless live_user[0].nil?
         .column.is-3
-          = link_to profile_path(name: live_user[0].name), target: '_blank' do
+          = link_to stream_path(name: live_user[0].name), target: '_blank' do
             .card
               .card-content.is-info
                 .media
@@ -16,7 +16,7 @@
                     p.title.is-5 style="color: #000;"= live_user[0].name
       - unless live_user[1].nil?
         .column.is-3
-          = link_to profile_path(name: live_user[1].name), target: '_blank' do
+          = link_to stream_path(name: live_user[1].name), target: '_blank' do
             .card
               .card-content.is-info
                 .media
