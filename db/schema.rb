@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20160428071449) do
     t.string   "video_path"
     t.string   "screenshot_path"
     t.string   "uuid"
+    t.boolean  "uploaded"
     t.integer  "user_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false

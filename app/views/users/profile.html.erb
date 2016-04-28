@@ -3,7 +3,11 @@
   <% @user.records.reverse.each do |record| %>
     <div class='thumbnail' style="display:inline;">
       <%= link_to play_record_path(name: @user.name, uuid: record.uuid), target: '_blank' do %>
-        <%= image_tag record.screenshot_url, alt: record.uuid, style: 'width: 200px;height:200px;' %>
+        <% if record.uploaded? %>
+          <%= image_tag record.screenshot_url, alt: record.uuid, style: 'width: 200px;height:200px;' %>
+        <% else %>
+          <h1>Work in progress...</h1>
+        <% end %>
       <% end %>
     </div>
   <% end %>
