@@ -32,7 +32,7 @@ class StreamController < ApplicationController
   def upload_to_s3(user, record, mp4_path)
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
-    obj = bucket.objects["#{user.uid}/records/#{record.uuid}.mp4"]
+    obj = bucket.objects["#{user.uuid}/records/#{record.uuid}.mp4"]
     obj.write(File.open(mp4_path))
     obj.acl = :public_read
     record.update(path: obj.key)

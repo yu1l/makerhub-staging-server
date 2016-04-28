@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   before_create do
+    self.uuid = ((0..9).to_a.sample(3) +
+                 ('a'..'z').to_a.sample(3) +
+                 ('A'..'Z').to_a.sample(3)
+                ).shuffle.join
     self.streaming_key = ((0..9).to_a.sample(8) +
                           ('a'..'z').to_a.sample(20) +
                           ('A'..'Z').to_a.sample(20)
