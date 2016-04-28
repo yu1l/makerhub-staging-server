@@ -1,0 +1,89 @@
+<section class="hero is-info">
+  <div class="hero-content">
+    <div class="container">
+      <h2 class="subtitle"><%= "@#{records.first.user.name}さんの#{I18n.t('popular.video')}" %></h2>
+
+      <% records.reverse.each_slice(4) do |record| %>
+        <div class="columns">
+          <% unless record[0].nil? %>
+          <div class="column is-3">
+            <%= link_to play_record_path(name: record[0].user.name, uuid: record[0].uuid), target: '_blank' do %>
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-4by3"><%= image_tag record[0].screenshot_url, alt: record[0].uuid %></figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p class="title is-5" style="color: #000;"><%= "#{record[0].uuid || 'Anonymous'}" %></p>
+                      <p class="subtitle is-6" style="color: #000;"><%= "@#{record[0].user.name}" %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% end %>
+          <% unless record[1].nil? %>
+          <div class="column is-3">
+            <%= link_to play_record_path(name: record[1].user.name, uuid: record[1].uuid), target: '_blank' do %>
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-4by3"><%= image_tag record[1].screenshot_url, alt: record[1].uuid %></figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p class="title is-5" style="color: #000;"><%= "#{record[1].uuid || 'Anonymous'}" %></p>
+                      <p class="subtitle is-6" style="color: #000;"><%= "@#{record[1].user.name}" %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% end %>
+          <% unless record[2].nil? %>
+          <div class="column is-3">
+            <%= link_to play_record_path(name: record[2].user.name, uuid: record[2].uuid), target: '_blank' do %>
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-4by3"><%= image_tag record[2].screenshot_url, alt: record[2].uuid %></figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p class="title is-5" style="color: #000;"><%= "#{record[2].uuid || 'Anonymous'}" %></p>
+                      <p class="subtitle is-6" style="color: #000;"><%= "@#{record[2].user.name}" %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% end %>
+          <% unless record[3].nil? %>
+          <div class="column is-3">
+            <%= link_to play_record_path(name: record[3].user.name, uuid: record[3].uuid), target: '_blank' do %>
+              <div class="card">
+                <div class="card-image">
+                  <figure class="image is-4by3"><%= image_tag record[3].screenshot_url, alt: record[3].uuid %></figure>
+                </div>
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p class="title is-5" style="color: #000;"><%= "#{record[3].uuid || 'Anonymous'}" %></p>
+                      <p class="subtitle is-6" style="color: #000;"><%= "@#{record[3].user.name}" %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</section>
