@@ -1,11 +1,11 @@
 <h1><%= @user.streaming_key %></h1>
 <ul>
-  <% @user.records.each do |record| %>
-    <li>
+  <% @user.records.reverse.each do |record| %>
+    <div class='thumbnail' style="display:inline;">
       <%= link_to play_record_path(name: @user.name, uuid: record.uuid), target: '_blank' do %>
-        <%= image_tag record.screenshot_url, alt: record.uuid %>
+        <%= image_tag record.screenshot_url, alt: record.uuid, style: 'width: 200px;height:200px;' %>
       <% end %>
-    </li>
+    </div>
   <% end %>
 </ul>
 <%= image_tag @user.twitter_image_url, alt: "#{@user.twitter_name}" %>

@@ -20,7 +20,7 @@ class Record < ActiveRecord::Base
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
     obj = bucket.objects["#{screenshot_path}"]
-    obj.acl = :public_read
+    # obj.acl = :public_read
     obj.public_url.to_param
   end
 
@@ -29,8 +29,35 @@ class Record < ActiveRecord::Base
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
     obj = bucket.objects["#{video_path}"]
-    obj.acl = :public_read
+    # obj.acl = :public_read
     obj.public_url.to_param
+  end
+
+  def upload_to_s3(input_flv_path)
+    flv = FFMPEG::Movie.new(input_flv_path)
+    options = '-vcodec copy -acodec copy'
+    mp4_path = "tmp/#{user.streaming_key}.mp4"
+    screenshot_path = "/usr/local/nginx/html/screenshot/#{user.streaming_key}.png"
+    flv.transcode(mp4_path, options) do |progress|
+      puts progress
+    end
+    s3 = AWS::S3.new
+    bucket = s3.buckets['live-streaming-staging']
+
+    # Screenshot
+    screenshot = bucket.objects["#{user.uuid}/screenshot/#{uuid}.png"]
+    screenshot.write(File.open(screenshot_path))
+    screenshot.acl = :public_read
+
+    # Video
+    video = bucket.objects["#{user.uuid}/records/#{uuid}.mp4"]
+    video.write(File.open(mp4_path))
+    video.acl = :public_read
+
+    update(video_path: video.key, screenshot_path: screenshot.key)
+    File.delete("/usr/local/nginx/html/hls/#{user.streaming_key}.flv")
+    File.delete(screenshot_path)
+    File.delete(mp4_path)
   end
 
   before_create do
