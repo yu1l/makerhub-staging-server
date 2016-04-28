@@ -1,0 +1,36 @@
+ja:
+  mypage: マイページ
+  streaming:
+    now: 配信中
+    none: 現在配信中の動画はありません。
+  watch_stream: 配信を見る
+  user:
+    edit_title: タイトルを編集する
+    edit_description: 自己紹介を編集する
+    edit: 編集する
+    cancel: キャンセル
+    streaming_token:
+      title: ストリーミングキー
+      show: 表示する
+      hide: 非表示にする
+    description: 自己紹介
+  recording: ただいま録画を作成中です。しばらく待って再度アクセスしてください。
+  popular:
+    stream: 現在配信中
+    video: 人気の録画
+  signin:
+    title: ログイン
+    email: メールアドレスでログイン
+    submit: ログインする
+  signup:
+    title: アカウント作成
+    minimum: 文字以上
+    email: メールアドレスでアカウントを作成
+    password_confirmation: 確認用パスワード
+    submit: アカウントを作成する
+  forgot_your_password:
+    title: パスワードを忘れた場合
+  email: メールアドレス
+  password: パスワード
+  signout: ログアウト
+  streams: 現在配信中

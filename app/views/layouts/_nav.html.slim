@@ -1,0 +1,20 @@
+header.header
+  .container
+    .header-left
+      = link_to root_path, class: 'header-item' do
+        img[src="https://s3-ap-northeast-1.amazonaws.com/live-streaming-service/DnD%401x.png" alt="Logo"]
+      = link_to t('streams'), streams_path, class: 'header-item is-active', target: '_blank'
+    span.header-toggle
+      span
+      span
+      span
+    .header-right.header-menu
+      span.header-item
+        - if user_signed_in?
+          = link_to profile_path(name: current_user.name), class: 'button is-info' do
+            span= t('mypage')
+          = link_to destroy_user_session_path, class: 'button is-info' do
+            span= t('signout')
+        - else
+          = link_to new_user_session_path, class: 'button is-info' do
+            span= t('signin.title')

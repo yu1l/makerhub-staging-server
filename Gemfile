@@ -19,6 +19,9 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
+gem 'bower-rails'
+gem 'font-awesome-rails'
+
 group :development do
   gem 'sqlite3'
 end
