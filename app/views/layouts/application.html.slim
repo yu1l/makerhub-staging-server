@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    meta charset="UTF-8"
+    - if params[:name]
+      title= "DnD - #{params[:name]}"
+    - else
+      title DnD
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'http://vjs.zencdn.net/5.8.8/video-js.css', 'data-turbolinks-track' => false
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  body
+    section.hero.is-info
+      .hero-header= render partial: 'layouts/nav'
+      = yield
+    = render partial: 'layouts/footer'
+    = javascript_include_tag 'http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js', 'data-turbolinks-track' => false
+    = javascript_include_tag 'http://vjs.zencdn.net/4.2.0/video.js', 'data-turbolinks-track' => false

@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   post 'on_record_done' => 'stream#on_record_done'
   ### OBS-End
 
+  # Streams
+  get 'streams' => 'stream#all'
+
   # User-Stream
   get ':name' => 'users#stream', as: :stream
 
