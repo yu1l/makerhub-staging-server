@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160428071449) do
+ActiveRecord::Schema.define(version: 20160428125302) do
+
+  create_table "chats", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "text"
+    t.string   "sender"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "chats", ["user_id"], name: "index_chats_on_user_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -37,6 +47,7 @@ ActiveRecord::Schema.define(version: 20160428071449) do
     t.integer  "user_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.string   "title"
   end
 
   add_index "records", ["user_id"], name: "index_records_on_user_id"

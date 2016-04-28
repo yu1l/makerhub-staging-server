@@ -1,0 +1,54 @@
+.hero-content
+  .container
+    = link_to stream_path(name: @user.name), target: '_blank' do
+      span.title= @user.name
+    - if @user.live?
+      = link_to I18n.t('watch_stream'), stream_path(name: @user.name), class: 'button is-info is-small is-inverted', style: 'margin-left:5px;margin-top:3px;', target: '_blank'
+    - if current_user == @user
+      .info style="margin-top:10px;"
+        p
+          span.title.is-5= I18n.t('user.streaming_token.title')
+          button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
+          h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px;"= @user.streaming_key
+    p style="margin-top: 10px;"
+      span.subtitle タイトル
+      - if user_signed_in? && current_user == @user
+        button.button.is-small.is-info#editTitle style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+      h1.title#title= "#{@user.title || 'Anonymous'}"
+    span.subtitle= I18n.t('user.description')
+    - if user_signed_in? && current_user == @user
+      button.button.is-small.is-info#editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+    .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
+    = render partial: 'records/all', locals: { records: @user.records }
+script
+  | $('#editDescription').on('click', function() {
+  |   if ($(this).hasClass('show')) {
+  |     $(this).text('編集する');
+  |     $('.description').html('#{escape_javascript(@content.gsub(/<h1/, '<h1 class="title"').gsub(/<h2/, '<h2 class="subtitle"').html_safe)}')
+  |   } else {
+  |     $(this).text('キャンセル');
+  |     $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">#{escape_javascript(@user.description)}</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
+  |   }
+  |   $(this).toggleClass('show');
+  | });
+  | $('#editTitle').on('click', function() {
+  |   if ($(this).hasClass('show')) {
+  |     $(this).text('編集する');
+  |     $('#title').html('<h1 class="title" id="title">#{@user.title || 'Anonymous'}</h1>')
+  |   } else {
+  |     $(this).text('キャンセル');
+  |    var _title = jQuery.trim($('#title').text());
+  |    $('#title').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title"><input type="text" name="user[title]" class="input" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>')
+  |   }
+  |   $(this).toggleClass('show');
+  |  });
+  | $('#streamingKey').on('click', function() {
+  |   if ($(this).hasClass('show')) {
+  |     $(this).text('表示する');
+  |     $('#key').css('visibility', 'hidden');
+  |   } else {
+  |     $(this).text('非表示にする');
+  |     $('#key').css('visibility', 'visible');
+  |   }
+  |   $(this).toggleClass('show');
+  | });

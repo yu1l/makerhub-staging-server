@@ -34,9 +34,45 @@
 class UsersController < ApplicationController
   def profile
     @user = User.find_by(name: params[:name])
+    description = HTML::Pipeline::MarkdownFilter.new(@user.description)
+    @content = description.call
+  end
+
+  def update_description
+    @user = User.find_by(name: params[:name])
+    if @user.update(user_params)
+      description = HTML::Pipeline::MarkdownFilter.new(@user.description)
+      @content = description.call
+      render :update_description
+    end
+  end
+
+  def update_title
+    @user = User.find_by(name: params[:name])
+    if @user.update(user_params)
+      render :update_title
+    end
+  end
+
+  def update_record_title
+    @user = User.find_by(name: params[:name])
+    @record = @user.records.find_by(uuid: params[:uuid])
+    if @record.update(record_params)
+      render :update_record_title
+    end
   end
 
   def stream
     @user = User.find_by(name: params[:name])
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :title, :description)
+  end
+
+  def record_params
+    params.require(:record).permit(:title)
   end
 end

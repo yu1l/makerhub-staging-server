@@ -6,9 +6,11 @@
 #  video_path      :string
 #  screenshot_path :string
 #  uuid            :string
+#  uploaded        :boolean
 #  user_id         :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  title           :string
 #
 
 # Record
@@ -16,6 +18,7 @@ class Record < ActiveRecord::Base
   belongs_to :user
 
   def screenshot_url
+    return "/#{uuid}.png" unless uploaded?
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
@@ -25,6 +28,7 @@ class Record < ActiveRecord::Base
   end
 
   def video_url
+    return "/#{uuid}.mp4" unless uploaded?
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
@@ -33,17 +37,17 @@ class Record < ActiveRecord::Base
     obj.public_url.to_param
   end
 
-  # def copy_screenshot_and_video_to_tmp(input_flv_path)
-    # flv = FFMPEG::Movie.new(input_flv_path)
-    # options = '-vcodec copy -acodec copy'
-    # mp4_path = "tmp/#{user.streaming_key}.mp4"
-    # screenshot_path = "/usr/local/nginx/html/screenshot/#{user.streaming_key}.png"
-    # File.copy_stream(screenshot_path, "public/#{user.streaming_key}.png")
-    # flv.transcode(mp4_path, options) do |progress|
-      # puts progress
-    # end
-    # update(video_path: "public/#{user.streaming_key}.mp4", screenshot_path: "public/#{user.streaming_key}.png")
-  # end
+  def copy_screenshot_and_video_to_tmp(input_flv_path)
+    flv = FFMPEG::Movie.new(input_flv_path)
+    options = '-vcodec copy -acodec copy'
+    mp4_path = "public/#{uuid}.mp4"
+    screenshot_path = "/usr/local/nginx/html/screenshot/#{user.streaming_key}.png"
+    File.copy_stream(screenshot_path, "public/#{uuid}.png")
+    flv.transcode(mp4_path, options) do |progress|
+      puts progress
+    end
+    update(video_path: "public/#{uuid}.mp4", screenshot_path: "public/#{uuid}.png", uploaded: false)
+  end
 
   def upload_to_s3(input_flv_path)
     flv = FFMPEG::Movie.new(input_flv_path)
@@ -70,8 +74,8 @@ class Record < ActiveRecord::Base
     File.delete("/usr/local/nginx/html/hls/#{user.streaming_key}.flv")
     File.delete(screenshot_path)
     File.delete(mp4_path)
-    # File.delete("tmp/#{user.streaming_key}.png")
-    # File.delete("tmp/#{user.streaming_key}.mp4")
+    File.delete("public/#{uuid}.png")
+    File.delete("public/#{uuid}.mp4")
   end
 
   before_create do

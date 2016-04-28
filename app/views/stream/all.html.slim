@@ -1,0 +1,41 @@
+.container
+  p style='margin-top:10px;'
+  - if @users.count == 0
+    h1.title= t('streaming.none')
+  - else
+    h1.title= t('streaming.now')
+  - @users.each_slice(4) do |live_user|
+    .columns
+      - unless live_user[0].nil?
+        .column.is-3
+          = link_to stream_path(name: live_user[0].name), target: '_blank' do
+            .card
+              .card-content.is-info
+                .media
+                  .media-content
+                    p.title.is-5 style="color: #000;"= live_user[0].name
+      - unless live_user[1].nil?
+        .column.is-3
+          = link_to stream_path(name: live_user[1].name), target: '_blank' do
+            .card
+              .card-content.is-info
+                .media
+                  .media-content
+                    p.title.is-5 style="color: #000;"= live_user[1].name
+      - unless live_user[2].nil?
+        .column.is-3
+          = link_to stream_path(name: live_user[2].name), target: '_blank' do
+            .card
+              .card-content.is-info
+                .media
+                  .media-content
+                    p.title.is-5 style="color: #000;"= live_user[2].name
+      - unless live_user[3].nil?
+        .column.is-3
+          = link_to stream_path(name: live_user[3].name), target: '_blank' do
+            .card
+              .card-content.is-info
+                .media
+                  .media-content
+                    p.title.is-5 style="color: #000;"= live_user[3].name
+= render partial: 'all', locals: { records: Record.all }

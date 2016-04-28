@@ -15,8 +15,20 @@ Rails.application.routes.draw do
   # Streams
   get 'streams' => 'stream#all'
 
-  # User-Stream
-  get ':name' => 'users#stream', as: :stream
+  # Stream-User
+  get ':name' => 'stream#user', as: :stream
+
+  # Stream-Chat
+  post ':name/chat' => 'stream#chat', as: :chat
+
+  # User-Update-Description
+  post ':name/update_description' => 'users#update_description', as: :update_description
+
+  # User-Update-Title
+  post ':name/update_title' => 'users#update_title', as: :update_title
+
+  # User-Update-Record-Title
+  post ':name/record/:uuid/update_title' => 'users#update_record_title', as: :update_record_title
 
   # User-Profile
   get ':name/profile' => 'users#profile', as: :profile

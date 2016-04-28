@@ -1,11 +1,38 @@
-<% if @record.uploaded? %>
-  <video id="my-video" class="video-js" autoplay controls preload="auto" height="360" width="640" data-setup="{}">
-  <source src="<%= @record.video_url %>" type="video/mp4" />
-    <p class="vjs-no-js">
-     To view this video please enable JavaScript, and consider upgrading to a web browser that
-     <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
-  </video>
-<% else %>
-  <h1>Work in progress...</h1>
-<% end %>
+<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
+  <div class="streamTitle"><h1 class="title" style="margin-bottom: 0px;"><%= "#{@record.title || 'Anonymous'}" %></h1></div>
+  <% if current_user == @user %>
+    <%= link_to profile_path(name: @user.name), target: '_blank' do %>
+      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px;"><%= @user.name %></h2>
+    <% end %>
+    <a style="display:none;" class="saveTitle button is-info"><%= t('user.cancel') %></a>
+    <a class="editTitle button is-info"><%= t('user.edit_title') %></a>
+  <% else %>
+    <%= link_to profile_path(name: @user.name), target: '_blank' do %>
+      <h2 class="subtitle" style="margin-bottom: 10px;"><%= @user.name %></h2>
+    <% end %>
+  <% end %>
+  <div class="columns">
+    <div class="column is-8">
+      <%= render partial: 'player', locals: { record: @record } %>
+    </div>
+    <div class="column is-4">
+    </div>
+  </div>
+</div>
+<%= render partial: 'all', locals: { records: @user.records } %>
+<script>
+  $(function() {
+    $('.editTitle').on('click', function() {
+      $(this).toggle();
+      $('.saveTitle').toggle();
+      var _title = jQuery.trim($('.streamTitle').text());
+      $('.saveTitle').attr('title', _title);
+      $('.streamTitle').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/record/<%= @record.uuid %>/update_title"><input type="text" name="record[title]" class="input updateTitle" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>')
+    });
+    $('.saveTitle').on('click', function() {
+      $(this).toggle();
+      $('#titleForm').html('<h1 class="title">' + $(this).attr('title') + '</h1>')
+      $('.editTitle').toggle();
+    });
+  });
+</script>

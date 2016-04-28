@@ -34,6 +34,7 @@
 # User
 class User < ActiveRecord::Base
   has_many :records
+  has_many :chats
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
