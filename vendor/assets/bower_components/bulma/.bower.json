@@ -1,0 +1,11 @@
+{
+  "name": "bulma",
+  "_cacheHeaders": {
+    "Last-Modified": "Sat, 16 Apr 2016 14:46:30 GMT",
+    "Content-Type": "text/css"
+  },
+  "main": "index.css",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.21/css/bulma.min.css",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.21/css/bulma.min.css"
+}
