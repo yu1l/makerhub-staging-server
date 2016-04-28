@@ -15,8 +15,10 @@
 #  last_sign_in_ip        :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  uuid                   :string
 #  provider               :string
 #  uid                    :string
+#  name                   :string
 #  twitter_nickname       :string
 #  twitter_image_url      :string
 #  twitter_name           :string
@@ -24,9 +26,9 @@
 #  twitter_description    :string
 #  twitter_location       :string
 #  streaming_key          :string
-#  title                  :string
-#  live                   :boolean
-#  description            :text
+#  title                  :string           default("Anonymous Title")
+#  live                   :boolean          default(FALSE)
+#  description            :text             default("Anonymous Description")
 #
 
 # User

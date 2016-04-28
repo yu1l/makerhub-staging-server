@@ -2,22 +2,33 @@
 #
 # Table name: records
 #
-#  id         :integer          not null, primary key
-#  path       :string
-#  uuid       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  video_path      :string
+#  screenshot_path :string
+#  uuid            :string
+#  user_id         :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 
 # Record
 class Record < ActiveRecord::Base
   belongs_to :user
 
-  def url
+  def screenshot_url
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
-    obj = bucket.objects["#{path}"]
+    obj = bucket.objects["#{screenshot_path}"]
+    obj.acl = :public_read
+    obj.public_url.to_param
+  end
+
+  def video_url
+    s3 = AWS::S3.new
+    bucket = s3.buckets['live-streaming-staging']
+    bucket.acl = :public_read
+    obj = bucket.objects["#{video_path}"]
     obj.acl = :public_read
     obj.public_url.to_param
   end
