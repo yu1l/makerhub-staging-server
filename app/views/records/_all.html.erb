@@ -2,7 +2,7 @@
   <div class="hero-content">
     <div class="container">
       <% unless params[:name].nil? %>
-        <h2 class="subtitle"><%= "@#{records.first.user.name}さんの#{I18n.t('popular.video')}" %></h2>
+        <h2 class="subtitle"><%= "@#{params[:name]}さんの#{I18n.t('popular.video')}" %></h2>
       <% end %>
       <% records.reverse.each_slice(3) do |record| %>
         <div class="columns">
