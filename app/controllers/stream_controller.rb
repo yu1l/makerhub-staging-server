@@ -48,7 +48,8 @@ class StreamController < ApplicationController
     while !File.exist?("/usr/local/nginx/html/screenshot/#{@user.streaming_key}.png") do
       sleep 1
     end
-    @record.copy_screenshot_and_video_to_tmp(params[:path])
+    @record.copy_screenshot_to_tmp(params[:path])
+    @record.delay.copy_video_to_tmp(params[:path])
     @record.delay.upload_to_s3(params[:path])
     render nothing: true, status: 200
   end
