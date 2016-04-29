@@ -2,4 +2,4 @@
   <h2 class="subtitle"><%= "#{I18n.t('popular.stream')}" %></h2>
   <%= render partial: 'streaming', locals: { users: @users } %>
 </div>
-<%= render partial: 'stream/all', locals: { records: Record.all } %>
+<%= render partial: 'records/all', locals: { records: Record.all } %>
