@@ -21,7 +21,7 @@ class StreamController < ApplicationController
 
   def user
     @user = User.find_by(name: params[:name])
-    description = HTML::Pipeline::MarkdownFilter.new(@user.description)
+    description = HTML::Pipeline::MarkdownFilter.new("#{@user.description || 'There is no description.'}")
     @content = description.call
     @url = ENV['URL']
     @client_token = ENV['CLIENT_TOKEN']

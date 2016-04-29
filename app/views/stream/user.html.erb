@@ -23,7 +23,11 @@
     <!-- Media Player -->
     <div class="column is-8">
       <div class="main" style="margin-top: 0px;">
-        <%= render partial: 'player', locals: { user: @user } %>
+        <% if @user.live? %>
+          <%= render partial: 'player', locals: { user: @user } %>
+        <% else %>
+          <%= image_tag "https://s3-ap-northeast-1.amazonaws.com/live-streaming-service/offline.png", alt: 'offline' %>
+        <% end %>
       </div>
     </div>
 

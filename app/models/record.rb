@@ -11,6 +11,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  title           :string
+#  duration        :float
 #
 
 # Record
@@ -46,7 +47,7 @@ class Record < ActiveRecord::Base
     flv.transcode(mp4_path, options) do |progress|
       puts progress
     end
-    update(video_path: "public/#{uuid}.mp4", screenshot_path: "public/#{uuid}.png", uploaded: false)
+    update(video_path: "public/#{uuid}.mp4", screenshot_path: "public/#{uuid}.png", uploaded: false, duration: flv.duration)
   end
 
   def upload_to_s3(input_flv_path)
@@ -70,7 +71,7 @@ class Record < ActiveRecord::Base
     video.write(File.open(mp4_path))
     video.acl = :public_read
 
-    update(video_path: video.key, screenshot_path: screenshot.key, uploaded: true)
+    update(video_path: video.key, screenshot_path: screenshot.key, uploaded: true, duration: flv.duration)
     File.delete("/usr/local/nginx/html/hls/#{user.streaming_key}.flv")
     File.delete(screenshot_path)
     File.delete(mp4_path)

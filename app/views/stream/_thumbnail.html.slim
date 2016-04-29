@@ -1,0 +1,13 @@
+.column.is-4
+  = link_to stream_path(name: user.name), target: '_blank' do
+    .card
+      .card-content.is-info
+        .media
+          .media-left
+            figure.image.is-32x32
+              = image_tag user.twitter_image_url, alt: user.name
+          .media-content
+            p.title.is-5 style="color: #000;"= user.twitter_name
+            p.subtitle.is-6 style="color: #000;"= user.name
+        .content
+          p.subtitle.is-5 style="color: #000;"= user.title
