@@ -68,7 +68,7 @@ class Record < ActiveRecord::Base
 
     # Video
     video = bucket.objects["#{user.uuid}/records/#{uuid}.mp4"]
-    video.write(File.open(mp4_path))
+    video.write(File.open("public/#{uuid}.mp4"))
     video.acl = :public_read
 
     update(video_path: video.key, screenshot_path: screenshot.key, uploaded: true, duration: flv.duration)
