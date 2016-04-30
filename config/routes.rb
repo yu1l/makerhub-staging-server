@@ -10,6 +10,9 @@ Rails.application.routes.draw do
 
   # on_record_done
   post 'on_record_done' => 'stream#on_record_done'
+
+  # screenshot_done
+  post 'screenshot_done' => 'stream#screenshot_done'
   ### OBS-End
 
   # Streams

@@ -1,6 +1,10 @@
 .column.is-4
   = link_to stream_path(name: user.name), target: '_blank' do
     .card
+      - if File.exist?("public/#{user.uuid}_current.png")
+        .card-image
+          figure.image.is-4by3
+            = image_tag "/#{user.uuid}_current.png", alt: user.title
       .card-content.is-info
         .media
           .media-left
