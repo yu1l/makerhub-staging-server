@@ -53,6 +53,8 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_from_twitter(auth)
+    token = auth[:credentials][:token]
+    secret = auth[:credentials][:secret]
     provider = auth[:provider]
     uid = auth[:uid]
     nickname = auth[:info][:nickname]
@@ -68,6 +70,10 @@ class User < ActiveRecord::Base
       user.password = pass
       user.password_confirmation = pass
       user.name = nickname
+      user.twitter_consumer_key = ENV['TWITTER_CONSUMER_KEY']
+      user.twitter_consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+      user.twitter_oauth_token = token
+      user.twitter_oauth_token_secret = secret
       user.twitter_nickname = nickname
       user.twitter_image_url = image_url
       user.twitter_name = name
@@ -75,5 +81,31 @@ class User < ActiveRecord::Base
       user.twitter_description = description
       user.twitter_location = location
     end
+    # tweet_msg('test http://localhost')
+  end
+
+  def tweet_msg(msg)
+    @client = Twitter::REST::Client.new do |config|
+      config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+      config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+      config.access_token = token
+      config.access_token_secret = secret
+    end
+    @client.update(msg)
+    # https://card-dev.twitter.com/validator
+    # <meta name="description" content="プログラミングスクール【TechAcademy（テックアカデミー）】のオフィシャルサイト。エンジニアになれるオンラインブートキャンプを開催。大手IT企業を中心に100社以上のプログラミング研修実績あり。" />
+    # <meta name="keywords" content="プログラミング, ブートキャンプ, エンジニア, ruby on rails, パーソナルメンター" />
+    # <link rel="canonical" href="https://techacademy.jp/" />
+    # <meta property="og:type" content="website" />
+    # <meta property="og:title" content="未経験からプロを育てるオンラインブートキャンプ | TechAcademy [テックアカデミー]" />
+    # <meta property="og:description" content="プログラミング学習で、もう挫折しない。パーソナルメンターがつくオンラインブートキャンプ。" />
+    # <meta property="og:url" content="https://techacademy.jp/" />
+    # <meta property="og:image" content="https://techacademy.jp/assets/og-image-6415b5a10c909883007740c2694dab82.jpg" />
+    # <meta name="twitter:card" content="summary_large_image" />
+    # <meta name="twitter:site" content="@techacademy" />
+    # <meta name="twitter:creator" content="@techacademy" />
+    # <meta name="twitter:title" content="未経験からプロを育てるオンラインブートキャンプ | TechAcademy [テックアカデミー]" />
+    # <meta name="twitter:description" content="プログラミング学習で、もう挫折しない。パーソナルメンターがつくオンラインブートキャンプ。" />
+    # <meta name="twitter:image" content="https://techacademy.jp/assets/og-image-6415b5a10c909883007740c2694dab82.jpg" />
   end
 end

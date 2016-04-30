@@ -26,6 +26,8 @@ gem 'html-pipeline'
 gem 'github-markdown'
 gem 'pushould'
 
+gem 'twitter'
+
 group :development do
   gem 'sqlite3'
 end
