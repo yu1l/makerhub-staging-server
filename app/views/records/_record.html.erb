@@ -3,6 +3,7 @@
     <div class="card">
       <div class="card-image">
         <figure class="image is-4by3"><%= image_tag record.screenshot_url, alt: record.uuid %></figure>
+        <% unless record.uploaded? %><span class="tag is-danger" style="float:right;border-radius:0px">Making</span><% end %>
       </div>
       <div class="card-content">
         <div class="media">
