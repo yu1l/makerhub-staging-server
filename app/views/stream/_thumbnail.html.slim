@@ -1,6 +1,10 @@
 .column.is-4
   = link_to stream_path(name: user.name), target: '_blank' do
     .card
+      - if File.exist?("public/#{user.uuid}_current.png")
+        .card-image
+          figure.image.is-4by3
+            = image_tag "/#{user.uuid}_current.png", alt: user.title
       .card-content.is-info
         .media
           .media-left
@@ -10,4 +14,4 @@
             p.title.is-5 style="color: #000;"= user.twitter_name
             p.subtitle.is-6 style="color: #000;"= user.name
         .content
-          p.subtitle.is-5 style="color: #000;"= user.title
+          p.subtitle.is-5 style="color: #000;"= "#{user.title || 'Anonymous'}"
