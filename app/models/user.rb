@@ -2,33 +2,35 @@
 #
 # Table name: users
 #
-#  id                     :integer          not null, primary key
-#  email                  :string           default(""), not null
-#  encrypted_password     :string           default(""), not null
-#  reset_password_token   :string
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0), not null
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string
-#  last_sign_in_ip        :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  uuid                   :string
-#  provider               :string
-#  uid                    :string
-#  name                   :string
-#  twitter_nickname       :string
-#  twitter_image_url      :string
-#  twitter_name           :string
-#  twitter_url            :string
-#  twitter_description    :string
-#  twitter_location       :string
-#  streaming_key          :string
-#  title                  :string           default("Anonymous Title")
-#  live                   :boolean          default(FALSE)
-#  description            :text             default("Anonymous Description")
+#  id                          :integer          not null, primary key
+#  email                       :string           default(""), not null
+#  encrypted_password          :string           default(""), not null
+#  reset_password_token        :string
+#  reset_password_sent_at      :datetime
+#  remember_created_at         :datetime
+#  sign_in_count               :integer          default(0), not null
+#  current_sign_in_at          :datetime
+#  last_sign_in_at             :datetime
+#  current_sign_in_ip          :string
+#  last_sign_in_ip             :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  uuid                        :string
+#  provider                    :string
+#  uid                         :string
+#  name                        :string
+#  twitter_access_token        :string
+#  twitter_access_token_secret :string
+#  twitter_nickname            :string
+#  twitter_image_url           :string
+#  twitter_name                :string
+#  twitter_url                 :string
+#  twitter_description         :string
+#  twitter_location            :string
+#  streaming_key               :string
+#  title                       :string
+#  live                        :boolean          default(FALSE)
+#  description                 :text
 #
 
 # User
@@ -70,10 +72,8 @@ class User < ActiveRecord::Base
       user.password = pass
       user.password_confirmation = pass
       user.name = nickname
-      user.twitter_consumer_key = ENV['TWITTER_CONSUMER_KEY']
-      user.twitter_consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-      user.twitter_oauth_token = token
-      user.twitter_oauth_token_secret = secret
+      user.twitter_access_token = token
+      user.twitter_access_token_secret = secret
       user.twitter_nickname = nickname
       user.twitter_image_url = image_url
       user.twitter_name = name
@@ -88,8 +88,8 @@ class User < ActiveRecord::Base
     @client = Twitter::REST::Client.new do |config|
       config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
       config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-      config.access_token = token
-      config.access_token_secret = secret
+      config.access_token = twitter_access_token
+      config.access_token_secret = twitter_access_token_secret
     end
     @client.update(msg)
     # https://card-dev.twitter.com/validator
