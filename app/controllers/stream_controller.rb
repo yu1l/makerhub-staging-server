@@ -46,9 +46,11 @@ class StreamController < ApplicationController
 
   def user
     @user = User.find_by(name: params[:name])
-    total = @user.total
-    total += 1
-    @user.update(total: total)
+    if @user.live?
+      total = @user.total
+      total += 1
+      @user.update(total: total)
+    end
     description = HTML::Pipeline::MarkdownFilter.new("#{@user.description || 'There is no description.'}")
     @content = description.call
     @url = ENV['URL']

@@ -1,7 +1,8 @@
 .hero-content
   .container
+    p= image_tag @user.twitter_image_url, alt: @user.name
     = link_to stream_path(name: @user.name), target: '_blank' do
-      span.title= @user.name
+      span.title= "@#{@user.name}"
     - if @user.live?
       = link_to I18n.t('watch_stream'), stream_path(name: @user.name), class: 'button is-info is-small is-inverted', style: 'margin-left:5px;margin-top:3px;', target: '_blank'
     - if current_user == @user
