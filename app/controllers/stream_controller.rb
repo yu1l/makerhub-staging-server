@@ -17,6 +17,16 @@ class StreamController < ApplicationController
     render nothing: true, status: 200
   end
 
+  def extract_chat
+    @user = User.find_by(name: params[:name])
+    @url = ENV['URL']
+    @client_token = ENV['CLIENT_TOKEN']
+    @channel = @user.name
+    @chats = @user.chats.all
+    @chat = @user.chats.new
+    render layout: false
+  end
+
   def chat
     @user = User.find_by(name: params[:name])
     @chat = @user.chats.create(sender: current_user.name, text: params[:chat][:text])

@@ -1,0 +1,74 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= @user.name %> - Chat</title>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <section class="hero is-info is-fullheight">
+<div class="columns">
+  <!-- Chat Area -->
+  <div class="column is-12" style="padding-bottom:0px;">
+    <h2 class="subtitle">Chat for <%= @user.name %>'s stream</h2>
+    <div id="chat" style="padding-bottom:4px; overflow-y:scroll;">
+      <%= render partial: 'chat', locals: { chats: @chats } %>
+    </div>
+    <div id="chat_form" style="position:absolute;width:100%;bottom:0px;height:32px;">
+    <% if user_signed_in? %>
+      <%= form_tag("/#{@user.name}/chat", remote: true, format: :js) do %>
+        <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;', required: false %>
+      <% end %>
+      <h2 class="subtitle msg-error" style="display:none;">Message can't be empty.</h2>
+    <% else %>
+      <%= link_to 'Sign in to chat', new_user_session_path, class: 'button is-primary is-inverted', style: 'width: 100%;' %>
+    <% end %>
+    </div>
+  </div>
+</div>
+</section>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
+<script src='https://s3-ap-northeast-1.amazonaws.com/pushould-static-files/v0.0.2/pushould.min.js'></script>
+<script>
+  $(function() {
+    $('#chat').css('height', $(window).height() - 32);
+    $(window).resize(function() {
+      $('#chat').css('height', $(window).height() - 32);
+    });
+    $('.message').keypress(function(e) {
+      if (e.which == 13) {
+        var _text = jQuery.trim($('.message').val());
+        if (_text.length == 0) {
+          $('.message').val('');
+          $('.msg-error').show();
+          return false;
+        }
+        $('.msg-error').hide();
+        $('#chat > ul').append('<li><% if user_signed_in? %><%= current_user.name %><% end %> : ' + $('.message').val() + '</li>')
+        $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+        $.ajax({
+          type: 'POST',
+          url: "/<%= @user.name %>/chat",
+          data: {
+            chat: {
+              text: $('.message').val()
+            }
+          },
+        });
+        $('.message').val('');
+        return false;
+      }
+    });
+    $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
+    var channel = pushould.subscribe('<%= @channel %>');
+    channel.bind('send', function(msg) {
+      $('#chat > ul').append('<li>' + msg.dummy + '</li>')
+      $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    });
+  });
+</script>
+  </body>
+</html>
