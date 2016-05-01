@@ -46,6 +46,9 @@ class StreamController < ApplicationController
 
   def user
     @user = User.find_by(name: params[:name])
+    total = @user.total
+    total += 1
+    @user.update(total: total)
     description = HTML::Pipeline::MarkdownFilter.new("#{@user.description || 'There is no description.'}")
     @content = description.call
     @url = ENV['URL']
@@ -62,6 +65,7 @@ class StreamController < ApplicationController
   def on_publish
     begin
       @user = User.find_by(streaming_key: params[:token])
+      @user.update(total: 0)
       @user.update(live: true)
     rescue
       return render nothing: true, status: 500
@@ -71,9 +75,9 @@ class StreamController < ApplicationController
 
   def on_record_done
     @user = User.find_by(streaming_key: params[:token])
-    @user.update(live: false)
     @record = @user.records.create
-    @record.update(uploaded: false, title: @user.title)
+    @record.update(uploaded: false, title: @user.title, total: @user.total)
+    @user.update(live: false, total: 0)
     while !File.exist?("/usr/local/nginx/html/screenshot/#{@user.name}.png") do
       sleep 1
     end
