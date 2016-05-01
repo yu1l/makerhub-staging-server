@@ -31,6 +31,7 @@
 #  title                       :string
 #  live                        :boolean          default(FALSE)
 #  description                 :text
+#  total                       :integer
 #
 
 # User

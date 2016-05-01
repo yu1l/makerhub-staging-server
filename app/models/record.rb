@@ -12,6 +12,7 @@
 #  updated_at      :datetime         not null
 #  title           :string
 #  duration        :float
+#  total           :integer
 #
 
 # Record
