@@ -19,7 +19,7 @@
         </div>
         <div class="content">
           <p class="subtitle is-5" style="color: #000;"><%= "#{record.title || 'Anonymous'}" %></p>
-          <small><%= record.duration.ceil %> <%= t('time.sec') %></small>
+          <small><%= time(record.duration.ceil) %></small>
         </div>
       </div>
     </div>
