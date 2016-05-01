@@ -44,6 +44,7 @@ class UsersController < ApplicationController
   def update_description
     @user = User.find_by(name: params[:name])
     if @user.update(user_params)
+      @user.reload
       description = HTML::Pipeline::MarkdownFilter.new(@user.description)
       @content = description.call
       render :update_description
