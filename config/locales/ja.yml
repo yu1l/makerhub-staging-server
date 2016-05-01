@@ -1,9 +1,11 @@
 ja:
   time:
-    sec: sec.
+    hour: 時間
+    min: 分
+    sec: 秒
   omniauth:
-    twitter: Sign in with Twitter
-    notice: We don't post without permission
+    twitter: Twitter でログイン
+    notice: が勝手に投稿することはありません
   mypage: マイページ
   streaming:
     now: 配信中
