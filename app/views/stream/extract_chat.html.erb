@@ -11,7 +11,7 @@
 <div class="columns">
   <!-- Chat Area -->
   <div class="column is-12" style="padding-bottom:0px;">
-    <h2 class="subtitle">Chat for <%= @user.name %>'s stream</h2>
+    <h2 class="subtitle"><%= @user.name %> <%= t('chat.window.subtitle') %></h2>
     <div id="chat" style="padding-bottom:4px; overflow-y:scroll;">
       <%= render partial: 'chat', locals: { chats: @chats } %>
     </div>

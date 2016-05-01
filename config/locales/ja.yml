@@ -1,4 +1,7 @@
 ja:
+  chat:
+    window:
+      subtitle: chat window subtitle
   time:
     hour: 時間
     min: 分
