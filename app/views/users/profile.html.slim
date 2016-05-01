@@ -1,6 +1,6 @@
 .hero-content
   .container
-    p= image_tag @user.twitter_image_url, alt: @user.name
+    p= image_tag @user.twitter_image_url, alt: ''
     = link_to stream_path(name: @user.name), target: '_blank' do
       span.title= "@#{@user.name}"
     - if @user.live?

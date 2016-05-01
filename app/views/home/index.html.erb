@@ -1,5 +1,6 @@
 <div class="container">
   <h2 class="subtitle"><%= "#{I18n.t('popular.stream')}" %></h2>
   <%= render partial: 'streaming', locals: { users: @users } %>
+  <h2 class="subtitle"><%= "#{I18n.t('popular.video')}" %></h2>
+  <%= render partial: 'records/all', locals: { records: Record.all } %>
 </div>
-<%= render partial: 'records/all', locals: { records: Record.all } %>
