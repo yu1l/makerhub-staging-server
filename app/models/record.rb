@@ -40,7 +40,7 @@ class Record < ActiveRecord::Base
 
   def copy_screenshot_to_tmp(input_flv_path)
     flv = FFMPEG::Movie.new(input_flv_path)
-    screenshot_path = "/usr/local/nginx/html/screenshot/#{user.streaming_key}.png"
+    screenshot_path = "/usr/local/nginx/html/screenshot/#{user.name}.png"
     File.copy_stream(screenshot_path, "public/#{uuid}.png")
     update(screenshot_path: "public/#{uuid}.png", duration: flv.duration)
   end
@@ -57,7 +57,7 @@ class Record < ActiveRecord::Base
 
   def upload_to_s3(input_flv_path)
     flv = FFMPEG::Movie.new(input_flv_path)
-    screenshot_path = "/usr/local/nginx/html/screenshot/#{user.streaming_key}.png"
+    screenshot_path = "/usr/local/nginx/html/screenshot/#{user.name}.png"
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
 
