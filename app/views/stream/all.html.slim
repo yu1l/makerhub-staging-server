@@ -14,4 +14,4 @@
         = render partial: 'stream/thumbnail', locals: { user: live_user[2] }
       - unless live_user[3].nil?
         = render partial: 'stream/thumbnail', locals: { user: live_user[3] }
-= render partial: 'all', locals: { records: Record.all }
+= render partial: 'all', locals: { records: Record.select { |r| r.duration.ceil > 0 } }

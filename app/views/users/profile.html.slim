@@ -20,7 +20,7 @@
     - if user_signed_in? && current_user == @user
       button.button.is-small.is-info#editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
-    = render partial: 'records/all', locals: { records: @user.records }
+    = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
 script
   | $('#editDescription').on('click', function() {
   |   if ($(this).hasClass('show')) {

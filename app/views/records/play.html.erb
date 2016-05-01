@@ -19,7 +19,7 @@
     </div>
   </div>
 </div>
-<%= render partial: 'all', locals: { records: @user.records } %>
+<%= render partial: 'all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
 <script>
   $(function() {
     $('.editTitle').on('click', function() {
