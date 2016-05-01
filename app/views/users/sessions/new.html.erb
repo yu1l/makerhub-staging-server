@@ -4,31 +4,10 @@
       <div class="column is-3"></div>
       <div class="column is-6">
         <h1 class="title"><%= t('signin.title') %></h1>
-        <h2 class="subtitle"><%= t('signin.email') %></h2>
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-          <div class="field">
-            <%= f.label :email, class: 'label', style: 'color:#fff;' %>
-            <%= f.email_field :email, autofocus: true, class: 'input', placeholder: I18n.t('email') %>
-          </div>
-
-          <div class="field">
-            <%= f.label :password, class: 'label', style: 'color:#fff;' %>
-            <%= f.password_field :password, autocomplete: "off", class: 'input', placeholder: I18n.t('password') %>
-          </div>
-
-          <% if devise_mapping.rememberable? -%>
-            <div class="field">
-              <%= f.check_box :remember_me, class: 'checkbox' %>
-              <%= f.label :remember_me, class: 'checkbox' %>
-            </div>
-          <% end -%>
-
-          <div class="actions">
-            <%= f.submit I18n.t('signin.submit'), class: 'button is-primary is-inverted' %>
-          </div>
+        <%= link_to user_twitter_omniauth_authorize_path, class: 'button is-info is-inverted', style: 'margin-bottom:8px;' do %>
+          <i style="margin-right:4px;" class="fa fa-twitter"></i><%= t('omniauth.twitter') %>
         <% end %>
-
-        <%= render "users/shared/links" %>
+        <h2 class="subtitle"><%= t('omniauth.notice') %></h2>
       </div>
       <div class="column is-3"></div>
     </div>

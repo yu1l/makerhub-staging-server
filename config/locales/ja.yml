@@ -1,4 +1,9 @@
 ja:
+  time:
+    sec: sec.
+  omniauth:
+    twitter: Sign in with Twitter
+    notice: We don't post without permission
   mypage: マイページ
   streaming:
     now: 配信中

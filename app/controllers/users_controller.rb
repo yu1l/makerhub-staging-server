@@ -37,6 +37,7 @@
 class UsersController < ApplicationController
   def profile
     @user = User.find_by(name: params[:name])
+    @me = true if @user == current_user
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call
   end
