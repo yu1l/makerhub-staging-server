@@ -39,7 +39,8 @@ class StreamController < ApplicationController
     @pushould.trigger(room: @user.name,
                       event: 'send',
                       data: {
-                        dummy: "#{@chat.sender}:#{@chat.text}"
+                        name: "#{@chat.sender}",
+                        text: "#{@chat.text}"
                       })
     render :chat
   end

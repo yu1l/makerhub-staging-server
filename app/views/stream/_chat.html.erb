@@ -1,5 +1,5 @@
 <ul style='padding-bottom: 4px;'>
   <% chats.each do |chat| %>
-    <li><%= "#{chat.sender}: #{chat.text}"%></li>
+    <li><%= link_to chat.sender, stream_path(name: chat.sender), style: 'color: #fff;', target: '_blank' %> : <%= "#{chat.text}" %></li>
   <% end %>
 </ul>

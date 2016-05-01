@@ -95,7 +95,7 @@
           return false;
         }
         $('.msg-error').hide();
-        $('#chat > ul').append('<li><% if user_signed_in? %><%= current_user.name %><% end %> : ' + $('.message').val() + '</li>')
+        $('#chat > ul').append('<li><% if user_signed_in? %><%= link_to current_user.name, stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank' %><% end %> : ' + $('.message').val() + '</li>')
         $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
@@ -137,7 +137,7 @@
     var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
-      $('#chat > ul').append('<li>' + msg.dummy + '</li>')
+      $('#chat > ul').append('<li><a href="/' + msg.name + '" style="color:#fff;" target="_blank">' + msg.name + '</a> : ' + msg.text + '</li>');
       $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
     });
   });
