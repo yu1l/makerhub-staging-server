@@ -10,7 +10,7 @@
         p
           span.title.is-5= I18n.t('user.streaming_token.title')
           button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
-          h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px;"= "#{@user.name}?token=#{@user.streaming_key}"
+          h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px; color: #fff;"= "#{@user.name}?token=#{@user.streaming_key}"
     p style="margin-top: 10px;"
       span.subtitle タイトル
       - if user_signed_in? && current_user == @user
