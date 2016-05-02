@@ -20,6 +20,7 @@
         <div class="content">
           <p class="subtitle is-5" style="color: #000;"><%= "#{record.title || 'Anonymous'}" %></p>
           <small><%= time(record.duration.ceil) %></small>
+          <small><%= t('streaming.total') %> : <%= record.total || 0 %></small>
         </div>
       </div>
     </div>
