@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-image">
         <figure class="image is-4by3"><%= image_tag record.screenshot_url, alt: record.uuid %></figure>
-        <% unless record.uploaded? %><span class="tag is-danger" style="float:right;border-radius:0px">Making</span><% end %>
+        <% unless record.uploaded? %><span class="tag is-danger" style="float:right;border-radius:0px"><%= t('streaming.making') %></span><% end %>
       </div>
       <div class="card-content">
         <div class="media">
@@ -20,6 +20,7 @@
         <div class="content">
           <p class="subtitle is-5" style="color: #000;"><%= "#{record.title || 'Anonymous'}" %></p>
           <small><%= time(record.duration.ceil) %></small>
+          <small><%= t('streaming.total') %> : <%= record.total || 0 %></small>
         </div>
       </div>
     </div>

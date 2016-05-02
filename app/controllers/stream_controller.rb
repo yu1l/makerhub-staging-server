@@ -25,6 +25,8 @@ class StreamController < ApplicationController
     @chats = @user.chats.all
     @chat = @user.chats.new
     render layout: false
+  rescue
+    redirect_to root_path
   end
 
   def chat
@@ -43,6 +45,8 @@ class StreamController < ApplicationController
                         text: "#{@chat.text}"
                       })
     render :chat
+  rescue
+    render nothing: true, status: 500
   end
 
   def user
@@ -51,6 +55,16 @@ class StreamController < ApplicationController
       total = @user.total
       total += 1
       @user.update(total: total)
+      @pushould = Pushould.new(server_token: ENV['SERVER_TOKEN'],
+                               url: ENV['URL'],
+                               email: ENV['EMAIL'],
+                               password: ENV['PASSWORD'])
+
+      @pushould.trigger(room: @user.name,
+                        event: 'view',
+                        data: {
+                          views: total
+                        })
     end
     description = HTML::Pipeline::MarkdownFilter.new("#{@user.description || 'There is no description.'}")
     @content = description.call
@@ -59,6 +73,8 @@ class StreamController < ApplicationController
     @channel = @user.name
     @chats = @user.chats.all
     @chat = @user.chats.new
+  rescue
+    redirect_to root_path
   end
 
   def all
