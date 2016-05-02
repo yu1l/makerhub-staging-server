@@ -39,4 +39,6 @@ Rails.application.routes.draw do
 
   # User-Play-Record
   get ':name/record/:uuid' => 'records#play', as: :play_record
+
+  get '*path' => redirect('/')
 end

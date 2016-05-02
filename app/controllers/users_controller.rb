@@ -40,6 +40,8 @@ class UsersController < ApplicationController
     @me = true if @user == current_user
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call
+  rescue
+    redirect_to root_path
   end
 
   def update_description
@@ -50,6 +52,8 @@ class UsersController < ApplicationController
       @content = description.call
       render :update_description
     end
+  rescue
+    render nothing: true, status: 500
   end
 
   def update_title
@@ -57,6 +61,8 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render :update_title
     end
+  rescue
+    render nothing: true, status: 500
   end
 
   def update_record_title
@@ -65,10 +71,14 @@ class UsersController < ApplicationController
     if @record.update(record_params)
       render :update_record_title
     end
+  rescue
+    render nothing: true, status: 500
   end
 
   def stream
     @user = User.find_by(name: params[:name])
+  rescue
+    redirect_to root_path
   end
 
   private

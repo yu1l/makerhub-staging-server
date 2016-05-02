@@ -25,6 +25,8 @@ class StreamController < ApplicationController
     @chats = @user.chats.all
     @chat = @user.chats.new
     render layout: false
+  rescue
+    redirect_to root_path
   end
 
   def chat
@@ -43,6 +45,8 @@ class StreamController < ApplicationController
                         text: "#{@chat.text}"
                       })
     render :chat
+  rescue
+    render nothing: true, status: 500
   end
 
   def user
@@ -69,6 +73,8 @@ class StreamController < ApplicationController
     @channel = @user.name
     @chats = @user.chats.all
     @chat = @user.chats.new
+  rescue
+    redirect_to root_path
   end
 
   def all
