@@ -58,6 +58,8 @@ class User < ActiveRecord::Base
                           ('a'..'z').to_a.sample(20) +
                           ('A'..'Z').to_a.sample(20)
                          ).shuffle.join
+    self.title = I18n.t('user.default.title')
+    self.description = I18n.t('user.default.description')
   end
 
   def self.find_or_create_from_twitter(auth)
@@ -94,8 +96,8 @@ class User < ActiveRecord::Base
     @client = Twitter::REST::Client.new do |config|
       config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
       config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-      config.access_token = twitter_access_token
-      config.access_token_secret = twitter_access_token_secret
+      config.access_token =  token
+      config.access_token_secret = secret
     end
     @client.update(msg)
     # https://card-dev.twitter.com/validator

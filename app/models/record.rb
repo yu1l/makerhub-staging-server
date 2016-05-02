@@ -19,6 +19,10 @@
 class Record < ActiveRecord::Base
   belongs_to :user
 
+  before_create do
+    self.duration = 1.0
+  end
+
   def screenshot_url
     return "/#{uuid}.png" unless uploaded?
     s3 = AWS::S3.new
@@ -40,14 +44,18 @@ class Record < ActiveRecord::Base
   end
 
   def copy_screenshot_to_tmp(input_flv_path)
-    flv = FFMPEG::Movie.new(input_flv_path)
+    flv = FFMPEG::Movie.new("/usr/local/nginx/html/hls/#{user.name}.flv")
     screenshot_path = "/usr/local/nginx/html/screenshot/#{user.name}.png"
-    File.copy_stream(screenshot_path, "public/#{uuid}.png")
+    begin
+      File.copy_stream(screenshot_path, "public/#{uuid}.png")
+    rescue
+      puts "File does not exist on #{screenshot_path}"
+    end
     update(screenshot_path: "public/#{uuid}.png", duration: flv.duration)
   end
 
   def copy_video_to_tmp(input_flv_path)
-    flv = FFMPEG::Movie.new(input_flv_path)
+    flv = FFMPEG::Movie.new("/usr/local/nginx/html/hls/#{user.name}.flv")
     options = '-vcodec copy -acodec copy'
     mp4_path = "public/#{uuid}.mp4"
     flv.transcode(mp4_path, options) do |progress|
@@ -77,6 +85,8 @@ class Record < ActiveRecord::Base
     File.delete(screenshot_path)
     File.delete("public/#{uuid}.png")
     File.delete("public/#{uuid}.mp4")
+  rescue
+    puts 'Error on app/models/record.rb'
   end
 
   before_create do

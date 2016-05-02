@@ -15,4 +15,7 @@
             p.subtitle.is-6 style="color: #000;"= user.name
         .content
           p.subtitle.is-5 style="color: #000;"= "#{user.title || 'Anonymous'}"
-          p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total + user.records.map(&:total).inject(:+)}"
+          - if user.records.count == 0
+            p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total}"
+          - else
+            p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total + user.records.map(&:total).inject(:+)}"
