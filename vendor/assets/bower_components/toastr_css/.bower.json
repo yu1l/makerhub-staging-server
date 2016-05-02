@@ -1,0 +1,12 @@
+{
+  "name": "toastr_css",
+  "_cacheHeaders": {
+    "Last-Modified": "Thu, 27 Aug 2015 01:07:20 GMT",
+    "Content-Length": "2821",
+    "Content-Type": "text/css"
+  },
+  "main": "index.css",
+  "_source": "http://codeseven.github.io/toastr/build/toastr.min.css",
+  "_target": "*",
+  "_originalSource": "http://codeseven.github.io/toastr/build/toastr.min.css"
+}

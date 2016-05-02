@@ -13,6 +13,7 @@
 #  title           :string
 #  duration        :float
 #  total           :integer
+#  category        :integer
 #
 
 # Record
@@ -21,6 +22,7 @@ class Record < ActiveRecord::Base
 
   before_create do
     self.duration = 1.0
+    self.category = self.user.category
   end
 
   def screenshot_url

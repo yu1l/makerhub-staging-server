@@ -1,6 +1,7 @@
 /*
  *= require font-awesome
  *= require bulma
+ *= require toastr_css
  *= require_tree .
  *= require_self
  */

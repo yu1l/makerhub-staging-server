@@ -40,5 +40,11 @@ Rails.application.routes.draw do
   # User-Play-Record
   get ':name/record/:uuid' => 'records#play', as: :play_record
 
+  # User-Category
+  post ':name/category' => 'users#category'
+
+  # Reocrd-Category
+  post ':name/record/:uuid/category' => 'users#record_category'
+
   get '*path' => redirect('/')
 end

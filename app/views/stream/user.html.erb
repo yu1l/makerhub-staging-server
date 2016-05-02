@@ -3,6 +3,7 @@
   <!-- Stream Header -->
   <div class="streamTitle">
     <h1 class="title" style="margin-bottom: 0px;"><%= "#{@user.title || 'Anonymous'}" %></h1>
+    <span class="tag is-default is-medium"><%= %w(Others Ruby Python)[@user.category] %></span>
   </div>
 
   <% if current_user == @user %>

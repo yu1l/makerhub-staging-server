@@ -32,6 +32,7 @@
 #  live                        :boolean          default(FALSE)
 #  description                 :text
 #  total                       :integer
+#  category                    :integer
 #
 
 # User
@@ -60,6 +61,7 @@ class User < ActiveRecord::Base
                          ).shuffle.join
     self.title = I18n.t('user.default.title')
     self.description = I18n.t('user.default.description')
+    self.category = 0
   end
 
   def self.find_or_create_from_twitter(auth)

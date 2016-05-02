@@ -13,6 +13,7 @@
 #  title           :string
 #  duration        :float
 #  total           :integer
+#  category        :integer
 #
 
 class RecordsController < ApplicationController

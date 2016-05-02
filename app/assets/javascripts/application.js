@@ -1,5 +1,5 @@
 //= require jquery
 //= require jquery_ujs
-//= require clipboard
+//= require toastr
 //= require turbolinks
 //= require_tree .

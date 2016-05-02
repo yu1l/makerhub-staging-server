@@ -11,6 +11,11 @@
           span.title.is-5= I18n.t('user.streaming_token.title')
           button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
           h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px; color: #fff;"= "#{@user.name}?token=#{@user.streaming_key}"
+        p.control
+          span.subtitle カテゴリ
+          = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do 
+            span.select= select :user, :category, [['Others', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
+            = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
     p style="margin-top: 10px;"
       span.subtitle タイトル
       - if user_signed_in? && current_user == @user
@@ -22,6 +27,7 @@
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
     = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
 script
+  | $('select').select2();
   | $('#editDescription').on('click', function() {
   |   if ($(this).hasClass('show')) {
   |     $(this).text('編集する');
