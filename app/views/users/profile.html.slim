@@ -1,6 +1,10 @@
 .hero-content
   .container
+
+    / User Image
     p= image_tag @user.twitter_image_url, alt: ''
+
+    / User Name
     = link_to stream_path(name: @user.name), target: '_blank' do
       span.title= "@#{@user.name}"
     - if @user.live?
@@ -11,11 +15,14 @@
           span.title.is-5= I18n.t('user.streaming_token.title')
           button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
           h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px; color: #fff;"= "#{@user.name}?token=#{@user.streaming_key}"
-        p.control
-          span.subtitle カテゴリ
-          = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do 
-            span.select= select :user, :category, [['Others', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
-            = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
+    p.control
+      span.subtitle カテゴリ
+      - if current_user == @user
+        = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do 
+          span.select= select :user, :category, [['Others', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
+          = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
+      - else
+        h2.subtitle= %w(Others Ruby Python)[@user.category]
     p style="margin-top: 10px;"
       span.subtitle タイトル
       - if user_signed_in? && current_user == @user
