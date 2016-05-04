@@ -65,6 +65,12 @@ class StreamController < ApplicationController
                         data: {
                           views: total
                         })
+    else
+      if @user.records.count == 0
+        @total = @user.total
+      else
+        @total = @user.total + @user.records.map(&:total).inject(:+)
+      end
     end
     description = HTML::Pipeline::MarkdownFilter.new("#{@user.description || 'There is no description.'}")
     @content = description.call

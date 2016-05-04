@@ -27,7 +27,6 @@
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
     = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
 script
-  | $('select').select2();
   | $('#editDescription').on('click', function() {
   |   if ($(this).hasClass('show')) {
   |     $(this).text('編集する');
