@@ -42,22 +42,24 @@
     / Description
     span.subtitle= I18n.t('user.description')
     - if user_signed_in? && current_user == @user
-      button.button.is-small.is-info#editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+      a.button.is-small.is-info.editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+      a.button.is-small.is-info.saveDescription content= "#{@user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
 
     / Records
     = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
 
 script
-  | $('#editDescription').on('click', function() {
-  |   if ($(this).hasClass('show')) {
-  |     $(this).text('編集する');
-  |     $('.description').html('#{escape_javascript(@content.gsub(/<h1/, '<h1 class="title"').gsub(/<h2/, '<h2 class="subtitle"').html_safe)}')
-  |   } else {
-  |     $(this).text('キャンセル');
-  |     $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">#{escape_javascript(@user.description)}</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
-  |   }
-  |   $(this).toggleClass('show');
+  | $('.editDescription').on('click', function() {
+  |   $(this).toggle();
+  |   $('.saveDescription').toggle();
+  |   $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">' + $('.saveDescription').attr('content') + '</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
+  | });
+  | $('.saveDescription').on('click', function() {
+  |   $(this).toggle();
+  |   $('.editDescription').toggle();
+  |   var _description = $('.saveDescription').attr('description');
+  |   $('.description').html(_description);
   | });
   | $('.editTitle').on('click', function() {
   |   $(this).toggle();
