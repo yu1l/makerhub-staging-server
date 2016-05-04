@@ -3,8 +3,8 @@
   <!-- Stream Header -->
   <div class="streamTitle">
     <h1 class="title" style="margin-bottom: 0px;"><%= "#{@user.title || 'Anonymous'}" %></h1>
-    <span class="tag is-default is-medium"><%= %w(Others Ruby Python)[@user.category] %></span>
   </div>
+  <span class="tag is-default is-medium"><%= %w(Others Ruby Python)[@user.category] %></span>
 
   <% if current_user == @user %>
     <%= link_to profile_path(name: @user.name), target: '_blank' do %>
