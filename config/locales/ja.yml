@@ -8,7 +8,7 @@ ja:
     sec: 秒
   omniauth:
     twitter: Twitter でログイン
-    notice: が勝手に投稿することはありません
+    notice: DnDが勝手に投稿することはありません
   mypage: マイページ
   streaming:
     making: 作成中
