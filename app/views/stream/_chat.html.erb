@@ -1,5 +1,12 @@
 <ul style='padding-bottom: 4px;'>
   <% chats.each do |chat| %>
-    <li><%= link_to chat.sender, stream_path(name: chat.sender), style: 'color: #fff;', target: '_blank' %> : <%= "#{chat.text}" %></li>
+    <li>
+      <%= link_to stream_path(name: chat.sender), target: '_blank', style: 'color: #fff;' do %>
+        <div class="columns is-mobile" style="width:100%;">
+          <div class="column is-1" style="margin-right: 4px;width:32px;"><span class="icon"><%= image_tag User.find_by(name: chat.sender).twitter_image_url, alt: chat.sender %></span></div>
+          <div class="column is-11" style="width:91%;word-wrap:break-word;"><p><%= User.find_by(name: chat.sender).twitter_name %><br /><%= chat.text %></p></div>
+        </div>
+      <% end %>
+    </li>
   <% end %>
 </ul>

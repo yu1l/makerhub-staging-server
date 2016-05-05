@@ -10,7 +10,8 @@
       "bulma": "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.21/css/bulma.min.css",
       "jquery": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js",
       "jquery_ujs": "https://cdnjs.cloudflare.com/ajax/libs/jquery-ujs/1.2.1/rails.min.js",
-      "clipboard": "https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.10/clipboard.min.js"
+      "toastr": "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js",
+      "toastr_css": "http://codeseven.github.io/toastr/build/toastr.min.css"
     }
   }
 }

@@ -1,48 +1,78 @@
 .hero-content
   .container
+
+    / User Image
     p= image_tag @user.twitter_image_url, alt: ''
+
+    / User Name
     = link_to stream_path(name: @user.name), target: '_blank' do
       span.title= "@#{@user.name}"
+
+    / Show Live Link
     - if @user.live?
       = link_to I18n.t('watch_stream'), stream_path(name: @user.name), class: 'button is-info is-small is-inverted', style: 'margin-left:5px;margin-top:3px;', target: '_blank'
+
+    / Streaming Key
     - if current_user == @user
       .info style="margin-top:10px;"
         p
           span.title.is-5= I18n.t('user.streaming_token.title')
           button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
           h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px; color: #fff;"= "#{@user.name}?token=#{@user.streaming_key}"
+
+    / Category
+    p.control
+      span.subtitle カテゴリ
+      - if current_user == @user
+        = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do 
+          span.select= select :user, :category, [['Others', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
+          = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
+      - else
+        h2.subtitle= %w(Others Ruby Python)[@user.category]
+
+    / Title
     p style="margin-top: 10px;"
       span.subtitle タイトル
       - if user_signed_in? && current_user == @user
-        button.button.is-small.is-info#editTitle style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
-      h1.title#title= "#{@user.title || 'Anonymous'}"
+        a.button.is-small.is-info.editTitle style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+        a.button.is-small.is-info.saveTitle style="display:none;"= I18n.t('user.cancel')
+      .streamTitle
+        h1.title#title= "#{@user.title || 'Anonymous'}"
+
+    / Description
     span.subtitle= I18n.t('user.description')
     - if user_signed_in? && current_user == @user
-      button.button.is-small.is-info#editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+      a.button.is-small.is-info.editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
+      a.button.is-small.is-info.saveDescription content= "#{@user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
+
+    / Records
     = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
+
 script
-  | $('#editDescription').on('click', function() {
-  |   if ($(this).hasClass('show')) {
-  |     $(this).text('編集する');
-  |     $('.description').html('#{escape_javascript(@content.gsub(/<h1/, '<h1 class="title"').gsub(/<h2/, '<h2 class="subtitle"').html_safe)}')
-  |   } else {
-  |     $(this).text('キャンセル');
-  |     $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">#{escape_javascript(@user.description)}</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
-  |   }
-  |   $(this).toggleClass('show');
+  | $('.editDescription').on('click', function() {
+  |   $(this).toggle();
+  |   $('.saveDescription').toggle();
+  |   $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">' + $('.saveDescription').attr('content') + '</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
   | });
-  | $('#editTitle').on('click', function() {
-  |   if ($(this).hasClass('show')) {
-  |     $(this).text('編集する');
-  |     $('#title').html('<h1 class="title" id="title">#{@user.title || 'Anonymous'}</h1>')
-  |   } else {
-  |     $(this).text('キャンセル');
-  |    var _title = jQuery.trim($('#title').text());
-  |    $('#title').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title"><input type="text" name="user[title]" class="input" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>')
-  |   }
-  |   $(this).toggleClass('show');
-  |  });
+  | $('.saveDescription').on('click', function() {
+  |   $(this).toggle();
+  |   $('.editDescription').toggle();
+  |   var _description = $('.saveDescription').attr('description');
+  |   $('.description').html(_description);
+  | });
+  | $('.editTitle').on('click', function() {
+  |   $(this).toggle();
+  |   $('.saveTitle').toggle();
+  |   var _title = jQuery.trim($('.streamTitle').text());
+  |   $('.saveTitle').attr('title', _title);
+  |   $('.streamTitle').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title"><input type="text" name="user[title]" class="input updateTitle" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>');
+  | });
+  | $('.saveTitle').on('click', function() {
+  |   $(this).toggle();
+  |   $('#titleForm').html('<h1 class="title">' + $(this).attr('title') + '</h1>');
+  |   $('.editTitle').toggle();
+  | });
   | $('#streamingKey').on('click', function() {
   |   if ($(this).hasClass('show')) {
   |     $(this).text('表示する');

@@ -38,10 +38,13 @@ class StreamController < ApplicationController
                              email: ENV['EMAIL'],
                              password: ENV['PASSWORD'])
 
+    @sender = User.find_by(name: @chat.sender)
     @pushould.trigger(room: @user.name,
                       event: 'send',
                       data: {
                         name: "#{@chat.sender}",
+                        image: "#{@sender.twitter_image_url}",
+                        nickname: "#{@sender.twitter_name}",
                         text: "#{@chat.text}"
                       })
     render :chat
@@ -65,6 +68,12 @@ class StreamController < ApplicationController
                         data: {
                           views: total
                         })
+    else
+      if @user.records.count == 0
+        @total = @user.total
+      else
+        @total = @user.total + @user.records.map(&:total).inject(:+)
+      end
     end
     description = HTML::Pipeline::MarkdownFilter.new("#{@user.description || 'There is no description.'}")
     @content = description.call

@@ -8,26 +8,11 @@
   </head>
   <body>
     <section class="hero is-info is-fullheight">
-<div class="columns">
-  <!-- Chat Area -->
-  <div class="column is-12" style="padding-bottom:0px;">
-    <h2 class="subtitle"><%= @user.name %> <%= t('chat.window.subtitle') %></h2>
-    <div id="chat" style="padding-bottom:4px; overflow-y:scroll;">
-      <%= render partial: 'chat', locals: { chats: @chats } %>
-    </div>
-    <div id="chat_form" style="position:absolute;width:100%;bottom:0px;height:32px;">
-    <% if user_signed_in? %>
-      <%= form_tag("/#{@user.name}/chat", remote: true, format: :js) do %>
-        <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;', required: false %>
-      <% end %>
-      <h2 class="subtitle msg-error" style="display:none;">Message can't be empty.</h2>
-    <% else %>
-      <%= link_to 'Sign in to chat', new_user_session_path, class: 'button is-primary is-inverted', style: 'width: 100%;' %>
-    <% end %>
-    </div>
-  </div>
-</div>
-</section>
+      <div id="chat" style="overflow-y:scroll;height:100%;">
+        <%= render partial: 'chat', locals: { chats: @chats } %>
+      </div>
+      <%= render partial: 'stream/chat_form' %>
+    </section>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
 <script src='https://s3-ap-northeast-1.amazonaws.com/pushould-static-files/v0.0.2/pushould.min.js'></script>

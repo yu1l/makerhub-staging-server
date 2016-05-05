@@ -32,9 +32,21 @@
 #  live                        :boolean          default(FALSE)
 #  description                 :text
 #  total                       :integer
+#  category                    :integer
 #
 
 class UsersController < ApplicationController
+  def category
+    current_user.update(user_params)
+    render :category
+#    redirect_to profile_path(name: current_user.name)
+  end
+
+  def record_category
+    current_user.records.find_by(uuid: params[:uuid]).update(record_params)
+    redirect_to play_record_path(name: current_user.name, uuid: params[:uuid])
+  end
+
   def profile
     @user = User.find_by(name: params[:name])
     @me = true if @user == current_user
@@ -47,7 +59,6 @@ class UsersController < ApplicationController
   def update_description
     @user = User.find_by(name: params[:name])
     if @user.update(user_params)
-      @user.reload
       description = HTML::Pipeline::MarkdownFilter.new(@user.description)
       @content = description.call
       render :update_description
@@ -84,10 +95,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :title, :description)
+    params.require(:user).permit(:name, :title, :description, :category)
   end
 
   def record_params
-    params.require(:record).permit(:title)
+    params.require(:record).permit(:title, :category)
   end
 end
