@@ -25,5 +25,18 @@ header.header
           = link_to destroy_user_session_path, class: 'header-item' do
             span= t('signout')
         - else
-          = link_to new_user_session_path, class: 'button is-info', target: '_blank'  do
-            span= t('signin.title')
+          a.button.is-info.is-inverted.modal-button#signin_button data-target='#signin'= t('signin.title')
+          .modal#signin
+            .modal-background style="background-color: rgba(0,0,0,0.5);"
+            .modal-container
+              .modal-content
+                .box
+                  article.media
+                    .media-content
+                      .content
+                        = link_to user_twitter_omniauth_authorize_path, class: 'button is-info', style: 'margin-bottom:16px;' do
+                          i style="margin-right:4px;" class="fa fa-twitter"
+                          span= t('omniauth.twitter')
+                        br /
+                        span.subtitle style="color:#000;"= t('omniauth.notice')
+            .modal-close
