@@ -38,10 +38,13 @@ class StreamController < ApplicationController
                              email: ENV['EMAIL'],
                              password: ENV['PASSWORD'])
 
+    @sender = User.find_by(name: @chat.sender)
     @pushould.trigger(room: @user.name,
                       event: 'send',
                       data: {
                         name: "#{@chat.sender}",
+                        image: "#{@sender.twitter_image_url}",
+                        nickname: "#{@sender.twitter_name}",
                         text: "#{@chat.text}"
                       })
     render :chat

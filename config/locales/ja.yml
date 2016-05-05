@@ -15,6 +15,7 @@ ja:
     total: 総視聴者数
     now: 配信中
     none: 現在配信中の動画はありません。
+    open_chat_window: チャット画面を開く
   watch_stream: 配信を見る
   user:
     default:

@@ -35,9 +35,9 @@
     </div>
 
     <!-- Chat Area -->
-    <div class="column is-4" id="chat_area">
+    <div class="column is-4" id="chat_area" style="margin-top:-25px;">
       <a href="/<%= @user.name%>/chat_window" class="button is-info is-small extract_chat">
-        <i class="fa fa-external-link fa-1" aria-hidden="true"></i>
+        <i class="fa fa-external-link fa-1" aria-hidden="true"></i><%= t('streaming.open_chat_window') %>
       </a>
       <div id="chat" style="padding-bottom:4px; height:330px; overflow-y:scroll;">
         <%= render partial: 'chat', locals: { chats: @chats } %>
@@ -98,7 +98,12 @@
           return false;
         }
         $('.msg-error').hide();
-        $('#chat > ul').append('<li><% if user_signed_in? %><%= link_to current_user.name, stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank' %><% end %> : ' + $('.message').val() + '</li>')
+        $('#chat > ul').append('<% if user_signed_in? %><li><%= link_to stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank'  do %>' + 
+          '<div class="columns" style="width:100%;">' +
+            '<div class="column is-1" style="margin-right: 4px;"><span class="icon"><%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %></span></div>' +
+            '<div class="column is-11"><%= current_user.name %>' + '<br />' + $('.message').val() + '</div>' +
+          '</div>' +
+          '<% end %></li><% end %>');
         $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
@@ -140,7 +145,13 @@
     var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
-      $('#chat > ul').append('<li><a href="/' + msg.name + '" style="color:#fff;" target="_blank">' + msg.name + '</a> : ' + msg.text + '</li>');
+      $('#chat > ul').append(
+        '<li><a href="/' + msg.name + '" style="color:#fff;" target="_blank">' +
+          '<div class="columns" style="width:100%;">' +
+            '<div class="column is-1" style="margin-right: 4px;"><span class="icon"><img src="' + msg.image + '" alt="' + msg.name + '" /></span></div>' +
+            '<div class="column is-11">' + msg.nickname + '<br />' + msg.text + '</div>' +
+          '</div>' +
+        '</a></li>');
       $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
     });
     channel.bind('view', function(msg) {
