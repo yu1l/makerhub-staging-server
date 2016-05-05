@@ -1,21 +1,21 @@
 <div class="container" style="padding-top: 20px; padding-bottom: 20px;">
   <div class="streamTitle"><h1 class="title" style="margin-bottom: 0px;"><%= "#{@record.title || 'Anonymous'}" %></h1></div>
-  <span class="tag is-default is-medium"><%= %w(Others Ruby Python)[@record.category] %></span>
+  <span class="tag is-default" style="margin-top:8px;"><%= %w(Others Ruby Python)[@record.category] %></span>
   <% if current_user == @user %>
     <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px;"><%= @user.name %></h2>
+      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px; padding-left:4px;"><%= @user.name %></h2>
     <% end %>
     <a style="display:none;" class="saveTitle button is-info"><%= t('user.cancel') %></a>
     <a class="editTitle button is-info"><%= t('user.edit_title') %></a>
   <% else %>
     <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-bottom: 10px;"><%= @user.name %></h2>
+      <h2 class="subtitle" style="margin-bottom: 10px; padding-left:4px;"><%= @user.name %></h2>
     <% end %>
   <% end %>
   <div class="columns">
     <div class="column is-8">
       <%= render partial: 'player', locals: { record: @record } %>
-      <h2 class="subtitle" id="total"><%= t('streaming.total') %> : <%= @record.total %></h2>
+      <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @record.total %></h2>
     </div>
     <div class="column is-4">
     </div>

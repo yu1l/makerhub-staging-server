@@ -4,17 +4,17 @@
   <div class="streamTitle">
     <h1 class="title" style="margin-bottom: 0px;"><%= "#{@user.title || 'Anonymous'}" %></h1>
   </div>
-  <span class="tag is-default is-medium"><%= %w(Others Ruby Python)[@user.category] %></span>
+  <span class="tag is-default" style="margin-top:8px;"><%= %w(Others Ruby Python)[@user.category] %></span>
 
   <% if current_user == @user %>
-    <%= link_to profile_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px;"><%= @user.name %></h2>
+    <%= link_to stream_path(name: @user.name), target: '_blank' do %>
+      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px; padding-left:4px;"><%= @user.name %></h2>
     <% end %>
     <a style="display:none;" class="saveTitle button is-info"><%= t('user.cancel') %></a>
     <a class="editTitle button is-info"><%= t('user.edit_title') %></a>
   <% else %>
     <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-bottom: 10px;"><%= @user.name %></h2>
+      <h2 class="subtitle" style="margin-bottom: 10px; padding-left:4px;"><%= @user.name %></h2>
     <% end %>
   <% end %>
 
@@ -26,10 +26,10 @@
       <div class="main" style="margin-top: 0px;">
         <% if @user.live? %>
           <%= render partial: 'player', locals: { user: @user } %>
-          <h2 class="subtitle" id="total"><%= t('streaming.total') %> : <%= @user.total %></h2>
+          <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @user.total %></h2>
         <% else %>
           <%= image_tag "https://s3-ap-northeast-1.amazonaws.com/live-streaming-service/offline.png", alt: 'offline' %>
-          <h2 class="subtitle" id="total"><%= t('streaming.total') %> : <%= @total %></h2>
+          <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @total %></h2>
         <% end %>
       </div>
     </div>
