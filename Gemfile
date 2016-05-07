@@ -27,6 +27,7 @@ gem 'github-markdown'
 gem 'pushould'
 
 gem 'twitter'
+gem 'acts_as_follower'
 
 group :development do
   gem 'sqlite3'
