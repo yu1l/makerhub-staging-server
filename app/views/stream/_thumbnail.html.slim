@@ -19,4 +19,4 @@
             p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total}"
           - else
             p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total + user.records.map(&:total).inject(:+)}"
-          p.subtitle.is-6 style="color: #000"= %w(Others Ruby Python)[user.category]
+          p.subtitle.is-6 style="color: #000"= %w(UI/UX Ruby Python)[user.category]

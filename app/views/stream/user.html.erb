@@ -4,7 +4,7 @@
   <div class="streamTitle">
     <h1 class="title" style="margin-bottom: 0px;"><%= "#{@user.title || 'Anonymous'}" %></h1>
   </div>
-  <span class="tag is-default" style="margin-top:8px;"><%= %w(Others Ruby Python)[@user.category] %></span>
+  <span class="tag is-default" style="margin-top:8px;"><%= %w(UI/UX Ruby Python)[@user.category] %></span>
 
   <% if current_user == @user %>
     <%= link_to stream_path(name: @user.name), target: '_blank' do %>
