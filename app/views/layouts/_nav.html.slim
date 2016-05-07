@@ -22,8 +22,6 @@ header.header
           - else
             = link_to profile_path(name: current_user.name), class: 'button is-info', target: '_blank'  do
               span= t('mypage')
-          = link_to destroy_user_session_path, class: 'header-item' do
-            span= t('signout')
         - else
           a.button.is-info.is-inverted.modal-button#signin_button data-target='#signin'= t('signin.title')
           .modal#signin

@@ -48,6 +48,9 @@
 
     / Records
     = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
+    - if current_user == @user
+      p= link_to destroy_user_session_path, class: 'button is-danger' do
+        span= t('signout')
 
 script
   | $('.editDescription').on('click', function() {
