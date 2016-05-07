@@ -19,7 +19,7 @@
         </div>
         <div class="content">
           <p class="subtitle is-5" style="color: #000;"><%= "#{record.title || 'Anonymous'}" %></p>
-          <p class="subtitle is-6" style="color: #000;"><%= %w(Others Ruby Python)[record.category] %></p>
+          <p class="subtitle is-6" style="color: #000;"><%= %w(UI/UX Ruby Python)[record.category] %></p>
           <small><%= time(record.duration.ceil) %></small>
           <small><%= t('streaming.total') %> : <%= record.total || 0 %></small>
         </div>

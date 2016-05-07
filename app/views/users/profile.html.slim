@@ -25,10 +25,10 @@
       span.subtitle カテゴリ
       - if current_user == @user
         = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do 
-          span.select= select :user, :category, [['Others', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
+          span.select= select :user, :category, [['UI/UX', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
           = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
       - else
-        h2.subtitle= %w(Others Ruby Python)[@user.category]
+        h2.subtitle= %w(UI/UX Ruby Python)[@user.category]
 
     / Title
     p style="margin-top: 10px;"
