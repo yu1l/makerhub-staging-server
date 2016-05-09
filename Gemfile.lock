@@ -36,6 +36,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    acts_as_follower (0.2.1)
     addressable (2.4.0)
     annotate (2.7.0)
       activerecord (>= 3.2, < 6.0)
@@ -221,6 +222,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_follower
   annotate
   aws-sdk-v1
   bower-rails

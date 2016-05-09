@@ -37,6 +37,9 @@
 
 # User
 class User < ActiveRecord::Base
+  acts_as_followable
+  acts_as_follower
+
   has_many :records
   has_many :chats
 

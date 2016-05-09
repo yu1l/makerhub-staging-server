@@ -24,7 +24,7 @@
     p.control
       span.subtitle カテゴリ
       - if current_user == @user
-        = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do 
+        = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do
           span.select= select :user, :category, [['UI/UX', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
           = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
       - else
@@ -45,6 +45,29 @@
       a.button.is-small.is-info.editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
       a.button.is-small.is-info.saveDescription content= "#{@user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
+
+    / Followings/Followers
+    .columns
+      .column.is-6
+        h2.subtitle Followings
+        - @user.all_following.each do |following|
+          = link_to stream_path(name: following.name), target: '_blank' do
+            article.media
+              figure.media-left
+                p.image.is-32x32= image_tag following.twitter_image_url, alt: following.name
+              .media-content
+                .content
+                  p.strong style="color:#fff;"= following.twitter_name
+      .column.is-6
+        h2.subtitle Followers
+        - @user.followers.each do |follower|
+          = link_to stream_path(name: follower.name), target: '_blank' do
+            article.media
+              figure.media-left
+                p.image.is-32x32= image_tag follower.twitter_image_url, alt: follower.name
+              .media-content
+                .content
+                  p.strong style="color:#fff;"= follower.twitter_name
 
     / Records
     = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }

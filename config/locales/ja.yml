@@ -18,6 +18,11 @@ ja:
     open_chat_window: チャット画面を開く
   watch_stream: 配信を見る
   user:
+    follow: Follow
+    followers: Followers
+    following: Following
+    followings: Followings
+    unfollow: Unfollow
     default:
       title: はじめました٩(♡ε♡ )۶
       description: はじめました٩(♡ε♡ )۶ よろしくお願いします！
