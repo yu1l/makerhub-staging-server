@@ -33,11 +33,11 @@
         <% end %>
         <% unless current_user == @user %>
           <% if current_user.following?(@user) %>
-            <%= link_to t('user.unfollow'), unfollow_path(name: @user.name), class: 'button is-danger unfollow', style: 'float:right;' %>
-            <%= link_to t('user.follow'), follow_path(name: @user.name), class: 'button is-success follow', style: 'float:right;display:none;' %>
+            <%= button_tag t('user.unfollow'), class: 'button is-danger unfollow', style: 'float:right;' %>
+            <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;display:none;' %>
           <% else %>
-            <%= link_to t('user.follow'), follow_path(name: @user.name), class: 'button is-success follow', style: 'float:right;' %>
-            <%= link_to t('user.unfollow'), unfollow_path(name: @user.name), class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+            <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;' %>
+            <%= button_tag t('user.unfollow'),  class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
           <% end %>
         <% end %>
       </div>
