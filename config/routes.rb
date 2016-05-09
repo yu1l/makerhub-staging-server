@@ -43,8 +43,14 @@ Rails.application.routes.draw do
   # User-Category
   post ':name/category' => 'users#category'
 
-  # Reocrd-Category
+  # Record-Category
   post ':name/record/:uuid/category' => 'users#record_category'
+
+  # Follow
+  get ':name/follow' => 'users#follow', as: :follow
+
+  # Unfollow
+  get ':name/unfollow' => 'users#unfollow', as: :unfollow
 
   get '*path' => redirect('/')
 end

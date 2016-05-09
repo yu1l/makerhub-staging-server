@@ -29,7 +29,16 @@
           <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @user.total %></h2>
         <% else %>
           <%= image_tag "https://s3-ap-northeast-1.amazonaws.com/live-streaming-service/offline.png", alt: 'offline' %>
-          <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @total %></h2>
+          <span class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @total %></span>
+        <% end %>
+        <% unless current_user == @user %>
+          <% if current_user.following?(@user) %>
+            <%= link_to t('user.unfollow'), unfollow_path(name: @user.name), class: 'button is-danger unfollow', style: 'float:right;' %>
+            <%= link_to t('user.follow'), follow_path(name: @user.name), class: 'button is-success follow', style: 'float:right;display:none;' %>
+          <% else %>
+            <%= link_to t('user.follow'), follow_path(name: @user.name), class: 'button is-success follow', style: 'float:right;' %>
+            <%= link_to t('user.unfollow'), unfollow_path(name: @user.name), class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -82,6 +91,28 @@
 <script src='https://s3-ap-northeast-1.amazonaws.com/pushould-static-files/v0.0.2/pushould.min.js'></script>
 <script>
   $(function() {
+    $('.follow').click(function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'GET',
+        url: "/<%= @user.name %>/follow",
+        success: function() {
+          $('.follow').hide();
+          $('.unfollow').show();
+        }
+      });
+    });
+    $('.unfollow').click(function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'GET',
+        url: "/<%= @user.name %>/unfollow",
+        success: function() {
+          $('.unfollow').hide();
+          $('.follow').show();
+        }
+      });
+    });
     $('.extract_chat').on('click', function(e) {
       e.preventDefault();
       var url = $(this).attr('href');
@@ -98,7 +129,7 @@
           return false;
         }
         $('.msg-error').hide();
-        $('#chat > ul').append('<% if user_signed_in? %><li><%= link_to stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank'  do %>' + 
+        $('#chat > ul').append('<% if user_signed_in? %><li><%= link_to stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank'  do %>' +
           '<div class="columns is-mobile" style="width:100%;">' +
             '<div class="column is-1" style="margin-right: 4px;width:32px;"><span class="icon"><%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %></span></div>' +
             '<div class="column is-11" style="width:91%;word-wrap:break-word;"><%= current_user.name %>' + '<br />' + $('.message').val() + '</div>' +

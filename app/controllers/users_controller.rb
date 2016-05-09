@@ -36,10 +36,22 @@
 #
 
 class UsersController < ApplicationController
+  def follow
+    @user = User.find_by(name: params[:name])
+    current_user.follow(@user)
+    render nothing: true, status: 200
+  end
+
+  def unfollow
+    @user = User.find_by(name: params[:name])
+    current_user.stop_following(@user)
+    render nothing: true, status: 200
+  end
+
   def category
     current_user.update(user_params)
     render :category
-#    redirect_to profile_path(name: current_user.name)
+    # redirect_to profile_path(name: current_user.name)
   end
 
   def record_category
