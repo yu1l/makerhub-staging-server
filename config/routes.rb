@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   # Stream-User
   get ':name' => 'stream#user', as: :stream
 
+  # Stream-Current
+  post ':name/current' => 'stream#current'
+
   # Stream-Chat
   get ':name/chat_window' => 'stream#extract_chat', as: :extract_chat
   post ':name/chat' => 'stream#chat', as: :chat

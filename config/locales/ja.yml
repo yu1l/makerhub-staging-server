@@ -13,6 +13,7 @@ ja:
   streaming:
     making: 作成中
     total: 総視聴者数
+    current: 閲覧
     now: 配信中
     none: 現在配信中の動画はありません。
     open_chat_window: チャット画面を開く
