@@ -1,6 +1,6 @@
 # Streaming
 class StreamController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish, :chat, :screenshot_done]
+  skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish, :chat, :screenshot_done, :current]
 
   def screenshot_done
     @user = User.find_by(name: params[:name])
@@ -27,6 +27,21 @@ class StreamController < ApplicationController
     render layout: false
   rescue
     redirect_to root_path
+  end
+
+  def current
+    @user = User.find_by(name: params[:name])
+    @pushould = Pushould.new(server_token: ENV['SERVER_TOKEN'],
+                             url: ENV['URL'],
+                             email: ENV['EMAIL'],
+                             password: ENV['PASSWORD'])
+
+    @pushould.trigger(room: @user.name,
+                      event: 'check',
+                      data: {})
+    render nothing: true, status: 200
+  rescue
+    render nothing: true, status: 500
   end
 
   def chat
