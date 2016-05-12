@@ -69,32 +69,52 @@
       <% end %>
     </div>
   </div>
-  <!-- Record -->
-  <%= render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
-</div>
-<div class="container">
 
-  <!-- Description Tab -->
-  <div class="tabs">
+  <!-- Tabs -->
+  <div class="tabs" style="margin-bottom:16px;">
     <ul>
-      <li class="is-active"><a><%= t('user.description') %></a></li>
+      <li id="description" class="is-active"><a>自己紹介</a></li>
+      <li id="record"><a>人気の録画 : <%= @user.records.count %></a></li>
+      <li id="following"><a>フォロー中 : <%= @user.all_following.count %></a></li>
+      <li id="follower"><a>フォロワー : <%= @user.followers.count %></a></li>
     </ul>
   </div>
 
-  <!-- Description Main -->
-  <section class="hero is-info">
-    <% if current_user == @user %>
-      <div class="hero-header" style="margin-bottom: 10px;">
-        <a style="display:none;" class="cancel button is-info"><%= t('user.cancel') %></a>
-        <a class="editDescription button is-info"><%= t('user.edit_description') %></a>
-      </div>
-    <% end %>
-    <div class="container description">
-      <%= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe %>
-    </div>
-  </section>
-</div>
+  <div id="information">
 
+    <!-- Description -->
+    <div class="columns" id="de">
+      <div class="column is-12">
+        <p class="control is-grouped">
+          <% if @user.provider == 'twitter' %>
+            <%= link_to "https://twitter.com/#{@user.name}", class: 'button is-info', target: '_blank' do %>
+              <i class="fa fa-twitter"></i><span style="padding-left:8px;">Twitter</span>
+            <% end %>
+          <% end %>
+        </p>
+        <div class="content" style="padding-bottom:16px;">
+          <%= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Records -->
+    <div id="re" style="display:none;">
+      <%= render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
+    </div>
+
+    <!-- Following -->
+    <div id="fing" style="display:none;">
+      <%= render partial: 'users/following', locals: { followings: @user.all_following } %>
+    </div>
+
+    <!-- Follower -->
+    <div id="fwer" style="display:none;">
+      <%= render partial: 'users/followers', locals: { followers: @user.followers } %>
+    </div>
+
+  </div>
+</div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
@@ -102,6 +122,35 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js'></script>
 <script>
   $(function() {
+    $('#description').click(function() {
+//      $('#de').height($('body').scrollTop() + $(this).offset().top);
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#de').show();
+      $('#de').siblings().hide()
+    });
+    $('#record').click(function() {
+//      $('#re').height($('body').scrollTop() + $(this).offset().top);
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#re').show();
+      $('#re').siblings().hide()
+    });
+    $('#following').click(function() {
+//      $('#fing').height($('body').scrollTop() + $(this).offset().top);
+      $('body').get(0).scrollHeight;
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#fing').show();
+      $('#fing').siblings().hide()
+    });
+    $('#follower').click(function() {
+//      $('#fwer').height($('body').scrollTop() + $(this).offset().top);
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#fwer').show();
+      $('#fwer').siblings().hide()
+    });
     $('#comment_area').height($('#live').height() - 28);
     $('#comments').perfectScrollbar();
     $(window).resize(function() {

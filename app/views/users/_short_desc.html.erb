@@ -1,0 +1,31 @@
+<div class="box">
+  <article class="media">
+    <div class="media-left">
+      <figure class="image is-64x64">
+        <%= image_tag user.twitter_image_url, alt: user.name %>
+      </figure>
+    </div>
+    <div class="media-content">
+      <div class="content">
+        <p>
+          <span class="tag is-dark is-small"><%= category(user.category) %></span>
+          <br />
+          <strong><%= user.twitter_name %></strong>
+          <small>@<%= user.name %></small>
+          <br />
+          <% if user_signed_in? %>
+            <% unless current_user == user %>
+              <% if current_user.following?(user) %>
+                <%= button_tag t('user.unfollow'), class: 'button is-danger is-small unfollow' %>
+                <%= button_tag t('user.follow'), class: 'button is-success is-small follow' %>
+              <% else %>
+                <%= button_tag t('user.follow'), class: 'button is-success is-small follow' %>
+                <%= button_tag t('user.unfollow'),  class: 'button is-danger is-small unfollow' %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </article>
+</div>

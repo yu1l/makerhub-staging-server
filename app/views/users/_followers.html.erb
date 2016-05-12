@@ -1,0 +1,24 @@
+<% followers.each_slice(4) do |follower| %>
+  <div class="columns">
+    <% unless follower[0].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: follower[0] } %>
+      </div>
+    <% end %>
+    <% unless follower[1].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: follower[1] } %>
+      </div>
+    <% end %>
+    <% unless follower[2].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: follower[2] } %>
+      </div>
+    <% end %>
+    <% unless follower[3].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: follower[3] } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
