@@ -1,4 +1,4 @@
-<div id="chat_form" style="position:fixed;width:100%;bottom:0px;height:32px;">
+<div id="chat_form" style="position:fixed;width:100%;bottom:0px;">
   <% if user_signed_in? %>
     <%= form_tag("/#{@user.name}/chat", remote: true, format: :js) do %>
       <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;', required: false %>
