@@ -2,7 +2,8 @@
   "lib": {
     "name": "bower-rails generated lib assets",
     "dependencies": {
-      "bulma": "https://github.com/jgthms/bulma.git"
+      "bulma": "https://github.com/jgthms/bulma.git",
+      "perfect_scrollbar": "https://github.com/noraesae/perfect-scrollbar.git"
     }
   },
   "vendor": {
@@ -12,7 +13,8 @@
       "jquery_ujs": "https://cdnjs.cloudflare.com/ajax/libs/jquery-ujs/1.2.1/rails.min.js",
       "toastr": "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js",
       "toastr_css": "http://codeseven.github.io/toastr/build/toastr.min.css",
-      "balloon": "https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css"
+      "balloon": "https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css",
+      "perfect_scrollbar": "https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js"
     }
   }
 }

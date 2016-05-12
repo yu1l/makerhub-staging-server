@@ -1,0 +1,14 @@
+{
+  "name": "perfect_scrollbar",
+  "homepage": "https://github.com/noraesae/perfect-scrollbar",
+  "version": "0.6.11",
+  "_release": "0.6.11",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.6.11",
+    "commit": "aec4e37f6125edd1d6844ced1244a595b20fb03b"
+  },
+  "_source": "https://github.com/noraesae/perfect-scrollbar.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/noraesae/perfect-scrollbar.git"
+}

@@ -5,6 +5,6 @@
     <% end %>
     <h2 class="subtitle msg-error" style="display:none;">Message can't be empty.</h2>
   <% else %>
-    <%= link_to 'Sign in to chat', new_user_session_path, class: 'button is-primary is-inverted', style: 'width: 100%;' %>
+    <%= link_to t('chat.signin'), new_user_session_path, class: 'button is-default', style: 'width: 100%;' %>
   <% end %>
 </div>

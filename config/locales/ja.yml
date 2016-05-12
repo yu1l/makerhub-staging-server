@@ -5,6 +5,7 @@ ja:
   app:
     title: SiteLogo
   chat:
+    signin: ログインしてコメントする
     window:
       subtitle: さんの配信
   time:
