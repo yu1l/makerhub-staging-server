@@ -33,15 +33,15 @@
           <span class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @total %></span>
         <% end %>
         <% if user_signed_in? %>
-        <% unless current_user == @user %>
-          <% if current_user.following?(@user) %>
-            <%= button_tag t('user.unfollow'), class: 'button is-danger unfollow', style: 'float:right;' %>
-            <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;display:none;' %>
-          <% else %>
-            <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;' %>
-            <%= button_tag t('user.unfollow'),  class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+          <% unless current_user == @user %>
+            <% if current_user.following?(@user) %>
+              <%= button_tag t('user.unfollow'), class: 'button is-danger unfollow', style: 'float:right;' %>
+              <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;display:none;' %>
+            <% else %>
+              <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;' %>
+              <%= button_tag t('user.unfollow'),  class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+            <% end %>
           <% end %>
-        <% end %>
         <% end %>
       </div>
     </div>

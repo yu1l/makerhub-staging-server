@@ -1,0 +1,17 @@
+/* line 2, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/home.scss */
+#home_index #re {
+  display: none;
+}
+/* line 5, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/home.scss */
+#home_index .tabs {
+  margin-bottom: 16px;
+}
+
+/* line 11, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/home.scss */
+#signin .twitter {
+  margin-bottom: 16px;
+}
+/* line 14, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/home.scss */
+#signin .modal-background {
+  background-color: rgba(0, 0, 0, 0.5);
+}

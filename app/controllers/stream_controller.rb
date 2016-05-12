@@ -68,8 +68,8 @@ class StreamController < ApplicationController
   end
 
   def user
-    return render json: { status: 500 } unless user_signed_in?
     @user = User.find_by(name: params[:name])
+    return render json: { status: 500 } if @user.private_stream? && !user_signed_in?
     if @user.live?
       total = @user.total
       total += 1

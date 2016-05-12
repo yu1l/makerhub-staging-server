@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160507174355) do
+ActiveRecord::Schema.define(version: 20160512104723) do
 
   create_table "chats", force: :cascade do |t|
     t.integer  "user_id"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20160507174355) do
     t.text     "description"
     t.integer  "total"
     t.integer  "category"
+    t.boolean  "private_stream"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

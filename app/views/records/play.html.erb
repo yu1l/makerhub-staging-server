@@ -1,29 +1,88 @@
-<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
-  <div class="streamTitle"><h1 class="title" style="margin-bottom: 0px;"><%= "#{@record.title || 'Anonymous'}" %></h1></div>
-  <span class="tag is-default" style="margin-top:8px;"><%= %w(UI/UX Ruby Python)[@record.category] %></span>
-  <% if current_user == @user %>
-    <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px; padding-left:4px;"><%= @user.name %></h2>
-    <% end %>
-    <a style="display:none;" class="saveTitle button is-info"><%= t('user.cancel') %></a>
-    <a class="editTitle button is-info"><%= t('user.edit_title') %></a>
-  <% else %>
-    <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-bottom: 10px; padding-left:4px;"><%= @user.name %></h2>
-    <% end %>
-  <% end %>
+<%= stylesheet_link_tag 'records' %>
+
+<!-- Main -->
+<div id="record_main" class="container">
   <div class="columns">
     <div class="column is-8">
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <%= image_tag @user.twitter_image_url, alt: @user.name %>
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+            <% if current_user == @user %>
+              <span id="stream_title" data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up"><%= @record.title || I18n.t('content.title.default') %></span>
+              <input class="input title_form" type="text" placeholder="<%= @record.title %>" />
+              <br>
+              <span id="username" ><%= @user.name %></span>
+              <span class="select" style="float:right">
+                <select>
+                  <option>UI/UX</option>
+                  <option>Ruby</option>
+                  <option>Python</option>
+                </select>
+              </span>
+            <% else %>
+              <span id="stream_title"><%= @record.title || I18n.t('content.title.default') %></span>
+              <br>
+              <span id="username"><%= @user.name %></span>
+              <span class=" category tag is-default"><%= category(@record.category) %></span>
+            <% end %>
+            </p>
+          </div>
+        </div>
+      </article>
       <%= render partial: 'player', locals: { record: @record } %>
-      <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @record.total %></h2>
-    </div>
-    <div class="column is-4">
+      <p id="status">
+        <span class="subtitle"><strong><%= t('streaming.total') %>  <%= @record.total %></strong></span>
+        <% if user_signed_in? %>
+          <% unless current_user == @user %>
+            <% if current_user.following?(@user) %>
+              <%= button_tag t('user.unfollow'), class: 'button is-danger unfollow', style: 'float:right;' %>
+              <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;display:none;' %>
+            <% else %>
+              <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;' %>
+              <%= button_tag t('user.unfollow'),  class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </p>
     </div>
   </div>
 </div>
-<%= render partial: 'all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
+
+<!-- Reocrds -->
+<div class="container">
+  <%= render partial: 'all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
+</div>
+
 <script>
   $(function() {
+    $('.follow').click(function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'GET',
+        url: "/<%= @user.name %>/follow",
+        success: function() {
+          $('.follow').hide();
+          $('.unfollow').show();
+        }
+      });
+    });
+    $('.unfollow').click(function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'GET',
+        url: "/<%= @user.name %>/unfollow",
+        success: function() {
+          $('.unfollow').hide();
+          $('.follow').show();
+        }
+      });
+    });
     $('.editTitle').on('click', function() {
       $(this).toggle();
       $('.saveTitle').toggle();

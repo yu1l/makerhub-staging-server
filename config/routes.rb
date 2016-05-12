@@ -58,5 +58,5 @@ Rails.application.routes.draw do
   # Unfollow
   get ':name/unfollow' => 'users#unfollow', as: :unfollow
 
-  get '*path' => redirect('/')
+  # get '*path' => redirect('/')
 end

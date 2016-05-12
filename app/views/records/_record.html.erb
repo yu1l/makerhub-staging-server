@@ -1,9 +1,14 @@
-<div class="column is-4">
+<%= stylesheet_link_tag 'records' %>
+<div class="column is-3">
   <%= link_to play_record_path(name: user.name, uuid: record.uuid), target: '_blank' do %>
     <div class="card">
       <div class="card-image">
         <figure class="image is-4by3"><%= image_tag record.screenshot_url, alt: record.uuid %></figure>
-        <% unless record.uploaded? %><span class="tag is-danger" style="float:right;border-radius:0px"><%= t('streaming.making') %></span><% end %>
+        <% unless record.uploaded? %>
+          <span class="tag is-danger"><%= t('streaming.making') %></span>
+        <% else %>
+          <span class="tag is-dark"><%= category(record.category) %></span>
+        <% end %>
       </div>
       <div class="card-content">
         <div class="media">
@@ -13,14 +18,13 @@
             </figure>
           </div>
           <div class="media-content">
-            <p class="title is-5" style="color: #000;"><%= "#{user.twitter_name}" %></p>
-            <p class="subtitle is-6" style="color: #000;"><%= "@#{user.name}" %></p>
+            <p class="title is-5"><%= "#{user.twitter_name}" %></p>
+            <p class="subtitle is-6"><%= "@#{user.name}" %></p>
           </div>
         </div>
         <div class="content">
-          <p class="subtitle is-5" style="color: #000;"><%= "#{record.title || 'Anonymous'}" %></p>
-          <p class="subtitle is-6" style="color: #000;"><%= %w(UI/UX Ruby Python)[record.category] %></p>
-          <small><%= time(record.duration.ceil) %></small>
+          <p class="subtitle is-5"><%= "#{record.title || I18n.t('content.title.default')}" %></p>
+          <small><%= time(record.duration.ceil) %></small><br />
           <small><%= t('streaming.total') %> : <%= record.total || 0 %></small>
         </div>
       </div>

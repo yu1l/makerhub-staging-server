@@ -1,4 +1,9 @@
 ja:
+  content:
+    title:
+      default: タイトル無し
+  app:
+    title: SiteLogo
   chat:
     window:
       subtitle: さんの配信
@@ -19,11 +24,11 @@ ja:
     open_chat_window: チャット画面を開く
   watch_stream: 配信を見る
   user:
-    follow: Follow
-    followers: Followers
-    following: Following
-    followings: Followings
-    unfollow: Unfollow
+    follow: フォローする
+    followers: フォロワー
+    following: フォロー中
+    followings: フォロー
+    unfollow: フォローを外す
     default:
       title: はじめました٩(♡ε♡ )۶
       description: はじめました٩(♡ε♡ )۶ よろしくお願いします！
