@@ -12,26 +12,18 @@
         </figure>
         <div class="media-content">
           <div class="content">
-            <p>
             <% if current_user == @user %>
-              <span id="stream_title" data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up"><%= @record.title || I18n.t('content.title.default') %></span>
-              <input class="input title_form" type="text" placeholder="<%= @record.title %>" />
-              <br>
-              <span id="username" ><%= @user.name %></span>
-              <span class="select" style="float:right">
-                <select>
-                  <option>UI/UX</option>
-                  <option>Ruby</option>
-                  <option>Python</option>
-                </select>
-              </span>
+              <div id="stream_title">
+              <span data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up" style="font-size:18pt;"><%= @record.title || I18n.t('content.title.default') %></span><br />
+              </div>
+              <form class="title_form" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/record/<%= @record.uuid %>/update_title" style="display:none;height:34px;">
+                <input type="text" name="record[title]" class="input update_title" value="<%= @record.title %>" focus="true" placeholder="Enterで保存" />
+              </form>
             <% else %>
               <span id="stream_title"><%= @record.title || I18n.t('content.title.default') %></span>
-              <br>
-              <span id="username"><%= @user.name %></span>
-              <span class=" category tag is-dark"><%= category(@record.category) %></span>
             <% end %>
-            </p>
+            <span id="username"><%= @user.name %></span>
+            <span class=" category tag is-dark"><%= category(@record.category) %></span>
           </div>
         </div>
       </article>
@@ -83,17 +75,14 @@
         }
       });
     });
-    $('.editTitle').on('click', function() {
-      $(this).toggle();
-      $('.saveTitle').toggle();
-      var _title = jQuery.trim($('.streamTitle').text());
-      $('.saveTitle').attr('title', _title);
-      $('.streamTitle').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/record/<%= @record.uuid %>/update_title"><input type="text" name="record[title]" class="input updateTitle" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>')
+    $('#stream_title').click(function() {
+      $(this).hide()
+      $('.title_form').show();
+      $('.update_title').focus();
     });
-    $('.saveTitle').on('click', function() {
-      $(this).toggle();
-      $('#titleForm').html('<h1 class="title">' + $(this).attr('title') + '</h1>')
-      $('.editTitle').toggle();
+    $('.update_title').focusout(function() {
+      $('.title_form').hide();
+      $('#stream_title').show();
     });
   });
 </script>
