@@ -1,6 +1,6 @@
 # Streaming
 class StreamController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish, :chat, :screenshot_done, :current]
+  skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish, :chat, :screenshot_done, :current, :on_play]
 
   def screenshot_done
     @user = User.find_by(name: params[:name])
@@ -68,6 +68,7 @@ class StreamController < ApplicationController
   end
 
   def user
+    return render json: { status: 500 } unless user_signed_in?
     @user = User.find_by(name: params[:name])
     if @user.live?
       total = @user.total
@@ -103,6 +104,13 @@ class StreamController < ApplicationController
 
   def all
     @users = User.where(live: true)
+  end
+
+  def on_play
+    # puts params[:addr]
+    # puts request.remote_ip
+    return render nothing: true, status: 500 if params[:swfurl] == ''
+    render nothing: true, status: 200
   end
 
   def on_publish
