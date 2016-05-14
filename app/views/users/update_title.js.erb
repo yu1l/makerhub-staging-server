@@ -1,5 +1,5 @@
-$('#titleForm').html('<h1 class="title"><%= @user.title %></h1>');
-$('#editTitle').text('Edit');
-$('#editTitle').toggleClass('show');
-$('.saveTitle').toggle();
-$('.editTitle').toggle();
+$('#stream_title').show();
+$('#stream_title').text('<%= @user.title %>');
+$('.title_form').hide();
+$('.update_title').focusout();
+$('.update_title').val('<%= @user.title %>');

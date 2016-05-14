@@ -1,21 +1,19 @@
-<section class="hero is-info">
-  <div class="hero-content">
-    <div class="container">
-      <% unless params[:name].nil? %>
-        <h2 class="subtitle"><%= "@#{params[:name]}さんの#{I18n.t('popular.video')}" %></h2>
-      <% end %>
-      <% records.reverse.each_slice(3) do |record| %>
-        <div class="columns">
-          <% unless record[0].nil? %>
-            <%= render partial: 'records/record', locals: { record: record[0], user: record[0].user } %>
-          <% end %>
-          <% unless record[1].nil? %>
-            <%= render partial: 'records/record', locals: { record: record[1], user: record[1].user } %>
-          <% end %>
-          <% unless record[2].nil? %>
-            <%= render partial: 'records/record', locals: { record: record[2], user: record[2].user } %>
-          <% end %>
-        </div>
-     <% end %>
+<% if records.count == 0 %>
+  <span class="subtitle">録画はまだありません</span>
+<% end %>
+<% records.reverse.each_slice(4) do |record| %>
+  <div class="columns">
+    <% unless record[0].nil? %>
+      <%= render partial: 'records/record', locals: { record: record[0], user: record[0].user } %>
+    <% end %>
+    <% unless record[1].nil? %>
+      <%= render partial: 'records/record', locals: { record: record[1], user: record[1].user } %>
+    <% end %>
+    <% unless record[2].nil? %>
+      <%= render partial: 'records/record', locals: { record: record[2], user: record[2].user } %>
+    <% end %>
+    <% unless record[3].nil? %>
+      <%= render partial: 'records/record', locals: { record: record[3], user: record[3].user } %>
+    <% end %>
   </div>
-</section>
+<% end %>

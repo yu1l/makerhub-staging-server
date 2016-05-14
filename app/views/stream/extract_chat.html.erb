@@ -3,24 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <title><%= @user.name %> - Chat</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag 'https://noraesae.github.io/perfect-scrollbar/perfect-scrollbar.min.css' %>
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <section class="hero is-info is-fullheight">
-      <div id="chat" style="overflow-y:scroll;height:100%;">
-        <%= render partial: 'chat', locals: { chats: @chats } %>
+    <!-- Nav -->
+    <nav class="nav">
+      <div class="nav-left">
+        <span class="nav-item">閲覧<span id="current_number">0</span>人/合計<%= @user.total %>人</span>
       </div>
-      <%= render partial: 'stream/chat_form' %>
-    </section>
+    </nav>
+
+    <!-- Header -->
+    <div class="columns navbar" style="margin-bottom:0;">
+      <div class="column is-12">
+        <article class="media">
+          <figure class="media-left">
+            <p class="image is-64x64">
+              <%= image_tag @user.twitter_image_url, alt: @user.name %>
+            </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+              <span id="stream_title" style="font-size:18pt;"><%= @user.title || t('content.title.default') %></span>
+                <br>
+                <span style="font-size:14pt;"><%= @user.name %></span>
+                <span class="tag is-dark" style="float:right;border-radius:0;"><%= category(@user.category) %></span>
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Comments -->
+    <div id="comment_area" style='padding-top:0px;padding-bottom:0px;'>
+      <ul id="comments" style='overflow-y:scroll;position:relative;height:100%;'>
+        <%= render partial: 'chat', locals: { chats: @chats } %>
+      </ul>
+    </div>
+    <%= render partial: 'stream/chat_form' %>
+
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
 <script src='https://s3-ap-northeast-1.amazonaws.com/pushould-static-files/v0.0.2/pushould.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js'></script>
 <script>
   $(function() {
-    $('#chat').css('height', $(window).height() - 32);
+    $('#comment_area').css('height', $(window).height() - $('nav').height() - $('.navbar').height() - 32 - 110 - 4);
+    $('#comments').perfectScrollbar();
     $(window).resize(function() {
-      $('#chat').css('height', $(window).height() - 32);
+      $('#comment_area').css('height', $(window).height() - $('nav').height() - $('.navbar').height() - $('#chat_form').height());
+      $('#comments').perfectScrollbar();
     });
     $('.message').keypress(function(e) {
       if (e.which == 13) {
@@ -31,8 +69,27 @@
           return false;
         }
         $('.msg-error').hide();
-        $('#chat > ul').append('<li><% if user_signed_in? %><%= link_to current_user.name, stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank' %><% end %> : ' + $('.message').val() + '</li>')
-        $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+        $('#comments').append('<% if user_signed_in? %><li>' +
+          '<%= link_to stream_path(name: current_user.name), style: "color: #000", target: "_blank"  do %>' +
+            '<article class="media">' +
+              '<figure class="media-left">' +
+                '<p class="image is-32x32">' +
+                  '<%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %>' +
+                '</p>' +
+              '</figure>' +
+              '<div class="media-content">' +
+                '<div class="content">' +
+                  '<p>' +
+                    '<strong><%= current_user.name %></strong>' +
+                    '<br />' +
+                    $('.message').val() +
+                  '</p>' +
+                '</div>' +
+              '</div>' +
+            '</article>' +
+          '<% end %>' +
+        '</li><% end %>');
+//        $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
           url: "/<%= @user.name %>/chat",
@@ -46,12 +103,42 @@
         return false;
       }
     });
-    $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
     var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
-      $('#chat > ul').append('<li><a href="/' + msg.name + '" style="color:#fff;" target="_blank">' + msg.name + '</a> : ' + msg.text + '</li>');
-      $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+      $('#comments').append('<li>' +
+        '<a href="/' + msg.name + '" style="color: #000;" target="_blank">' +
+          '<article class="media">' +
+            '<figure class="media-left">' +
+              '<p class="image is-32x32">' +
+                '<img src=' + msg.image + ' alt=' + msg.name +' />' +
+              '</p>' +
+            '</figure>' +
+            '<div class="media-content">' +
+              '<div class="content">' +
+                '<p>' +
+                  '<strong>' + msg.name + '</strong>' +
+                  '<br />' +
+                  msg.text +
+                '</p>' +
+              '</div>' +
+            '</div>' +
+          '</article>' +
+        '</a></li>');
+      $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
+    });
+    channel.bind('current', function(msg) {
+      $('#current_number').text(msg.count);
+    });
+    channel.bind('disconnect', function(msg) {
+      $.ajax({
+        type: 'POST',
+        url: '/<%= @user.name %>/current'
+      });
+    });
+    channel.bind('view', function(msg) {
+      $('#total').text(msg.views);
     });
   });
 </script>

@@ -1,0 +1,11 @@
+{
+  "name": "balloon",
+  "_cacheHeaders": {
+    "Last-Modified": "Thu, 12 May 2016 06:01:34 GMT",
+    "Content-Type": "text/css"
+  },
+  "main": "index.css",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.2.4/balloon.min.css"
+}

@@ -33,9 +33,12 @@
 #  description                 :text
 #  total                       :integer
 #  category                    :integer
+#  private_stream              :boolean
 #
 
 class UsersController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:category]
+
   def follow
     @user = User.find_by(name: params[:name])
     current_user.follow(@user)
@@ -51,7 +54,6 @@ class UsersController < ApplicationController
   def category
     current_user.update(user_params)
     render :category
-    # redirect_to profile_path(name: current_user.name)
   end
 
   def record_category
@@ -61,6 +63,7 @@ class UsersController < ApplicationController
 
   def profile
     @user = User.find_by(name: params[:name])
+    return redirect_to stream_path(name: @user.name) unless @user == current_user
     @me = true if @user == current_user
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call

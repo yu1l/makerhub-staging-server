@@ -1,0 +1,20 @@
+/* line 1, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/records.scss */
+span.tag {
+  float: right;
+  border-radius: 0px;
+}
+
+/* line 7, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/records.scss */
+.media-content .title {
+  color: #000;
+}
+/* line 10, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/records.scss */
+.media-content .subtitle {
+  color: #000;
+}
+
+/* line 16, /Users/yhoshino11/dokugaku/streaming/stream-staging/app/assets/stylesheets/records.scss */
+.content p.subtitle.is-5 {
+  color: #000;
+  margin-bottom: 8px;
+}

@@ -1,99 +1,169 @@
-<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
-
-  <!-- Stream Header -->
-  <div class="streamTitle">
-    <h1 class="title" style="margin-bottom: 0px;"><%= "#{@user.title || 'Anonymous'}" %></h1>
-  </div>
-  <span class="tag is-default" style="margin-top:8px;"><%= %w(UI/UX Ruby Python)[@user.category] %></span>
-
-  <% if current_user == @user %>
-    <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-top: 5px;margin-bottom: 5px;padding-bottom:5px; padding-left:4px;"><%= @user.name %></h2>
-    <% end %>
-    <a style="display:none;" class="saveTitle button is-info"><%= t('user.cancel') %></a>
-    <a class="editTitle button is-info"><%= t('user.edit_title') %></a>
-  <% else %>
-    <%= link_to stream_path(name: @user.name), target: '_blank' do %>
-      <h2 class="subtitle" style="margin-bottom: 10px; padding-left:4px;"><%= @user.name %></h2>
-    <% end %>
-  <% end %>
-
-  <!-- Stream Main -->
-  <div class="columns">
-
-    <!-- Media Player -->
+<%= stylesheet_link_tag 'https://noraesae.github.io/perfect-scrollbar/perfect-scrollbar.min.css' %>
+<%= stylesheet_link_tag 'stream' %>
+<div id="stream_main" class="container">
+  <!-- Header -->
+  <div class="columns" style="margin-bottom:0px;">
     <div class="column is-8">
-      <div class="main" style="margin-top: 0px;">
-        <% if @user.live? %>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+          <%= image_tag @user.twitter_image_url, alt: @user.name %>
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <div>
+            <% if user_signed_in? && current_user == @user %>
+              <span id="stream_title" data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up" style="font-size:18pt;"><%= @user.title || t('content.title.default') %></span>
+              <form class="title_form" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_title" style="display:none;height:34px;">
+                <input type="text" name="user[title]" class="input update_title" value="<%= @user.title %>" focus="true" placeholder="Enterで保存" />
+              </form>
+            <% else %>
+              <span id="stream_title" style="font-size:18pt;"><%= @user.title || t('content.title.default') %></span>
+            <% end %>
+            </div>
+            <span style="font-size:14pt;"><%= @user.name %></span>
+            <span class="tag is-dark" style="float:right;border-radius:0;"><%= category(@user.category) %></span>
+          </div>
+        </div>
+      </article>
+    </div>
+    <!-- Open External Chat Window -->
+    <div class="column is-4" style="padding-top:0px;padding-bottom:22px;">
+      <a href="/<%= @user.name%>/chat_window" class="button is-info open_chat" style="border-radius:0;" target="_blank">
+        <i class="fa fa-external-link fa-1" aria-hidden="true"></i><span style="padding-left:4px;"><%= t('streaming.open_chat_window') %></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="columns">
+    <!-- Player -->
+    <div class="column is-8" style="padding-top:0px;">
+      <% if @user.live? %>
+        <div id="live">
           <%= render partial: 'player', locals: { user: @user } %>
-          <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @user.total %></h2>
-        <% else %>
-          <%= image_tag "https://s3-ap-northeast-1.amazonaws.com/live-streaming-service/offline.png", alt: 'offline' %>
-          <span class="subtitle" id="current" style="padding-top:8px;"><%= t('streaming.current') %> : <span id="current_number">0</span></span><br />
-          <span class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @total %></span>
-        <% end %>
-        <% if user_signed_in? %>
-        <% unless current_user == @user %>
-          <% if current_user.following?(@user) %>
-            <%= button_tag t('user.unfollow'), class: 'button is-danger unfollow', style: 'float:right;' %>
-            <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;display:none;' %>
-          <% else %>
-            <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;' %>
-            <%= button_tag t('user.unfollow'),  class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+        </div>
+        <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @user.total %></h2>
+      <% else %>
+        <%= image_tag asset_path("offline.png"), alt: 'offline', style:'width:100%;height:auto;', id: 'live' %>
+        <br />
+        <p style="padding-top:8px;">
+          <span class="subtitle"><strong>閲覧<span id="current_number">0</span>人/合計<%= @total || 0 %>人</strong></span>
+          <% if user_signed_in? %>
+            <% unless current_user == @user %>
+              <% if current_user.following?(@user) %>
+                <%= button_tag t('user.unfollow'), class: 'button is-danger unfollow', style: 'float:right;' %>
+                <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;display:none;' %>
+              <% else %>
+                <%= button_tag t('user.follow'), class: 'button is-success follow', style: 'float:right;' %>
+                <%= button_tag t('user.unfollow'),  class: 'button is-danger unfollow', style: 'float:right;display:none;' %>
+              <% end %>
+            <% end %>
           <% end %>
-        <% end %>
-        <% end %>
-      </div>
+        </p>
+      <% end %>
     </div>
 
-    <!-- Chat Area -->
-    <div class="column is-4" id="chat_area" style="margin-top:-25px;">
-      <a href="/<%= @user.name%>/chat_window" class="button is-info is-small extract_chat">
-        <i class="fa fa-external-link fa-1" aria-hidden="true"></i><%= t('streaming.open_chat_window') %>
-      </a>
-      <div id="chat" style="padding-bottom:4px; height:330px; overflow-y:scroll;">
+    <!-- Chat -->
+    <div class="column is-4" id="comment_area" style="padding-top:0px;">
+      <ul id="comments" style='overflow-y:scroll;position:relative;'>
         <%= render partial: 'chat', locals: { chats: @chats } %>
-      </div>
+      </ul>
       <% if user_signed_in? %>
         <%= form_tag("/#{@user.name}/chat", remote: true, format: :js) do %>
-          <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;', required: false %>
+          <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;background-color:#fff;', required: false %>
         <% end %>
         <h2 class="subtitle msg-error" style="display:none;">Message can't be empty.</h2>
       <% else %>
-        <%= link_to 'Sign in to chat', new_user_session_path, class: 'button is-primary is-inverted', style: 'width: 100%;' %>
+        <%= link_to t('chat.signin'), new_user_session_path, class: 'button is-default', style: 'width: 100%;' %>
       <% end %>
     </div>
   </div>
 
-  <!-- Description Tab -->
-  <div class="tabs">
+  <!-- Tabs -->
+  <div class="tabs" style="margin-bottom:16px;">
     <ul>
-      <li class="is-active"><a><%= t('user.description') %></a></li>
+      <li id="description" class="is-active"><a>自己紹介</a></li>
+      <li id="record"><a>人気の録画 : <%= @user.records.count %></a></li>
+      <li id="following"><a>フォロー中 : <%= @user.all_following.count %></a></li>
+      <li id="follower"><a>フォロワー : <%= @user.followers.count %></a></li>
     </ul>
   </div>
 
-  <!-- Description Main -->
-  <section class="hero is-info">
-    <% if current_user == @user %>
-      <div class="hero-header" style="margin-bottom: 10px;">
-        <a style="display:none;" class="cancel button is-info"><%= t('user.cancel') %></a>
-        <a class="editDescription button is-info"><%= t('user.edit_description') %></a>
-      </div>
-    <% end %>
-    <div class="container description">
-      <%= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe %>
-    </div>
-  </section>
-</div>
+  <div id="information">
 
-<!-- Record -->
-<%= render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
+    <!-- Description -->
+    <div id="de">
+      <%= render partial: 'users/description', locals: { user: @user } %>
+    </div>
+
+    <!-- Records -->
+    <div id="re" style="display:none;">
+      <%= render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
+    </div>
+
+    <!-- Following -->
+    <div id="fing" style="display:none;">
+      <%= render partial: 'users/following', locals: { followings: @user.all_following } %>
+    </div>
+
+    <!-- Follower -->
+    <div id="fwer" style="display:none;">
+      <%= render partial: 'users/followers', locals: { followers: @user.followers } %>
+    </div>
+
+  </div>
+</div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
 <script src='https://s3-ap-northeast-1.amazonaws.com/pushould-static-files/v0.0.2/pushould.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js'></script>
 <script>
   $(function() {
+    $('.twitter').show();
+    $('#description').click(function() {
+//      $('#de').height($('body').scrollTop() + $(this).offset().top);
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#de').show();
+      $('#de').siblings().hide()
+    });
+    $('#record').click(function() {
+//      $('#re').height($('body').scrollTop() + $(this).offset().top);
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#re').show();
+      $('#re').siblings().hide()
+    });
+    $('#following').click(function() {
+//      $('#fing').height($('body').scrollTop() + $(this).offset().top);
+      $('body').get(0).scrollHeight;
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#fing').show();
+      $('#fing').siblings().hide()
+    });
+    $('#follower').click(function() {
+//      $('#fwer').height($('body').scrollTop() + $(this).offset().top);
+      $(this).addClass('is-active');
+      $(this).siblings().removeClass('is-active');
+      $('#fwer').show();
+      $('#fwer').siblings().hide()
+    });
+
+    $('#comment_area').height($('#live').height() - 28);
+    $('#comments').perfectScrollbar();
+    $(window).resize(function() {
+      $('#comment_area').height($('#live').height() - 28);
+      $('#comments').perfectScrollbar();
+    });
+
+    $('#live').resize(function() {
+      $('#comment_area').height($('#live').height() - 28);
+      $('#comments').perfectScrollbar();
+    });
+
     $('.follow').click(function(e) {
       e.preventDefault();
       $.ajax({
@@ -132,13 +202,27 @@
           return false;
         }
         $('.msg-error').hide();
-        $('#chat > ul').append('<% if user_signed_in? %><li><%= link_to stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank'  do %>' +
-          '<div class="columns is-mobile" style="width:100%;">' +
-            '<div class="column is-1" style="margin-right: 4px;width:32px;"><span class="icon"><%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %></span></div>' +
-            '<div class="column is-11" style="width:91%;word-wrap:break-word;"><%= current_user.name %>' + '<br />' + $('.message').val() + '</div>' +
-          '</div>' +
-          '<% end %></li><% end %>');
-        $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+        $('#comments').append('<% if user_signed_in? %><li>' +
+          '<%= link_to stream_path(name: current_user.name), style: "color: #000", target: "_blank"  do %>' +
+            '<article class="media">' +
+              '<figure class="media-left">' +
+                '<p class="image is-32x32">' +
+                  '<%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %>' +
+                '</p>' +
+              '</figure>' +
+              '<div class="media-content">' +
+                '<div class="content">' +
+                  '<p>' +
+                    '<strong><%= current_user.name %></strong>' +
+                    '<br />' +
+                    $('.message').val() +
+                  '</p>' +
+                '</div>' +
+              '</div>' +
+            '</article>' +
+          '<% end %>' +
+        '</li><% end %>');
+//        $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
           url: "/<%= @user.name %>/chat",
@@ -152,41 +236,41 @@
         return false;
       }
     });
-    $('.editTitle').on('click', function() {
-      $(this).toggle();
-      $('.saveTitle').toggle();
-      var _title = jQuery.trim($('.streamTitle').text());
-      $('.saveTitle').attr('title', _title);
-      $('.streamTitle').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_title"><input type="text" name="user[title]" class="input updateTitle" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>')
+    <% if current_user == @user %>
+    $('#stream_title').click(function() {
+      $(this).hide()
+      $('.title_form').show();
+      $('.update_title').focus();
     });
-    $('.saveTitle').on('click', function() {
-      $(this).toggle();
-      $('#titleForm').html('<h1 class="title">' + $(this).attr('title') + '</h1>')
-      $('.editTitle').toggle();
+    $('.update_title').focusout(function() {
+      $('.title_form').hide();
+      $('#stream_title').show();
     });
-    $('.editDescription').on('click', function() {
-      $(this).toggle();
-      $('.cancel').toggle()
-      $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_description"><textarea class="textarea" name="user[description]"><%= escape_javascript(@user.description) %></textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
-    });
-    $('.cancel').on('click', function() {
-      $(this).toggle();
-      $('.editDescription').toggle()
-      $('.description').html('<%= escape_javascript(@content.gsub(/<h1/, "<h1 class=\"title\"").gsub(/<h2/, "<h2 class=\"subtitle\"").html_safe) %>');
-    });
-
-    $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    <% end %>
+    $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
     var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
-      $('#chat > ul').append(
-        '<li><a href="/' + msg.name + '" style="color:#fff;" target="_blank">' +
-          '<div class="columns is-mobile" style="width:100%;">' +
-            '<div class="column is-1" style="margin-right: 4px;width:32px;"><span class="icon"><img src="' + msg.image + '" alt="' + msg.name + '" /></span></div>' +
-            '<div class="column is-11" style="width:91%;word-wrap:break-word;">' + msg.nickname + '<br />' + msg.text + '</div>' +
-          '</div>' +
+      $('#comments').append('<li>' +
+        '<a href="/' + msg.name + '" style="color: #000;" target="_blank">' +
+          '<article class="media">' +
+            '<figure class="media-left">' +
+              '<p class="image is-32x32">' +
+                '<img src=' + msg.image + ' alt=' + msg.name +' />' +
+              '</p>' +
+            '</figure>' +
+            '<div class="media-content">' +
+              '<div class="content">' +
+                '<p>' +
+                  '<strong>' + msg.name + '</strong>' +
+                  '<br />' +
+                  msg.text +
+                '</p>' +
+              '</div>' +
+            '</div>' +
+          '</article>' +
         '</a></li>');
-      $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+      $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
     });
     channel.bind('current', function(msg) {
       $('#current_number').text(msg.count);

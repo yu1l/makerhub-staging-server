@@ -1,6 +1,24 @@
-<div class="container">
-  <h2 class="subtitle"><%= "#{I18n.t('popular.stream')}" %></h2>
+<%= stylesheet_link_tag 'home' %>
+
+<!-- Main -->
+<div class="container" id="home_index">
+  <!-- Tabs -->
+  <div class="tabs">
+    <ul>
+      <li id="streams" class="is-active"><a>配信中</a></li>
+      <li id="records"><a>人気の録画</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Streams -->
+<div class="container" id="st">
   <%= render partial: 'streaming', locals: { users: @users } %>
-  <h2 class="subtitle"><%= "#{I18n.t('popular.video')}" %></h2>
+</div>
+
+  <!-- Records -->
+<div class="container" id="re">
   <%= render partial: 'records/all', locals: { records: Record.select { |r| r.duration.ceil > 0 } } %>
 </div>
+
+<%= javascript_include_tag 'home' %>

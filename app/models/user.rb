@@ -33,6 +33,7 @@
 #  description                 :text
 #  total                       :integer
 #  category                    :integer
+#  private_stream              :boolean
 #
 
 # User

@@ -1,0 +1,27 @@
+<% if followings.count == 0 %>
+  <span class="subtitle">フォロー中のユーザーはいません</span>
+<% end %>
+<% followings.each_slice(4) do |following| %>
+  <div class="columns">
+    <% unless following[0].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: following[0] } %>
+      </div>
+    <% end %>
+    <% unless following[1].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: following[1] } %>
+      </div>
+    <% end %>
+    <% unless following[2].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: following[2] } %>
+      </div>
+    <% end %>
+    <% unless following[3].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'users/short_desc', locals: { user: following[3] } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,5 +1,5 @@
-$('#titleForm').html('<h1 class="title"><%= @record.title %></h1>');
-$('#editTitle').text('Edit');
-$('#editTitle').toggleClass('show');
-$('.saveTitle').toggle();
-$('.editTitle').toggle();
+$('#stream_title').show();
+$('#stream_title').html('<span data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up" style="font-size:18pt;"><%= @record.title || I18n.t("content.title.default") %></span><br />');
+$('.title_form').hide();
+$('.update_title').focusout();
+$('.update_title').val('<%= @record.title %>');

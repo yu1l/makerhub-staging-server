@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   # on_publish
   post 'on_publish' => 'stream#on_publish'
 
+  # on_play
+  post 'on_play' => 'stream#on_play'
+
   # on_record_done
   post 'on_record_done' => 'stream#on_record_done'
 

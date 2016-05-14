@@ -1,9 +1,12 @@
 $ ->
-  $('.header-toggle').click ->
-    $(@).toggleClass('is-active')
-    $('.header-menu').toggleClass('is-active')
+  $('#records').click ->
+    $(@).addClass('is-active')
+    $('#streams').removeClass('is-active')
+    $('#re').show()
+    $('#st').hide()
 
-  $('.modal-close').on 'click', ->
-    $('#signin').removeClass('is-active')
-  $('#signin_button').on 'click', ->
-    $('#signin').addClass('is-active')
+  $('#streams').click ->
+    $(@).addClass('is-active')
+    $('#records').removeClass('is-active')
+    $('#st').show()
+    $('#re').hide()

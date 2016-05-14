@@ -1,0 +1,11 @@
+{
+  "name": "perfect_scrollbar",
+  "_cacheHeaders": {
+    "Last-Modified": "Sat, 23 Apr 2016 13:46:36 GMT",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js"
+}

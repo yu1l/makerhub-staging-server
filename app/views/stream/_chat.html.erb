@@ -1,12 +1,22 @@
-<ul style='padding-bottom: 4px;'>
-  <% chats.each do |chat| %>
-    <li>
-      <%= link_to stream_path(name: chat.sender), target: '_blank', style: 'color: #fff;' do %>
-        <div class="columns is-mobile" style="width:100%;">
-          <div class="column is-1" style="margin-right: 4px;width:32px;"><span class="icon"><%= image_tag User.find_by(name: chat.sender).twitter_image_url, alt: chat.sender %></span></div>
-          <div class="column is-11" style="width:91%;word-wrap:break-word;"><p><%= User.find_by(name: chat.sender).twitter_name %><br /><%= chat.text %></p></div>
+<% chats.each do |chat| %>
+  <li>
+    <%= link_to stream_path(name: chat.sender), target: '_blank', style: 'color:#000;' do %>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-32x32">
+            <%= image_tag User.find_by(name: chat.sender).twitter_image_url, alt: chat.sender %>
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong><%= chat.sender %></strong>
+              <br>
+              <%= chat.text %>
+            </p>
+          </div>
         </div>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+      </article>
+    <% end %>
+  </li>
+<% end %>
