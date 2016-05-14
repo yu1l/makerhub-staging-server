@@ -69,8 +69,27 @@
           return false;
         }
         $('.msg-error').hide();
-        $('#chat > ul').append('<li><% if user_signed_in? %><%= link_to current_user.name, stream_path(name: current_user.name), style: 'color: #fff;', target: '_blank' %><% end %> : ' + $('.message').val() + '</li>')
-        $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+        $('#comments').append('<% if user_signed_in? %><li>' +
+          '<%= link_to stream_path(name: current_user.name), style: "color: #000", target: "_blank"  do %>' +
+            '<article class="media">' +
+              '<figure class="media-left">' +
+                '<p class="image is-32x32">' +
+                  '<%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %>' +
+                '</p>' +
+              '</figure>' +
+              '<div class="media-content">' +
+                '<div class="content">' +
+                  '<p>' +
+                    '<strong><%= current_user.name %></strong>' +
+                    '<br />' +
+                    $('.message').val() +
+                  '</p>' +
+                '</div>' +
+              '</div>' +
+            '</article>' +
+          '<% end %>' +
+        '</li><% end %>');
+//        $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
           url: "/<%= @user.name %>/chat",
@@ -84,12 +103,30 @@
         return false;
       }
     });
-    $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+    $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
     var pushould = new Pushould({ url: '<%= @url %>', client_token: '<%= @client_token %>' });
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
-      $('#chat > ul').append('<li><a href="/' + msg.name + '" style="color:#fff;" target="_blank">' + msg.name + '</a> : ' + msg.text + '</li>');
-      $('#chat').animate({ scrollTop: $('#chat').prop('scrollHeight') }, "slow");
+      $('#comments').append('<li>' +
+        '<a href="/' + msg.name + '" style="color: #000;" target="_blank">' +
+          '<article class="media">' +
+            '<figure class="media-left">' +
+              '<p class="image is-32x32">' +
+                '<img src=' + msg.image + ' alt=' + msg.name +' />' +
+              '</p>' +
+            '</figure>' +
+            '<div class="media-content">' +
+              '<div class="content">' +
+                '<p>' +
+                  '<strong>' + msg.name + '</strong>' +
+                  '<br />' +
+                  msg.text +
+                '</p>' +
+              '</div>' +
+            '</div>' +
+          '</article>' +
+        '</a></li>');
+      $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
     });
     channel.bind('current', function(msg) {
       $('#current_number').text(msg.count);
