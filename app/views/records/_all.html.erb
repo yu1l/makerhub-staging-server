@@ -1,6 +1,3 @@
-<% unless params[:name].nil? %>
-  <h2 class="subtitle"><%= "@#{params[:name]}さんの#{I18n.t('popular.video')}" %></h2>
-<% end %>
 <% records.reverse.each_slice(4) do |record| %>
   <div class="columns">
     <% unless record[0].nil? %>
