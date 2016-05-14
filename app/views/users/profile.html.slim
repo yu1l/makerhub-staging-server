@@ -25,11 +25,11 @@
           li#description.is-active
             a 自己紹介
           li#record
-            a 人気の録画
+            a= "人気の録画 : #{current_user.records.count}"
           li#following
-            a フォロー中
+            a= "フォロー中 : #{current_user.all_following.count}"
           li#follower
-            a フォロワー
+            a= "フォロワー : #{current_user.followers.count}"
           li#setting
             a 設定
   #information

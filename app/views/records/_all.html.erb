@@ -1,3 +1,6 @@
+<% if records.count == 0 %>
+  <span class="subtitle">録画はまだありません</span>
+<% end %>
 <% records.reverse.each_slice(4) do |record| %>
   <div class="columns">
     <% unless record[0].nil? %>

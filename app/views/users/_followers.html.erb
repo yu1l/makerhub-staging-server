@@ -1,3 +1,6 @@
+<% if followers.count == 0 %>
+  <span class="subtitle">フォロワーはいません</span>
+<% end %>
 <% followers.each_slice(4) do |follower| %>
   <div class="columns">
     <% unless follower[0].nil? %>
