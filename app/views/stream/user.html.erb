@@ -159,6 +159,11 @@
       $('#comments').perfectScrollbar();
     });
 
+    $('#live').resize(function() {
+      $('#comment_area').height($('#live').height() - 28);
+      $('#comments').perfectScrollbar();
+    });
+
     $('.follow').click(function(e) {
       e.preventDefault();
       $.ajax({
