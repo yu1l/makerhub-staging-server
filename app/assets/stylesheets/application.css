@@ -2,5 +2,6 @@
  *= require font-awesome
  *= require bulma
  *= require balloon
+ *= require toastr_css
  *= require_self
  */

@@ -37,6 +37,8 @@
 #
 
 class UsersController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:category]
+
   def follow
     @user = User.find_by(name: params[:name])
     current_user.follow(@user)
@@ -52,7 +54,6 @@ class UsersController < ApplicationController
   def category
     current_user.update(user_params)
     render :category
-    # redirect_to profile_path(name: current_user.name)
   end
 
   def record_category

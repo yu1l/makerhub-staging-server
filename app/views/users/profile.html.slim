@@ -1,3 +1,22 @@
+.container
+  .columns style='margin-bottom:0px;'
+    .column.is-8
+      article.media
+        figure.media-left
+          p.image.is-64x64= image_tag @user.twitter_image_url, alt: ''
+        .media-content
+          .content
+            - if current_user == @user
+              .stream
+                span#stream_title data-balloon='タイトルをクリックして編集できます' data-balloon-pos='up' style='font-size:18pt;'= @user.title
+                form.title_form format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title" style="display:none;height:34px;"
+                  input.input.update_title type="text" name="user[title]" value="#{@user.title}" focus="true" placeholder="Enterで保存"
+              span style='font-size:14pt;'= @user.name
+              span.select.category style='float:right;'= select :user, :category, [['UI/UX', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
+    .column.is-4
+  .columns
+    .column.is-8 style='padding-top:0px;'= image_tag asset_path('offline.png'), alt: 'offline', style: 'width:100%;height:auto;', id: 'live'
+
 .hero-content
   .container
 
@@ -76,6 +95,29 @@
         span= t('signout')
 
 script
+  | $('.category').change(function(){
+  |   $(".category > select option:selected").each(function () {
+  |     $.ajax({
+  |       method: 'POST',
+  |       url: "/#{current_user.name}/category",
+  |       data: {
+  |         user: { category: $(this).val() }
+  |       },
+  |       success: function() {
+  |         console.log($(this).val());
+  |       }
+  |     })
+  |   });
+  | });
+  | $('#stream_title').click(function() {
+  |   $(this).hide();
+  |   $('.title_form').show();
+  |   $('.update_title').focus();
+  | });
+  | $('.update_title').focusout(function() {
+  |   $('.title_form').hide();
+  |   $('#stream_title').show();
+  | });
   | $('.editDescription').on('click', function() {
   |   $(this).toggle();
   |   $('.saveDescription').toggle();
