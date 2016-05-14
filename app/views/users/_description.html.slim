@@ -1,0 +1,27 @@
+.columns
+  .column.is-12
+    / .control.is-grouped
+      / - if current_user.provider == 'twitter'
+        / = link_to "https://twitter.com/#{current_user.name}", class: 'button is-info', target: '_blank' do
+          / i.fa.fa-twitter
+          / span style='padding-left:8px;' Twitter
+    / Description
+    - if user_signed_in? && current_user == @user
+      a.button.is-info.editDescription style="margin-top:-3px;margin-bottom:10px;"
+        i.fa.fa-pencil-square-o
+        span style='padding-left:8px;'= I18n.t('user.edit')
+      a.button.is-info.saveDescription content= "#{@user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
+    .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
+
+script
+  | $('.editDescription').on('click', function() {
+  |   $(this).toggle();
+  |   $('.saveDescription').toggle();
+  |   $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">' + $('.saveDescription').attr('content') + '</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
+  | });
+  | $('.saveDescription').on('click', function() {
+  |   $(this).toggle();
+  |   $('.editDescription').toggle();
+  |   var _description = $('.saveDescription').attr('description');
+  |   $('.description').html(_description);
+  | });

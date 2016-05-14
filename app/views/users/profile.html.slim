@@ -16,85 +16,66 @@
     .column.is-4
   .columns
     .column.is-8 style='padding-top:0px;'= image_tag asset_path('offline.png'), alt: 'offline', style: 'width:100%;height:auto;', id: 'live'
-
-.hero-content
-  .container
-
-    / User Image
-    p= image_tag @user.twitter_image_url, alt: ''
-
-    / User Name
-    = link_to stream_path(name: @user.name), target: '_blank' do
-      span.title= "@#{@user.name}"
-
-    / Show Live Link
-    - if @user.live?
-      = link_to I18n.t('watch_stream'), stream_path(name: @user.name), class: 'button is-info is-small is-inverted', style: 'margin-left:5px;margin-top:3px;', target: '_blank'
-
-    / Streaming Key
-    - if current_user == @user
-      .info style="margin-top:10px;"
-        p
-          span.title.is-5= I18n.t('user.streaming_token.title')
-          button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
-          h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px; color: #fff;"= "#{@user.name}?token=#{@user.streaming_key}"
-
-    / Category
-    p.control
-      span.subtitle カテゴリ
-      - if current_user == @user
-        = form_tag("/#{current_user.name}/category", remote: true, method: 'post') do
-          span.select= select :user, :category, [['UI/UX', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
-          = submit_tag 'カテゴリを更新する', class: 'button is-small is-info'
-      - else
-        h2.subtitle= %w(UI/UX Ruby Python)[@user.category]
-
-    / Title
-    p style="margin-top: 10px;"
-      span.subtitle タイトル
-      - if user_signed_in? && current_user == @user
-        a.button.is-small.is-info.editTitle style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
-        a.button.is-small.is-info.saveTitle style="display:none;"= I18n.t('user.cancel')
-      .streamTitle
-        h1.title#title= "#{@user.title || 'Anonymous'}"
-
+    .column.is-4
+  / Tabs
+  .columns
+    .column.is-12
+      .tabs
+        ul
+          li#description.is-active
+            a 自己紹介
+          li#record
+            a 人気の録画
+          li#following
+            a フォロー中
+          li#follower
+            a フォロワー
+          li#setting
+            a 設定
+  #information
     / Description
-    span.subtitle= I18n.t('user.description')
-    - if user_signed_in? && current_user == @user
-      a.button.is-small.is-info.editDescription style="margin-left:5px;margin-top:-3px;margin-bottom:10px;"= I18n.t('user.edit')
-      a.button.is-small.is-info.saveDescription content= "#{@user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
-    .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
-
-    / Followings/Followers
-    .columns
-      .column.is-6
-        h2.subtitle Followings
-        - @user.all_following.each do |following|
-          = link_to stream_path(name: following.name), target: '_blank' do
-            article.media
-              figure.media-left
-                p.image.is-32x32= image_tag following.twitter_image_url, alt: following.name
-              .media-content
-                .content
-                  p.strong style="color:#fff;"= following.twitter_name
-      .column.is-6
-        h2.subtitle Followers
-        - @user.followers.each do |follower|
-          = link_to stream_path(name: follower.name), target: '_blank' do
-            article.media
-              figure.media-left
-                p.image.is-32x32= image_tag follower.twitter_image_url, alt: follower.name
-              .media-content
-                .content
-                  p.strong style="color:#fff;"= follower.twitter_name
-
+    #de= render partial: 'users/description', locals: { user: current_user }
     / Records
-    = render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } }
-    - if current_user == @user
-      p= link_to destroy_user_session_path, class: 'button is-danger' do
-        span= t('signout')
+    #re style='display:none;'= render partial: 'records/all', locals: { records: current_user.records.select { |r| r.duration.ceil > 0 } }
+    / Followings
+    #fing style='display:none;'= render partial: 'users/following', locals: { followings: current_user.all_following }
+    / Followers
+    #fwer style='display:none;'= render partial: 'users/followers', locals: { followers: current_user.followers }
+    / Setting
+    #set style='display:none;'= render partial: 'users/setting', locals: { user: current_user }
 
 script
+  |  $('#description').click(function() {
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#de').show();
+  |    $('#de').siblings().hide()
+  |  });
+  |  $('#record').click(function() {
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#re').show();
+  |    $('#re').siblings().hide()
+  |  });
+  |  $('#following').click(function() {
+  |    $('body').get(0).scrollHeight;
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#fing').show();
+  |    $('#fing').siblings().hide()
+  |  });
+  |  $('#follower').click(function() {
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#fwer').show();
+  |    $('#fwer').siblings().hide()
+  |  });
+  |  $('#setting').click(function() {
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#set').show();
+  |    $('#set').siblings().hide();
+  |  });
   | $('.category').change(function(){
   |   $(".category > select option:selected").each(function () {
   |     $.ajax({
@@ -117,37 +98,4 @@ script
   | $('.update_title').focusout(function() {
   |   $('.title_form').hide();
   |   $('#stream_title').show();
-  | });
-  | $('.editDescription').on('click', function() {
-  |   $(this).toggle();
-  |   $('.saveDescription').toggle();
-  |   $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">' + $('.saveDescription').attr('content') + '</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
-  | });
-  | $('.saveDescription').on('click', function() {
-  |   $(this).toggle();
-  |   $('.editDescription').toggle();
-  |   var _description = $('.saveDescription').attr('description');
-  |   $('.description').html(_description);
-  | });
-  | $('.editTitle').on('click', function() {
-  |   $(this).toggle();
-  |   $('.saveTitle').toggle();
-  |   var _title = jQuery.trim($('.streamTitle').text());
-  |   $('.saveTitle').attr('title', _title);
-  |   $('.streamTitle').html('<form id="titleForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title"><input type="text" name="user[title]" class="input updateTitle" value="' + _title + '" focus="true" placeholder="Enterで保存" /></form>');
-  | });
-  | $('.saveTitle').on('click', function() {
-  |   $(this).toggle();
-  |   $('#titleForm').html('<h1 class="title">' + $(this).attr('title') + '</h1>');
-  |   $('.editTitle').toggle();
-  | });
-  | $('#streamingKey').on('click', function() {
-  |   if ($(this).hasClass('show')) {
-  |     $(this).text('表示する');
-  |     $('#key').css('visibility', 'hidden');
-  |   } else {
-  |     $(this).text('非表示にする');
-  |     $('#key').css('visibility', 'visible');
-  |   }
-  |   $(this).toggleClass('show');
   | });
