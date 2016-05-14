@@ -20,7 +20,9 @@
                 <input type="text" name="record[title]" class="input update_title" value="<%= @record.title %>" focus="true" placeholder="Enterで保存" />
               </form>
             <% else %>
-              <span id="stream_title"><%= @record.title || I18n.t('content.title.default') %></span>
+              <div>
+                <span id="stream_title"><%= @record.title || I18n.t('content.title.default') %></span>
+              </div>
             <% end %>
             <span id="username"><%= @user.name %></span>
             <span class=" category tag is-dark"><%= category(@record.category) %></span>

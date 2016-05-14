@@ -13,7 +13,6 @@
                   input.input.update_title type="text" name="user[title]" value="#{@user.title}" focus="true" placeholder="Enterで保存"
               span style='font-size:14pt;'= @user.name
               span.select.category style='float:right;'= select :user, :category, [['UI/UX', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
-    .column.is-4
   .columns
     .column.is-8 style='padding-top:0px;'= image_tag asset_path('offline.png'), alt: 'offline', style: 'width:100%;height:auto;', id: 'live'
     .column.is-4
