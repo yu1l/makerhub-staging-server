@@ -1,22 +1,22 @@
-.column.is-4
+.column.is-3
   = link_to stream_path(name: user.name), target: '_blank' do
     .card
       - if File.exist?("public/#{user.uuid}_current.png")
         .card-image
           figure.image.is-4by3
             = image_tag "/#{user.uuid}_current.png", alt: user.title
-      .card-content.is-info
+      .card-content
         .media
           .media-left
-            figure.image.is-32x32
-              = image_tag user.twitter_image_url, alt: user.name
+            figure.image.is-32x32= image_tag user.twitter_image_url, alt: user.name
           .media-content
-            p.title.is-5 style="color: #000;"= user.twitter_name
-            p.subtitle.is-6 style="color: #000;"= user.name
+            p.title.is-5= user.twitter_name
+            p.subtitle.is-6= user.name
+          span.tag.is-dark style="float:right;"= category(user.category)
         .content
-          p.subtitle.is-5 style="color: #000;"= "#{user.title || 'Anonymous'}"
+          p.subtitle.is-5= "#{user.title || I18n.t('content.title.default')}"
           - if user.records.count == 0
-            p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total}"
+            small= "#{I18n.t('streaming.total')} : #{user.total}"
+            br
           - else
-            p.subtitle.is-5 style="color: #000;"= "#{I18n.t('streaming.total')} : #{user.total + user.records.map(&:total).inject(:+)}"
-          p.subtitle.is-6 style="color: #000"= %w(UI/UX Ruby Python)[user.category]
+            small= "#{I18n.t('streaming.total')} : #{user.total + user.records.map(&:total).inject(:+)}"

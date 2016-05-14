@@ -40,7 +40,9 @@
     <!-- Player -->
     <div class="column is-8" style="padding-top:0px;">
       <% if @user.live? %>
-        <%= render partial: 'player', locals: { user: @user } %>
+        <div id="live">
+          <%= render partial: 'player', locals: { user: @user } %>
+        </div>
         <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @user.total %></h2>
       <% else %>
         <%= image_tag asset_path("offline.png"), alt: 'offline', style:'width:100%;height:auto;', id: 'live' %>
