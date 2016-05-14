@@ -1,16 +1,16 @@
 .columns
   .column.is-12
-    / .control.is-grouped
-      / - if current_user.provider == 'twitter'
-        / = link_to "https://twitter.com/#{current_user.name}", class: 'button is-info', target: '_blank' do
-          / i.fa.fa-twitter
-          / span style='padding-left:8px;' Twitter
-    / Description
-    - if user_signed_in? && current_user == @user
+    .control.is-grouped.twitter style='display:none;'
+      - if user.provider == 'twitter'
+        = link_to "https://twitter.com/#{user.name}", class: 'button is-info', target: '_blank' do
+          i.fa.fa-twitter
+          span style='padding-left:8px;' Twitter
+    Description
+    - if user_signed_in? && current_user == user
       a.button.is-info.editDescription style="margin-top:-3px;margin-bottom:10px;"
         i.fa.fa-pencil-square-o
         span style='padding-left:8px;'= I18n.t('user.edit')
-      a.button.is-info.saveDescription content= "#{@user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
+      a.button.is-info.saveDescription content= "#{user.description}" description="#{@content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe}" style="display:none;"= I18n.t('user.cancel')
     .description style="margin-top:20px;"= @content.gsub(/<h1/, "<h1 class='title'").gsub(/<h2/, "<h2 class='subtitle'").html_safe
 
 script
