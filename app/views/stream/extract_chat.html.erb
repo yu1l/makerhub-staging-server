@@ -41,12 +41,12 @@
     </div>
 
     <!-- Comments -->
-    <div class="columns">
-      <div class="column is-12" id="comment_area">
+    <div id="comment_area" style='padding-top:0px;padding-bottom:0px;'>
+      <ul id="comments" style='overflow-y:scroll;position:relative;height:100%;'>
         <%= render partial: 'chat', locals: { chats: @chats } %>
-        <%= render partial: 'stream/chat_form' %>
-      </div>
+      </ul>
     </div>
+    <%= render partial: 'stream/chat_form' %>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
@@ -54,10 +54,10 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.11/js/perfect-scrollbar.jquery.min.js'></script>
 <script>
   $(function() {
-    $('#comment_area').css('height', $(window).height() - 142);
+    $('#comment_area').css('height', $(window).height() - $('nav').height() - $('.navbar').height() - 32 - 110 - 4);
     $('#comments').perfectScrollbar();
     $(window).resize(function() {
-      $('#comment_area').css('height', $(window).height() - 142);
+      $('#comment_area').css('height', $(window).height() - $('nav').height() - $('.navbar').height() - $('#chat_form').height());
       $('#comments').perfectScrollbar();
     });
     $('.message').keypress(function(e) {

@@ -1,6 +1,6 @@
-  <% chats.each do |chat| %>
-    <li>
-      <%= link_to stream_path(name: chat.sender), target: '_blank', style: 'color:#000;' do %>
+<% chats.each do |chat| %>
+  <li>
+    <%= link_to stream_path(name: chat.sender), target: '_blank', style: 'color:#000;' do %>
       <article class="media">
         <figure class="media-left">
           <p class="image is-32x32">
@@ -18,5 +18,5 @@
         </div>
       </article>
     <% end %>
-    </li>
-  <% end %>
+  </li>
+<% end %>
