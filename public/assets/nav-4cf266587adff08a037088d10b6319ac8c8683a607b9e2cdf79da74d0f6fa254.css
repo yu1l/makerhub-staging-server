@@ -1,0 +1,8 @@
+/* line 2, /home/ubuntu/stream-staging/app/assets/stylesheets/nav.scss */
+#signin .twitter {
+  margin-bottom: 16px;
+}
+/* line 5, /home/ubuntu/stream-staging/app/assets/stylesheets/nav.scss */
+#signin .modal-background {
+  background-color: rgba(0, 0, 0, 0.5);
+}

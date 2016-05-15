@@ -1,0 +1,9 @@
+/* line 2, /home/ubuntu/stream-staging/app/assets/stylesheets/home.scss */
+#home_index .tabs {
+  margin-bottom: 16px;
+}
+
+/* line 7, /home/ubuntu/stream-staging/app/assets/stylesheets/home.scss */
+#re {
+  display: none;
+}

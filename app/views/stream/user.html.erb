@@ -43,7 +43,7 @@
         <div id="live">
           <%= render partial: 'player', locals: { user: @user } %>
         </div>
-        <h2 class="subtitle" id="total" style="padding-top:8px;"><%= t('streaming.total') %> : <%= @user.total %></h2>
+        <span class="subtitle"><strong>閲覧<span id="current_number">0</span>人/合計<span id="total"><%= @total || 0 %></span>人</strong></span>
       <% else %>
         <%= image_tag asset_path("offline.png"), alt: 'offline', style:'width:100%;height:auto;', id: 'live' %>
         <br />
