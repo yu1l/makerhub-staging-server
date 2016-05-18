@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160512104723) do
+ActiveRecord::Schema.define(version: 20160518081453) do
 
   create_table "chats", force: :cascade do |t|
     t.integer  "user_id"
@@ -52,6 +52,15 @@ ActiveRecord::Schema.define(version: 20160512104723) do
   add_index "follows", ["followable_id", "followable_type"], name: "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], name: "fk_follows"
 
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "private"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "uuid"
+    t.boolean  "streaming"
+  end
+
   create_table "records", force: :cascade do |t|
     t.string   "video_path"
     t.string   "screenshot_path"
@@ -67,6 +76,17 @@ ActiveRecord::Schema.define(version: 20160512104723) do
   end
 
   add_index "records", ["user_id"], name: "index_records_on_user_id"
+
+  create_table "user_groups", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.integer  "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "user_groups", ["group_id"], name: "index_user_groups_on_group_id"
+  add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                       default: "",    null: false

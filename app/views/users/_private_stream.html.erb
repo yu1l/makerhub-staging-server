@@ -6,3 +6,28 @@
     <% end %>
   </div>
 </div>
+
+<% user.groups.reverse.each_slice(4) do |groups| %>
+  <div class='columns'>
+    <% unless groups[0].nil? %>
+      <div class="column is-3">
+        <%= render partial: 'groups/group', locals: { group: groups[0] } %>
+      </div>
+    <% end %>
+    <% unless groups[1].nil? %>
+      <div class="column is-3">
+      <%= render partial: 'groups/group', locals: { group: groups[1] } %>
+      </div>
+    <% end %>
+    <% unless groups[2].nil? %>
+      <div class="column is-3">
+      <%= render partial: 'groups/group', locals: { group: groups[2] } %>
+      </div>
+    <% end %>
+    <% unless groups[3].nil? %>
+      <div class="column is-3">
+      <%= render partial: 'groups/group', locals: { group: groups[3] } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

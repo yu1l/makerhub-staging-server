@@ -49,6 +49,12 @@ Rails.application.routes.draw do
   # User-Category
   post ':name/category' => 'users#category'
 
+  # User-Private-Stream
+  get ':uuid/stream' => 'users#private_stream', as: :private_stream
+
+  # User-Stop-Private-Stream
+  get ':uuid/stop_stream' => 'users#stop_private_stream', as: :stop_private_stream
+
   # Record-Category
   post ':name/record/:uuid/category' => 'users#record_category'
 
@@ -60,6 +66,9 @@ Rails.application.routes.draw do
 
   # Group
   post ':name/groups' => 'groups#create'
+
+  # Group-Invite
+  get '/groups/:uuid/invite/:user_uuid' => 'groups#invite', as: :group_invite
 
   get '*path' => redirect('/')
 end
