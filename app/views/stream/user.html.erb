@@ -99,7 +99,7 @@
 
     <!-- Records -->
     <div id="re" style="display:none;">
-      <%= render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
+      <%= render partial: 'records/all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 && !r.private? } } %>
     </div>
 
     <!-- Following -->

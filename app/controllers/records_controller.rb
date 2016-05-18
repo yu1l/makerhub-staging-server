@@ -14,6 +14,8 @@
 #  duration        :float
 #  total           :integer
 #  category        :integer
+#  private         :boolean
+#  group_id        :integer
 #
 
 class RecordsController < ApplicationController

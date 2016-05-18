@@ -15,6 +15,8 @@ class Group < ActiveRecord::Base
   has_many :user_groups
   has_many :users, through: :user_groups
 
+  has_many :records
+
   before_create do
     self.private = true
     self.uuid = ((0..9).to_a.sample(3) +

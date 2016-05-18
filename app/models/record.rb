@@ -14,11 +14,14 @@
 #  duration        :float
 #  total           :integer
 #  category        :integer
+#  private         :boolean
+#  group_id        :integer
 #
 
 # Record
 class Record < ActiveRecord::Base
   belongs_to :user
+  belongs_to :group
 
   before_create do
     self.duration = 1.0

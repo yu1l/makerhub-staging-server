@@ -144,6 +144,10 @@ class StreamController < ApplicationController
     rescue
       puts 'tmp screenshot does not exist'
     end
+    if @user.private_stream?
+      @group = @user.groups.find_by(streaming: true)
+      @record.delay.update(private: true, group_id: @group.id)
+    end
     render nothing: true, status: 200
   end
 end

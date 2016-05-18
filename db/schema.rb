@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518081453) do
+ActiveRecord::Schema.define(version: 20160518100401) do
 
   create_table "chats", force: :cascade do |t|
     t.integer  "user_id"
@@ -73,8 +73,11 @@ ActiveRecord::Schema.define(version: 20160518081453) do
     t.float    "duration"
     t.integer  "total"
     t.integer  "category"
+    t.boolean  "private"
+    t.integer  "group_id"
   end
 
+  add_index "records", ["group_id"], name: "index_records_on_group_id"
   add_index "records", ["user_id"], name: "index_records_on_user_id"
 
   create_table "user_groups", force: :cascade do |t|
