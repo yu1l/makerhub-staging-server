@@ -14,7 +14,7 @@
           <div class="content">
             <div>
             <% if user_signed_in? && current_user == @user %>
-              <span id="stream_title" data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up" style="font-size:18pt;"><%= @user.title || t('content.title.default') %></span>
+              <span id="stream_title" data-balloon="<%= t('stream.title.edit') %>" data-balloon-pos="up" style="font-size:18pt;"><%= @user.title || t('content.title.default') %></span>
               <form class="title_form" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_title" style="display:none;height:34px;">
                 <input type="text" name="user[title]" class="input update_title" value="<%= @user.title %>" focus="true" placeholder="Enterで保存" />
               </form>
@@ -43,12 +43,12 @@
         <div id="live">
           <%= render partial: 'player', locals: { user: @user } %>
         </div>
-        <span class="subtitle"><strong>閲覧<span id="current_number">0</span>人/合計<span id="total"><%= @total || 0 %></span>人</strong></span>
+        <span class="subtitle"><strong><i class="fa fa-eye"></i><span id="current_number">0</span></strong></span>
       <% else %>
         <%= image_tag asset_path("offline.png"), alt: 'offline', style:'width:100%;height:auto;', id: 'live' %>
         <br />
         <p style="padding-top:8px;">
-          <span class="subtitle"><strong>閲覧<span id="current_number">0</span>人/合計<%= @total || 0 %>人</strong></span>
+          <span class="subtitle"><strong><i class="fa fa-eye"></i><span id="current_number">0</span></strong></span>
           <% if user_signed_in? %>
             <% unless current_user == @user %>
               <% if current_user.following?(@user) %>
@@ -83,10 +83,10 @@
   <!-- Tabs -->
   <div class="tabs" style="margin-bottom:16px;">
     <ul>
-      <li id="description" class="is-active"><a>自己紹介</a></li>
-      <li id="record"><a>人気の録画 : <%= @user.records.count %></a></li>
-      <li id="following"><a>フォロー中 : <%= @user.all_following.count %></a></li>
-      <li id="follower"><a>フォロワー : <%= @user.followers.count %></a></li>
+      <li id="description" class="is-active"><a><%= t('user.description') %></a></li>
+      <li id="record"><a><%= t('user.records') %> : <%= @user.records.count %></a></li>
+      <li id="following"><a><%= t('user.followings') %><%= @user.all_following.count %></a></li>
+      <li id="follower"><a><%= t('user.followers') %> : <%= @user.followers.count %></a></li>
     </ul>
   </div>
 

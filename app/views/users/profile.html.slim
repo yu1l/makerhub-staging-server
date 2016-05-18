@@ -8,7 +8,7 @@
           .content
             - if current_user == @user
               .stream
-                span#stream_title data-balloon='タイトルをクリックして編集できます' data-balloon-pos='up' style='font-size:18pt;'= @user.title
+                span#stream_title data-balloon="#{I18n.t('stream.title.edit')}" data-balloon-pos='up' style='font-size:18pt;'= @user.title
                 form.title_form format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title" style="display:none;height:34px;"
                   input.input.update_title type="text" name="user[title]" value="#{@user.title}" focus="true" placeholder="Enterで保存"
               span style='font-size:14pt;'= @user.name
@@ -22,17 +22,17 @@
       .tabs
         ul
           li#description.is-active
-            a 自己紹介
+            a= t('user.description')
           li#record
-            a= "人気の録画 : #{current_user.records.count}"
+            a= "#{I18n.t('user.records')} : #{current_user.records.count}"
           li#following
-            a= "フォロー中 : #{current_user.all_following.count}"
+            a= "#{I18n.t('user.followings')} : #{current_user.all_following.count}"
           li#follower
-            a= "フォロワー : #{current_user.followers.count}"
+            a= "#{I18n.t('user.followers')} : #{current_user.followers.count}"
           li#setting
-            a 設定
+            a= t('user.setting')
           li#private
-            a プライベート配信
+            a= t('user.private_stream')
   #information
     / Description
     #de= render partial: 'users/description', locals: { user: current_user }

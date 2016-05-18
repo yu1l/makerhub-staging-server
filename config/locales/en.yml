@@ -1,23 +1,70 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  stream:
+    title:
+      edit: Click the title and edit
+  content:
+    title:
+      default: Anonymous
+  app:
+    title: SiteLogo
+  chat:
+    signin: Sign in and Comment
+    window:
+      subtitle: s stream
+  time:
+    hour: h
+    min: m
+    sec: s
+  omniauth:
+    twitter: Sign in with Twitter
+    notice: SiteLogo will not post without your permission
+  mypage: Mypage
+  streaming:
+    making: making
+    total: total
+    current: current
+    now: Live Now
+    none: No live streaming right now
+    open_chat_window: open chat window
+  watch_stream: watch stream
+  user:
+    follow: follow
+    followers: followers
+    following: following
+    followings: followings
+    unfollow: unfollow
+    records: Records
+    setting: Setting
+    private_stream: Private Stream Group Setting
+    default:
+      title: Just Started
+      description: Nice to meet you!
+    edit_title: Edit Title
+    edit_description: Edit Description
+    edit: edit
+    cancel: cancel
+    streaming_token:
+      title: streaming key
+      show: show
+      hide: hide
+    description: Description
+  recording: Making a record right now.Please be patient.
+  popular:
+    stream: Streaming Now
+    video: Popular Records
+  signin:
+    title: Sign in
+    email: Sign in with Email
+    submit: Sign in
+  signup:
+    title: Create Account
+    minimum: minimum
+    email: Create Account with Email Address
+    password_confirmation: Password Confirmation
+    submit: Create Account
+  forgot_your_password:
+    title: Forgot your password?
+  email: Email
+  password: Password
+  signout: Sign out
+  streams: Live Now

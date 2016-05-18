@@ -72,7 +72,7 @@ class StreamController < ApplicationController
     # return render json: { status: 500 } if @user.private_stream? && !user_signed_in?
     return redirect_to root_path if @user.private_stream? && !user_signed_in?
     @streaming_group = @user.groups.find_by(streaming: true)
-    return redirect_to root_path if @streaming_group.users.exclude?(current_user)
+    return redirect_to root_path if @user.private_stream? && @streaming_group.users.exclude?(current_user)
     if @user.live?
       total = @user.total
       total += 1

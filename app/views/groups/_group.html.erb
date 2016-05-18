@@ -8,7 +8,8 @@
 <% group.users.each do |user| %>
   <p><%= user.name %></p>
 <% end %>
-<% User.select { |u| u.groups.exclude?(group) }.each do |user| %>
+<h2 class="subtitle">Invitable People</h2>
+<% User.select { |u| u.groups.exclude?(group) && !u.name.nil? }.each do |user| %>
   <p>
     <%= user.name %>
     <%= link_to 'Invite', group_invite_path(uuid: group.uuid, user_uuid: user.uuid) %>
