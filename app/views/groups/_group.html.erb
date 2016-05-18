@@ -1,0 +1,16 @@
+<h1 class="title"><%= group.name %></h1>
+<% if group.streaming %>
+  <%= link_to 'stop streaming for this group', stop_private_stream_path(uuid: group.uuid), class: 'button is-success' %>
+<% else %>
+  <%= link_to 'stream for this group', private_stream_path(uuid: group.uuid), class: 'button is-info' %>
+<% end %>
+<h2 class="subtitle">Members</h2>
+<% group.users.each do |user| %>
+  <p><%= user.name %></p>
+<% end %>
+<% User.select { |u| u.groups.exclude?(group) }.each do |user| %>
+  <p>
+    <%= user.name %>
+    <%= link_to 'Invite', group_invite_path(uuid: group.uuid, user_uuid: user.uuid) %>
+  </p>
+<% end %>

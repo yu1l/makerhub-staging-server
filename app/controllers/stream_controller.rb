@@ -69,7 +69,10 @@ class StreamController < ApplicationController
 
   def user
     @user = User.find_by(name: params[:name])
-    return render json: { status: 500 } if @user.private_stream? && !user_signed_in?
+    # return render json: { status: 500 } if @user.private_stream? && !user_signed_in?
+    return redirect_to root_path if @user.private_stream? && !user_signed_in?
+    @streaming_group = @user.groups.find_by(streaming: true)
+    return redirect_to root_path if @streaming_group.users.exclude?(current_user)
     if @user.live?
       total = @user.total
       total += 1
@@ -140,6 +143,10 @@ class StreamController < ApplicationController
       File.delete("public/#{@user.uuid}_current.png")
     rescue
       puts 'tmp screenshot does not exist'
+    end
+    if @user.private_stream?
+      @group = @user.groups.find_by(streaming: true)
+      @record.delay.update(private: true, group_id: @group.id)
     end
     render nothing: true, status: 200
   end

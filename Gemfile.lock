@@ -49,6 +49,7 @@ GEM
     bower-rails (0.10.0)
     buftok (0.2.0)
     builder (3.2.2)
+    choice (0.2.0)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -152,6 +153,11 @@ GEM
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
+    rails-erd (1.4.7)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
     railties (4.2.6)
@@ -164,6 +170,7 @@ GEM
       railties (>= 4.2.0, < 5.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ruby-graphviz (1.2.2)
     sass (3.4.22)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -239,6 +246,7 @@ DEPENDENCIES
   omniauth-twitter
   pushould
   rails
+  rails-erd
   sass-rails
   slim-rails
   sqlite3
@@ -248,4 +256,4 @@ DEPENDENCIES
   uglifier
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
