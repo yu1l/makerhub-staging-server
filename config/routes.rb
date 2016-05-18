@@ -58,5 +58,8 @@ Rails.application.routes.draw do
   # Unfollow
   get ':name/unfollow' => 'users#unfollow', as: :unfollow
 
+  # Group
+  post ':name/groups' => 'groups#create'
+
   get '*path' => redirect('/')
 end

@@ -31,6 +31,8 @@
             a= "フォロワー : #{current_user.followers.count}"
           li#setting
             a 設定
+          li#private
+            a プライベート配信
   #information
     / Description
     #de= render partial: 'users/description', locals: { user: current_user }
@@ -42,8 +44,16 @@
     #fwer style='display:none;'= render partial: 'users/followers', locals: { followers: current_user.followers }
     / Setting
     #set style='display:none;'= render partial: 'users/setting', locals: { user: current_user }
+    / Private Stream
+    #ps style='display:none;'= render partial: 'users/private_stream', locals: { user: current_user }
 
 script
+  |  $('#private').click(function() {
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#ps').show();
+  |    $('#ps').siblings().hide()
+  |  });
   |  $('#description').click(function() {
   |    $(this).addClass('is-active');
   |    $(this).siblings().removeClass('is-active');

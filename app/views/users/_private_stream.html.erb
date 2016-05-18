@@ -1,0 +1,8 @@
+<div class='columns'>
+  <div class='column is-3'>
+    <%= form_tag("/#{user.name}/groups", class: 'control has-addons') do %>
+      <%= text_field_tag 'group[name]', '', placeholder: 'group name', class: 'input' %>
+      <%= submit_tag 'create', class: 'button is-info' %>
+    <% end %>
+  </div>
+</div>

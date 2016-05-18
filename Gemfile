@@ -31,6 +31,7 @@ gem 'acts_as_follower'
 
 group :development do
   gem 'sqlite3'
+  gem 'rails-erd'
 end
 
 group :production do
