@@ -48,6 +48,7 @@ class UsersController < ApplicationController
 
   def private_stream
     current_user.update(private_stream: true)
+    current_user.groups.map { |g| g.update(streaming: false) }
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: true)
     redirect_to profile_path(name: current_user.name)
