@@ -45,6 +45,8 @@ class User < ActiveRecord::Base
   has_many :groups, through: :user_groups
   has_many :records
   has_many :chats
+  has_one :tw
+  has_one :gh
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
