@@ -15,6 +15,7 @@ gem 'seed_dump'
 
 gem 'devise'
 gem 'omniauth-twitter'
+gem 'omniauth-github'
 
 gem 'delayed_job'
 gem 'delayed_job_active_record'

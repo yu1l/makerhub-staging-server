@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160519185031) do
+ActiveRecord::Schema.define(version: 20160519192419) do
 
   create_table "chats", force: :cascade do |t|
     t.integer  "user_id"
@@ -100,14 +100,15 @@ ActiveRecord::Schema.define(version: 20160519185031) do
     t.string   "uid"
     t.string   "provider"
     t.string   "access_token"
+    t.string   "access_token_secret"
     t.text     "description"
     t.string   "image"
     t.string   "location"
     t.string   "name"
     t.string   "nickname"
     t.string   "url"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   add_index "tws", ["user_id"], name: "index_tws_on_user_id"
@@ -155,6 +156,10 @@ ActiveRecord::Schema.define(version: 20160519185031) do
     t.integer  "total"
     t.integer  "category"
     t.boolean  "private_stream"
+    t.boolean  "github"
+    t.boolean  "twitter"
+    t.string   "twitter_uid"
+    t.string   "github_uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

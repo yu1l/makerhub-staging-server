@@ -16,6 +16,7 @@ en:
     min: m
     sec: s
   omniauth:
+    github: Sign in with GitHub
     twitter: Sign in with Twitter
     notice: SiteLogo will not post without your permission
   mypage: My Page
@@ -28,6 +29,8 @@ en:
     open_chat_window: open chat window
   watch_stream: watch stream
   user:
+    integration: SNS Integration
+    zero_records: No records.
     zero_followings: No followings.
     zero_followers: No followers.
     follow: follow

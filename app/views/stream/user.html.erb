@@ -7,7 +7,7 @@
       <article class="media">
         <figure class="media-left">
           <p class="image is-64x64">
-          <%= image_tag @user.twitter_image_url, alt: @user.name %>
+          <%= image_tag @user.gh.image, alt: @user.name %>
           </p>
         </figure>
         <div class="media-content">
@@ -85,7 +85,7 @@
     <ul>
       <li id="description" class="is-active"><a><%= t('user.description') %></a></li>
       <li id="record"><a><%= t('user.records') %> : <%= @user.records.count %></a></li>
-      <li id="following"><a><%= t('user.followings') %><%= @user.all_following.count %></a></li>
+      <li id="following"><a><%= t('user.followings') %> : <%= @user.all_following.count %></a></li>
       <li id="follower"><a><%= t('user.followers') %> : <%= @user.followers.count %></a></li>
     </ul>
   </div>

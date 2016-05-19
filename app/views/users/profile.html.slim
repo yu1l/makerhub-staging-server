@@ -3,7 +3,7 @@
     .column.is-8
       article.media
         figure.media-left
-          p.image.is-64x64= image_tag @user.twitter_image_url, alt: ''
+          p.image.is-64x64= image_tag @user.gh.image, alt: ''
         .media-content
           .content
             - if current_user == @user
@@ -33,6 +33,8 @@
             a= t('user.setting')
           li#private
             a= t('user.private_stream')
+          li#integration
+            a= t('user.integration')
   #information
     / Description
     #de= render partial: 'users/description', locals: { user: current_user }
@@ -46,8 +48,16 @@
     #set style='display:none;'= render partial: 'users/setting', locals: { user: current_user }
     / Private Stream
     #ps style='display:none;'= render partial: 'users/private_stream', locals: { user: current_user }
+    / Integration
+    #it style='display:none;'= render partial: 'users/integrations', locals: { user: current_user }
 
 script
+  |  $('#integration').click(function() {
+  |    $(this).addClass('is-active');
+  |    $(this).siblings().removeClass('is-active');
+  |    $('#it').show();
+  |    $('#it').siblings().hide()
+  |  });
   |  $('#private').click(function() {
   |    $(this).addClass('is-active');
   |    $(this).siblings().removeClass('is-active');

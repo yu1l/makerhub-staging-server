@@ -5,7 +5,7 @@ class CreateTws < ActiveRecord::Migration
       t.string :uid
       t.string :provider
       t.string :access_token
-      t.string :access_token
+      t.string :access_token_secret
       t.text :description
       t.string :image
       t.string :location

@@ -34,6 +34,10 @@
 #  total                       :integer
 #  category                    :integer
 #  private_stream              :boolean
+#  github                      :boolean
+#  twitter                     :boolean
+#  twitter_uid                 :string
+#  github_uid                  :string
 #
 
 # User
@@ -72,34 +76,55 @@ class User < ActiveRecord::Base
     self.category = 0
   end
 
-  def self.find_or_create_from_twitter(auth)
-    token = auth[:credentials][:token]
-    secret = auth[:credentials][:secret]
-    provider = auth[:provider]
-    uid = auth[:uid]
-    nickname = auth[:info][:nickname]
-    image_url = auth[:info][:image]
-    name = auth[:info][:name]
-    location = auth[:info][:location]
-    description = auth[:info][:description]
-    twitter_url = auth[:info][:Twitter]
-
-    find_or_create_by(provider: provider, uid: uid) do |user|
-      user.email = "#{Devise.friendly_token(8)}@design_and_develop.com"
-      pass = Devise.friendly_token(8)
-      user.password = pass
-      user.password_confirmation = pass
-      user.name = nickname
-      user.twitter_access_token = token
-      user.twitter_access_token_secret = secret
-      user.twitter_nickname = nickname
-      user.twitter_image_url = image_url
-      user.twitter_name = name
-      user.twitter_url = twitter_url
-      user.twitter_description = description
-      user.twitter_location = location
+  def self.find_from_auth(auth, sign_in_resource=nil)
+    return sign_in_resource.add_oauth(auth) unless sign_in_resource.nil?
+    if auth[:provider] == 'twitter'
+      @user = find_or_create_by(twitter: true, twitter_uid: auth[:uid]) do |user|
+        user.name = auth[:info][:name],
+        user.email = "#{Devise.friendly_token(8)}@design_and_develop.com"
+        pass = Devise.friendly_token(8)
+        user.password = pass
+        user.password_confirmation = pass
+      end
+      @user.add_oauth(auth)
+      @user
+    elsif auth[:provider] == 'github'
+      @user = find_or_create_by(github: true, github_uid: auth[:uid]) do |user|
+        user.name = auth[:info][:nickname]
+        user.email = "#{Devise.friendly_token(8)}@design_and_develop.com"
+        pass = Devise.friendly_token(8)
+        user.password = pass
+        user.password_confirmation = pass
+      end
+      @user.add_oauth(auth)
+      @user
     end
+  end
+
+  def add_oauth(auth)
+    if auth[:provider] == 'twitter'
+      update(twitter: true, twitter_uid: auth[:uid])
+      tw ||= create_tw(provider: 'twitter', uid: auth[:uid])
+      tw.update(access_token: auth[:credentials][:token],
+                access_token_secret: auth[:credentials][:secret],
+                name: auth[:info][:name],
+                nickname: auth[:info][:nickname],
+                location: auth[:info][:location],
+                description: auth[:info][:description],
+                image: auth[:info][:image],
+                url: auth[:info][:Twitter])
+      self
     # tweet_msg('test http://localhost')
+    elsif auth[:provider] == 'github'
+      update(github: true, github_uid: auth[:uid])
+      gh ||= create_gh(provider: 'github', uid: auth[:uid])
+      gh.update(email: auth[:info][:email],
+                image: auth[:info][:image],
+                nickname: auth[:info][:nickname],
+                profile_url: auth[:info][:urls][:GitHub],
+                blog_url: auth[:info][:urls][:Blog])
+      self
+    end
   end
 
   def tweet_msg(msg)
