@@ -11,6 +11,7 @@ gem 'slim-rails'
 gem 'streamio-ffmpeg'
 gem 'annotate'
 gem 'aws-sdk-v1'
+gem 'seed_dump'
 
 gem 'devise'
 gem 'omniauth-twitter'
