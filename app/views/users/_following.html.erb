@@ -1,5 +1,5 @@
 <% if followings.count == 0 %>
-  <span class="subtitle">フォロー中のユーザーはいません</span>
+  <span class="subtitle"><%= t('user.zero_followings') %></span>
 <% end %>
 <% followings.each_slice(4) do |following| %>
   <div class="columns">

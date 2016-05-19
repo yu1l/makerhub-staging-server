@@ -28,6 +28,8 @@ en:
     open_chat_window: open chat window
   watch_stream: watch stream
   user:
+    zero_followings: No followings.
+    zero_followers: No followers.
     follow: follow
     followers: followers
     following: following
