@@ -23,7 +23,7 @@
         <article class="media">
           <figure class="media-left">
             <p class="image is-64x64">
-              <%= image_tag @user.twitter_image_url, alt: @user.name %>
+              <%= image_tag "#{@user.gh.image || @user.twitter_image_url}", alt: @user.name %>
             </p>
           </figure>
           <div class="media-content">

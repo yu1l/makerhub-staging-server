@@ -3,7 +3,7 @@
     <div class="media-left">
       <figure class="image is-64x64">
         <%= link_to stream_path(name: user.name), target: '_blank' do %>
-          <%= image_tag user.twitter_image_url, alt: user.name %>
+          <%= image_tag user.gh.image, alt: user.name %>
         <% end %>
       </figure>
     </div>
@@ -11,7 +11,7 @@
       <div class="content">
         <p>
           <span class="tag is-dark is-small" style="float:right;"><%= category(user.category) %></span>
-          <strong><%= user.twitter_name %></strong>
+          <strong><%= user.name %></strong>
           <br />
           <small style="float:left;">@<%= user.name %></small>
           <br />

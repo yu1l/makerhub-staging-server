@@ -4,7 +4,7 @@
       <article class="media">
         <figure class="media-left">
           <p class="image is-32x32">
-            <%= image_tag User.find_by(name: chat.sender).twitter_image_url, alt: chat.sender %>
+            <%= image_tag "#{User.find_by(name: chat.sender).gh.image || User.find_by(name: chat.sender).twitter_image_url}", alt: chat.sender %>
           </p>
         </figure>
         <div class="media-content">

@@ -207,7 +207,7 @@
             '<article class="media">' +
               '<figure class="media-left">' +
                 '<p class="image is-32x32">' +
-                  '<%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %>' +
+                  '<%= image_tag User.find_by(name: current_user.name).gh.image, alt: current_user.name %>' +
                 '</p>' +
               '</figure>' +
               '<div class="media-content">' +

@@ -14,12 +14,11 @@
         <div class="media">
           <div class="media-left">
             <figure class="image is-32x32">
-              <%= image_tag user.twitter_image_url, alt: user.name %>
+              <%= image_tag "#{user.gh.image || user.twitter_image_url}", alt: user.name %>
             </figure>
           </div>
           <div class="media-content">
-            <p class="title is-5"><%= "#{user.twitter_name}" %></p>
-            <p class="subtitle is-6"><%= "@#{user.name}" %></p>
+            <p class="title is-5">@<%= "#{user.name}" %></p>
           </div>
         </div>
         <div class="content">
