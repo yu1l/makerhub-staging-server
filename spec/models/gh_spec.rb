@@ -13,6 +13,7 @@
 #  profile_url :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  name        :string
 #
 
 require 'rails_helper'
