@@ -1,12 +1,12 @@
 <div class='columns'>
   <div class='column is-12'>
   <% unless current_user.github? %>
-    <%= link_to 'GitHub Integration', user_github_omniauth_authorize_path, class: 'button is-default' %>
+    <%= link_to t('user.connect.github'), user_github_omniauth_authorize_path, class: 'button is-default' %>
   <% else %>
     <i class='fa fa-github'></i>
   <% end %>
   <% unless current_user.twitter? %>
-    <%= link_to 'Twitter Integration', user_twitter_omniauth_authorize_path, class: 'button is-info' %>
+    <%= link_to t('user.connect.twitter'), user_twitter_omniauth_authorize_path, class: 'button is-info' %>
   <% else %>
     <i class='fa fa-twitter'></i>
   <% end %>

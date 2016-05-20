@@ -30,6 +30,9 @@ en:
   watch_stream: watch stream
   user:
     integration: SNS Integration
+    connect:
+      github: Connect to GitHub
+      twitter: Connect to Twitter
     zero_records: No records.
     zero_followings: No followings.
     zero_followers: No followers.

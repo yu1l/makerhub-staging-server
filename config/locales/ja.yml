@@ -27,6 +27,9 @@ ja:
   watch_stream: 配信を見る
   user:
     integration: SNS連携
+    connect:
+      github: GitHub連携
+      twitter: Twitter連携
     follow: フォローする
     followers: フォロワー
     following: フォロー中
