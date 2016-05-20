@@ -6,6 +6,13 @@ require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/rspec'
 require 'devise'
+require 'shoulda-matchers'
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
 unless ENV['FIREFOX_PATH'].nil?
   Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_PATH']
 end
