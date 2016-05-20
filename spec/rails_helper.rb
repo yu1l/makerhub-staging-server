@@ -17,6 +17,8 @@ unless ENV['FIREFOX_PATH'].nil?
   Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_PATH']
 end
 OmniAuth.config.test_mode = true
+OmniAuth.config.add_mock(:github)
+OmniAuth.config.add_mock(:twitter)
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 

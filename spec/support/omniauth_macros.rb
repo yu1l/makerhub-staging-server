@@ -222,7 +222,7 @@ module OmniauthMacros
   end
 
   def mock_auth_hash
-    OmniAuth.config.mock_auth[:github] = {
+    OmniAuth.config.mock_auth[:github] = OmniAuth::AuthHash.new({
        "provider"=>"github",
        "uid"=>"2164119",
        "info"=>
@@ -273,8 +273,8 @@ module OmniauthMacros
           }
         }
       }
-    }
-    OmniAuth.config.mock_auth[:twitter] = {
+    })
+    OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new({
       "provider"=>"twitter",
       "uid"=>"601935449",
       "info"=>{"nickname"=>"nil_ppoi", "name"=>"ニル", "email"=>nil, "location"=>"日本 東京都", "image"=>"http://pbs.twimg.com/profile_images/709849980148711424/ws38SlR8_normal.jpg", "description"=>"予定は未定/プロフ画はSuGiRL(@aprilfool1177)さん/キャスは10月末までお休み", "urls"=>{"Website"=>nil, "Twitter"=>"https://twitter.com/nil_ppoi"}},
@@ -437,6 +437,6 @@ module OmniauthMacros
      "following"=>false,
      "follow_request_sent"=>false,
      "notifications"=>false}}
-    }
+    })
   end
 end

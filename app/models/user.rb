@@ -89,8 +89,8 @@ class User < ActiveRecord::Base
       pass = Devise.friendly_token(8)
       user.password = pass
       user.password_confirmation = pass
+      user.add_oauth(auth)
     end
-    @user.add_oauth(auth)
     @user
   end
 
@@ -101,8 +101,8 @@ class User < ActiveRecord::Base
       pass = Devise.friendly_token(8)
       user.password = pass
       user.password_confirmation = pass
+      user.add_github_info(auth)
     end
-    @user.add_github_info(auth)
     @user
   end
 
