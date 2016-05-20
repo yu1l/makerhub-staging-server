@@ -1,8 +1,12 @@
 .columns
   .column.is-12
     .control.is-grouped.twitter style='display:none;'
-      - if user.provider == 'twitter'
-        = link_to "https://twitter.com/#{user.name}", class: 'button is-info', target: '_blank' do
+      - unless user.gh.nil?
+        = link_to user.gh.profile_url, class: 'button is-default', target: '_blank' do
+          i.fa.fa-github
+          span style='padding-left:8px;' GitHub
+      - unless user.tw.nil?
+        = link_to "https://twitter.com/#{user.tw.nickname}", class: 'button is-info', target: '_blank' do
           i.fa.fa-twitter
           span style='padding-left:8px;' Twitter
     Description

@@ -13,6 +13,7 @@ ja:
     min: 分
     sec: 秒
   omniauth:
+    github: GitHub でログイン
     twitter: Twitter でログイン
     notice: DnDが勝手に投稿することはありません
   mypage: マイページ
@@ -25,6 +26,10 @@ ja:
     open_chat_window: チャット画面を開く
   watch_stream: 配信を見る
   user:
+    integration: SNS連携
+    connect:
+      github: GitHub連携
+      twitter: Twitter連携
     follow: フォローする
     followers: フォロワー
     following: フォロー中

@@ -34,6 +34,10 @@
 #  total                       :integer
 #  category                    :integer
 #  private_stream              :boolean
+#  github                      :boolean
+#  twitter                     :boolean
+#  twitter_uid                 :string
+#  github_uid                  :string
 #
 
 class UsersController < ApplicationController

@@ -25,9 +25,9 @@ nav.nav
                   article.media
                     .media-content
                       .content
-                        = link_to user_twitter_omniauth_authorize_path, class: 'button is-info twitter' do
-                          i style="margin-right:4px;" class="fa fa-twitter"
-                          span= t('omniauth.twitter')
+                        = link_to user_github_omniauth_authorize_path, class: 'button is-default twitter' do
+                          i style="margin-right:4px;" class="fa fa-github"
+                          span= t('omniauth.github')
                         br /
                         span.subtitle style="color:#000;"= t('omniauth.notice')
             .modal-close

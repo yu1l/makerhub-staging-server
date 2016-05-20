@@ -11,9 +11,11 @@ gem 'slim-rails'
 gem 'streamio-ffmpeg'
 gem 'annotate'
 gem 'aws-sdk-v1'
+gem 'seed_dump'
 
 gem 'devise'
 gem 'omniauth-twitter'
+gem 'omniauth-github'
 
 gem 'delayed_job'
 gem 'delayed_job_active_record'

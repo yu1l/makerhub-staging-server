@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518100401) do
+ActiveRecord::Schema.define(version: 20160519192419) do
 
   create_table "chats", force: :cascade do |t|
     t.integer  "user_id"
@@ -52,6 +52,21 @@ ActiveRecord::Schema.define(version: 20160518100401) do
   add_index "follows", ["followable_id", "followable_type"], name: "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], name: "fk_follows"
 
+  create_table "ghs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "uid"
+    t.string   "provider"
+    t.string   "nickname"
+    t.string   "email"
+    t.string   "image"
+    t.string   "blog_url"
+    t.string   "profile_url"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "ghs", ["user_id"], name: "index_ghs_on_user_id"
+
   create_table "groups", force: :cascade do |t|
     t.string   "name"
     t.boolean  "private"
@@ -79,6 +94,24 @@ ActiveRecord::Schema.define(version: 20160518100401) do
 
   add_index "records", ["group_id"], name: "index_records_on_group_id"
   add_index "records", ["user_id"], name: "index_records_on_user_id"
+
+  create_table "tws", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "uid"
+    t.string   "provider"
+    t.string   "access_token"
+    t.string   "access_token_secret"
+    t.text     "description"
+    t.string   "image"
+    t.string   "location"
+    t.string   "name"
+    t.string   "nickname"
+    t.string   "url"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "tws", ["user_id"], name: "index_tws_on_user_id"
 
   create_table "user_groups", force: :cascade do |t|
     t.integer  "user_id"
@@ -123,6 +156,10 @@ ActiveRecord::Schema.define(version: 20160518100401) do
     t.integer  "total"
     t.integer  "category"
     t.boolean  "private_stream"
+    t.boolean  "github"
+    t.boolean  "twitter"
+    t.string   "twitter_uid"
+    t.string   "github_uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

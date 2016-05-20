@@ -1,8 +1,7 @@
 module Users
-  # Omniauth
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-    def twitter
-      @user = User.find_or_create_from_twitter(request.env['omniauth.auth'])
+    def callback_from_providers
+      @user = User.find_from_auth(request.env['omniauth.auth'], current_user)
       if @user.persisted?
         sign_in(@user)
         redirect_to profile_path(name: @user.name)
@@ -10,5 +9,8 @@ module Users
         redirect_to new_user_session_path
       end
     end
+
+    alias_method :twitter, :callback_from_providers
+    alias_method :github, :callback_from_providers
   end
 end
