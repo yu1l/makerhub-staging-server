@@ -18,6 +18,7 @@
 #  updated_at          :datetime         not null
 #
 
-class Tw < ActiveRecord::Base
-  belongs_to :user
+require 'rails_helper'
+
+RSpec.describe Tw, type: :model do
 end

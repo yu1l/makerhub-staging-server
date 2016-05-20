@@ -12,6 +12,7 @@ gem 'streamio-ffmpeg'
 gem 'annotate'
 gem 'aws-sdk-v1'
 gem 'seed_dump'
+gem 'pundit'
 
 gem 'devise'
 gem 'omniauth-twitter'
@@ -31,11 +32,33 @@ gem 'pushould'
 gem 'twitter'
 gem 'acts_as_follower'
 
+group :development, :test do
+  gem 'guard-rspec'
+  gem 'rspec-rails'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'factory_girl_rails'
+  gem 'simplecov', require: false
+end
+
+group :test do
+  gem 'faker'
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'shoulda-matchers'
+  gem 'selenium-webdriver'
+end
+
 group :development do
   gem 'sqlite3'
   gem 'rails-erd'
+  gem 'pry-rails'
+  gem 'hirb'
+  gem 'hirb-unicode'
 end
 
 group :production do
   gem 'mysql2'
+  gem 'puma'
 end
