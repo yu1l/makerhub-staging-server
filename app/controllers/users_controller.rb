@@ -83,7 +83,7 @@ class UsersController < ApplicationController
   def profile
     @user = User.find_by(name: params[:name])
     return redirect_to stream_path(name: @user.name) unless @user == current_user
-    @me = true if @user == current_user
+    @me = true
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call
   rescue

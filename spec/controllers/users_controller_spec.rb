@@ -43,4 +43,79 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
+  describe 'POST #update_description'
+  describe 'POST #update_title'
+  describe 'POST #update_record_title'
+  describe 'GET #profile' do
+    before do
+      @user = User.find_from_auth(github_hash, nil)
+    end
+
+    context 'anonymous' do
+      context 'with invalid params' do
+        before do
+          get :profile, name: ''
+        end
+
+        it do
+          expect(subject.current_user).to be_nil
+          expect(response).to redirect_to(root_path)
+        end
+      end
+
+      context 'with valid params' do
+        before do
+          get :profile, name: @user.name
+        end
+
+        it do
+          expect(subject.current_user).to be_nil
+          expect(response).to redirect_to(stream_path(name: @user.name))
+        end
+      end
+    end
+
+    context 'another user' do
+      let(:other) { create(:user) }
+      before do
+        sign_in(other)
+        get :profile, name: @user.name
+      end
+
+      it do
+        expect(other).to be_valid
+        expect(subject.current_user).not_to be_nil
+        expect(response).to redirect_to(stream_path(name: @user.name))
+      end
+    end
+
+    context 'current_user' do
+      before do
+        sign_in(@user)
+        get :profile, name: @user.name
+      end
+
+      it do
+        expect(subject.current_user).not_to be_nil
+      end
+
+      it do
+        expect(assigns(:me)).to be_truthy
+      end
+
+      it do
+        expect(assigns(:content)).to eq("<p>#{I18n.t('user.default.description')}</p>")
+      end
+
+      it do
+        expect(response).to render_template(:profile)
+      end
+    end
+  end
+  describe 'POST #category'
+  describe 'GET #private_stream'
+  describe 'GET #stop_private_stream'
+  describe 'POST #record_cateogry'
+  describe 'GET #follow'
+  describe 'GET #unfollow'
 end
