@@ -4,10 +4,10 @@
       <div class="column is-3"></div>
       <div class="column is-6">
         <h1 class="title"><%= t('signin.title') %></h1>
-        <%= link_to user_twitter_omniauth_authorize_path, class: 'button is-info is-inverted', style: 'margin-bottom:8px;' do %>
-          <i style="margin-right:4px;" class="fa fa-twitter"></i><%= t('omniauth.twitter') %>
+        <%= link_to user_github_omniauth_authorize_path, class: 'button is-default', style: 'margin-bottom:8px;' do %>
+          <i style="margin-right:4px;" class="fa fa-github"></i><%= t('omniauth.github') %>
         <% end %>
-        <h2 class="subtitle">DnD <%= t('omniauth.notice') %></h2>
+        <h2 class="subtitle"><%= t('omniauth.notice') %></h2>
       </div>
       <div class="column is-3"></div>
     </div>

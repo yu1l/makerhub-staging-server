@@ -78,4 +78,88 @@ RSpec.describe User, type: :model do
       # expect(@user.gh.blog_url).to eq(github_hash['info']['urls']['Blog'])
     end
   end
+
+  describe '.find_from_auth with twitter after github sign in' do
+    before do
+      @user = User.find_from_auth(github_hash, nil)
+      @user = User.find_from_auth(twitter_hash, @user)
+    end
+
+    describe 'User' do
+      describe '.count' do
+        subject { User.count }
+        it { is_expected.to eq(1) }
+      end
+
+      describe '.twitter' do
+        subject { @user.twitter }
+        it { is_expected.to be_truthy }
+      end
+
+      describe '.twitter_uid' do
+        subject { @user.twitter_uid }
+        it { is_expected.to eq(twitter_hash['uid']) }
+      end
+
+      describe '.tw' do
+        subject { @user.tw }
+        it { is_expected.to be_valid }
+
+        describe '.count' do
+          subject { Tw.count }
+          it { is_expected.to eq(1) }
+        end
+
+        describe '.provider' do
+          subject { @user.tw.provider }
+          it { is_expected.to eq(twitter_hash['provider']) }
+        end
+
+        describe '.uid' do
+          subject { @user.tw.uid }
+          it { is_expected.to eq(twitter_hash['uid']) }
+        end
+
+        describe '.access_token' do
+          subject { @user.tw.access_token }
+          it { is_expected.to eq(twitter_hash['credentials']['token']) }
+        end
+
+        describe '.access_token_secret' do
+          subject { @user.tw.access_token_secret }
+          it { is_expected.to eq(twitter_hash['credentials']['secret']) }
+        end
+
+        describe '.image' do
+          subject { @user.tw.image }
+          it { is_expected.to eq(twitter_hash['info']['image']) }
+        end
+
+        describe '.name' do
+          subject { @user.tw.name }
+          it { is_expected.to eq(twitter_hash['info']['name']) }
+        end
+
+        describe '.nickname' do
+          subject { @user.tw.nickname }
+          it { is_expected.to eq(twitter_hash['info']['nickname']) }
+        end
+
+        describe '.location' do
+          subject { @user.tw.location }
+          it { is_expected.to eq(twitter_hash['info']['location']) }
+        end
+
+        describe '.description' do
+          subject { @user.tw.description }
+          it { is_expected.to eq(twitter_hash['info']['description']) }
+        end
+
+        describe '.url' do
+          subject { @user.tw.url }
+          it { is_expected.to eq(twitter_hash['info']['urls']['Twitter']) }
+        end
+      end
+    end
+  end
 end
