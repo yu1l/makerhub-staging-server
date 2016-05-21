@@ -22,9 +22,9 @@ RSpec.describe ApplicationHelper, type: :helper do
     let(:middle) { 600 }
     let(:short) { 6 }
     it do
-      expect(time(short)).to eq('6 s')
-      expect(time(middle)).to eq('10 m 0 s')
-      expect(time(long)).to eq('1 h 0 m 0 s')
+      expect(time(short)).to eq("6 #{I18n.t('time.sec')}")
+      expect(time(middle)).to eq("10 #{I18n.t('time.min')} 0 #{I18n.t('time.sec')}")
+      expect(time(long)).to eq("1 #{I18n.t('time.hour')} 0 #{I18n.t('time.min')} 0 #{I18n.t('time.sec')}")
     end
   end
 end
