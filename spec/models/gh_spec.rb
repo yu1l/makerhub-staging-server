@@ -16,14 +16,11 @@
 #  name        :string
 #
 
-class Gh < ActiveRecord::Base
-  belongs_to :user
-  validates :user_id, presence: true
-  validates :provider, presence: true
-  validates :uid, presence: true
-  validates :email, presence: true
-  validates :image, presence: true
-  # validates :name, presence: true
-  # validates :nickname, presence: true
-  # validates :profile_url, presence: true
+require 'rails_helper'
+
+RSpec.describe Gh, type: :model do
+  it { should belong_to(:user) }
+  it { should validate_presence_of(:user_id) }
+  it { should validate_presence_of(:uid) }
+  it { should validate_presence_of(:provider) }
 end

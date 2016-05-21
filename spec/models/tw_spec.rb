@@ -18,9 +18,11 @@
 #  updated_at          :datetime         not null
 #
 
-class Tw < ActiveRecord::Base
-  belongs_to :user
-  validates :user_id, presence: true
-  validates :provider, presence: true
-  validates :uid, presence: true
+require 'rails_helper'
+
+RSpec.describe Tw, type: :model do
+  it { should belong_to(:user) }
+  it { should validate_presence_of(:user_id) }
+  it { should validate_presence_of(:uid) }
+  it { should validate_presence_of(:provider) }
 end

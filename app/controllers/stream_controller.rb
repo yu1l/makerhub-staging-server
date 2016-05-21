@@ -58,11 +58,11 @@ class StreamController < ApplicationController
                       event: 'send',
                       data: {
                         name: "#{@chat.sender}",
-                        image: "#{@sender.twitter_image_url}",
-                        nickname: "#{@sender.twitter_name}",
+                        image: "#{@sender.gh.image}",
+                        nickname: "#{@sender.name}",
                         text: "#{@chat.text}"
                       })
-    render :chat
+    render js: :chat, status: 200
   rescue
     render nothing: true, status: 500
   end
@@ -117,14 +117,12 @@ class StreamController < ApplicationController
   end
 
   def on_publish
-    begin
-      @user = User.find_by(streaming_key: params[:token])
-      @user.update(total: 0)
-      @user.update(live: true)
-    rescue
-      return render nothing: true, status: 500
-    end
+    @user = User.find_by(streaming_key: params[:token])
+    @user.update(total: 0)
+    @user.update(live: true)
     render nothing: true, status: 200
+  rescue
+    render nothing: true, status: 500
   end
 
   def on_record_done

@@ -44,86 +44,103 @@ class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:category]
 
   def stop_private_stream
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.update(private_stream: false)
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: false)
     redirect_to profile_path(name: current_user.name)
+  rescue
+    redirect_to root_path
   end
 
   def private_stream
-    current_user.update(private_stream: true)
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.groups.map { |g| g.update(streaming: false) }
+    current_user.update(private_stream: true)
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: true)
     redirect_to profile_path(name: current_user.name)
+  rescue
+    redirect_to root_path
   end
 
   def follow
     @user = User.find_by(name: params[:name])
-    current_user.follow(@user)
+    authorize(@user, :other?)
+    current_user.follow(@user) unless current_user.following?(@user)
     render nothing: true, status: 200
+  rescue
+    return render nothing: true, status: 500
   end
 
   def unfollow
     @user = User.find_by(name: params[:name])
-    current_user.stop_following(@user)
+    authorize(@user, :other?)
+    current_user.stop_following(@user) if current_user.following?(@user)
     render nothing: true, status: 200
+  rescue
+    return render nothing: true, status: 500
   end
 
   def category
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.update(user_params)
-    render :category
+    render js: :category, status: 200
+  rescue
+    render nothing: true, status: 500
   end
 
   def record_category
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.records.find_by(uuid: params[:uuid]).update(record_params)
     redirect_to play_record_path(name: current_user.name, uuid: params[:uuid])
+  rescue
+    redirect_to root_path
   end
 
   def profile
     @user = User.find_by(name: params[:name])
-    return redirect_to stream_path(name: @user.name) unless @user == current_user
-    @me = true if @user == current_user
+    authorize(@user, :me?)
+    @me = true
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call
   rescue
+    return redirect_to stream_path(name: @user.name) unless @user.nil?
     redirect_to root_path
   end
 
   def update_description
     @user = User.find_by(name: params[:name])
-    if @user.update(user_params)
-      description = HTML::Pipeline::MarkdownFilter.new(@user.description)
-      @content = description.call
-      render :update_description
-    end
+    authorize(@user, :me?)
+    current_user.update(user_params)
+    description = HTML::Pipeline::MarkdownFilter.new(@user.description)
+    @content = description.call
+    render js: :update_description, status: 200
   rescue
     render nothing: true, status: 500
   end
 
   def update_title
     @user = User.find_by(name: params[:name])
-    if @user.update(user_params)
-      render :update_title
-    end
+    authorize(@user, :me?)
+    current_user.update(user_params)
+    render js: :update_title, status: 200
   rescue
     render nothing: true, status: 500
   end
 
   def update_record_title
     @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     @record = @user.records.find_by(uuid: params[:uuid])
-    if @record.update(record_params)
-      render :update_record_title
-    end
+    @record.update(record_params)
+    render js: :update_record_title, status: 200
   rescue
     render nothing: true, status: 500
-  end
-
-  def stream
-    @user = User.find_by(name: params[:name])
-  rescue
-    redirect_to root_path
   end
 
   private
