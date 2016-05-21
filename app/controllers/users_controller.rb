@@ -114,9 +114,9 @@ class UsersController < ApplicationController
 
   def update_title
     @user = User.find_by(name: params[:name])
-    if @user.update(user_params)
-      render :update_title
-    end
+    authorize(@user, :me?)
+    current_user.update(user_params)
+    render js: :update_title, status: 200
   rescue
     render nothing: true, status: 500
   end
