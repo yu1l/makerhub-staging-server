@@ -77,8 +77,12 @@ class UsersController < ApplicationController
   end
 
   def category
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.update(user_params)
-    render :category
+    render js: :category, status: 200
+  rescue
+    render nothing: true, status: 500
   end
 
   def record_category

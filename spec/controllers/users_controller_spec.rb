@@ -46,6 +46,55 @@ RSpec.describe UsersController, type: :controller do
   describe 'POST #update_description'
   describe 'POST #update_title'
   describe 'POST #update_record_title'
+
+  describe 'POST #category' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+      end
+
+      it do
+        expect {
+          post :category, name: @user.name, user: { category: 2 }
+        }.not_to change{@user.category}.from(0)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+      end
+
+      it do
+        expect {
+          post :category, name: @user.name, user: { category: 2 }
+        }.not_to change{@user.category}.from(0)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via current_user' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      before do
+        sign_in(user)
+      end
+
+      it do
+        expect {
+          post :category, name: subject.current_user.name, user: { category: 2 }
+        }.to change{subject.current_user.category}.from(0).to(2)
+        expect(response).to be_success
+      end
+    end
+  end
+
+  describe 'GET #private_stream'
+  describe 'GET #stop_private_stream'
+  describe 'POST #record_cateogry'
+
   describe 'GET #profile' do
     before do
       @user = User.find_from_auth(github_hash, nil)
@@ -112,10 +161,7 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
-  describe 'POST #category'
-  describe 'GET #private_stream'
-  describe 'GET #stop_private_stream'
-  describe 'POST #record_cateogry'
+
   describe 'GET #follow' do
     context 'via anonymous user' do
       before do
@@ -163,6 +209,7 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
   describe 'GET #unfollow' do
     context 'via anonymous user' do
       before do
