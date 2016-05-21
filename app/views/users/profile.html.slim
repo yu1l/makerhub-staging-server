@@ -31,8 +31,6 @@
             a= "#{I18n.t('user.followers')} : #{current_user.followers.count}"
           li#setting
             a= t('user.setting')
-          li#private
-            a= t('user.private_stream')
           li#integration
             a= t('user.integration')
   #information
@@ -46,8 +44,6 @@
     #fwer style='display:none;'= render partial: 'users/followers', locals: { followers: current_user.followers }
     / Setting
     #set style='display:none;'= render partial: 'users/setting', locals: { user: current_user }
-    / Private Stream
-    #ps style='display:none;'= render partial: 'users/private_stream', locals: { user: current_user }
     / Integration
     #it style='display:none;'= render partial: 'users/integrations', locals: { user: current_user }
 
@@ -57,12 +53,6 @@ script
   |    $(this).siblings().removeClass('is-active');
   |    $('#it').show();
   |    $('#it').siblings().hide()
-  |  });
-  |  $('#private').click(function() {
-  |    $(this).addClass('is-active');
-  |    $(this).siblings().removeClass('is-active');
-  |    $('#ps').show();
-  |    $('#ps').siblings().hide()
   |  });
   |  $('#description').click(function() {
   |    $(this).addClass('is-active');

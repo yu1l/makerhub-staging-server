@@ -45,8 +45,8 @@ class StreamController < ApplicationController
   end
 
   def chat
-    @user = User.find_by(name: params[:name])
-    @chat = @user.chats.create(sender: current_user.name, text: params[:chat][:text])
+    @user = User.find_by(name: params['name'])
+    @chat = @user.chats.create(sender: current_user.name, text: params['chat']['text'])
     @chats = @user.chats.all
     @pushould = Pushould.new(server_token: ENV['SERVER_TOKEN'],
                              url: ENV['URL'],
@@ -62,7 +62,7 @@ class StreamController < ApplicationController
                         nickname: "#{@sender.name}",
                         text: "#{@chat.text}"
                       })
-    render js: :chat, status: 200
+    render :chat, status: 200
   rescue
     render nothing: true, status: 500
   end

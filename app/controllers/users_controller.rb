@@ -88,7 +88,7 @@ class UsersController < ApplicationController
     @user = User.find_by(name: params[:name])
     authorize(@user, :me?)
     current_user.update(user_params)
-    render js: :category, status: 200
+    render :category, status: 200
   rescue
     render nothing: true, status: 500
   end
@@ -119,7 +119,7 @@ class UsersController < ApplicationController
     current_user.update(user_params)
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call
-    render js: :update_description, status: 200
+    render :update_description, status: 200
   rescue
     render nothing: true, status: 500
   end
@@ -128,7 +128,7 @@ class UsersController < ApplicationController
     @user = User.find_by(name: params[:name])
     authorize(@user, :me?)
     current_user.update(user_params)
-    render js: :update_title, status: 200
+    render :update_title, status: 200
   rescue
     render nothing: true, status: 500
   end
@@ -138,7 +138,7 @@ class UsersController < ApplicationController
     authorize(@user, :me?)
     @record = @user.records.find_by(uuid: params[:uuid])
     @record.update(record_params)
-    render js: :update_record_title, status: 200
+    render :update_record_title, status: 200
   rescue
     render nothing: true, status: 500
   end
