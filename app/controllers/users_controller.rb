@@ -69,8 +69,11 @@ class UsersController < ApplicationController
 
   def unfollow
     @user = User.find_by(name: params[:name])
-    current_user.stop_following(@user)
+    authorize(@user, :other?)
+    current_user.stop_following(@user) if current_user.following?(@user)
     render nothing: true, status: 200
+  rescue
+    return render nothing: true, status: 500
   end
 
   def category

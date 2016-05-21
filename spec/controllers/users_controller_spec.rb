@@ -163,5 +163,50 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
-  describe 'GET #unfollow'
+  describe 'GET #unfollow' do
+    context 'via anonymous user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        get :unfollow, name: @user.name
+      end
+
+      it 'status 500' do
+        expect(@user.all_following.count).to eq(0)
+        expect(@user.followers.count).to eq(0)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via signed in user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+        get :follow, name: @user.name
+        get :unfollow, name: @user.name
+      end
+
+      it 'status 200' do
+        expect(@other.all_following.count).to eq(0)
+        expect(@other.followers.count).to eq(0)
+        expect(@user.all_following.count).to eq(0)
+        expect(@user.followers.count).to eq(0)
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'via current_user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        sign_in(@user)
+        get :unfollow, name: @user.name
+      end
+
+      it 'status 500' do
+        expect(@user.all_following.count).to eq(0)
+        expect(@user.followers.count).to eq(0)
+        expect(response.status).to eq(500)
+      end
+    end
+  end
 end
