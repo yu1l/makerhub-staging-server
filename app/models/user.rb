@@ -63,6 +63,7 @@ class User < ActiveRecord::Base
          :omniauthable
 
   before_create do
+    self.private_stream = false
     self.uuid = ((0..9).to_a.sample(3) +
                  ('a'..'z').to_a.sample(3) +
                  ('A'..'Z').to_a.sample(3)

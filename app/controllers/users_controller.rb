@@ -44,18 +44,26 @@ class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:category]
 
   def stop_private_stream
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.update(private_stream: false)
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: false)
     redirect_to profile_path(name: current_user.name)
+  rescue
+    redirect_to root_path
   end
 
   def private_stream
-    current_user.update(private_stream: true)
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.groups.map { |g| g.update(streaming: false) }
+    current_user.update(private_stream: true)
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: true)
     redirect_to profile_path(name: current_user.name)
+  rescue
+    redirect_to root_path
   end
 
   def follow

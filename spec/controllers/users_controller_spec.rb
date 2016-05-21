@@ -131,8 +131,6 @@ RSpec.describe UsersController, type: :controller do
     end
   end
 
-  describe 'POST #update_record_title'
-
   describe 'POST #category' do
     context 'via anonymous' do
       before do
@@ -176,10 +174,6 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
-
-  describe 'GET #private_stream'
-  describe 'GET #stop_private_stream'
-  describe 'POST #record_cateogry'
 
   describe 'GET #profile' do
     before do
@@ -342,4 +336,155 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'GET #private_stream' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @group = @user.groups.create(name: 'test')
+        @user.user_groups.find_by(group_id: @group.id).admin!
+      end
+
+      it do
+        expect {
+          get :private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.attributes}
+
+        expect {
+          get :private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.user_groups.map(&:attributes)}
+
+        expect {
+          get :private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.groups.map(&:attributes)}
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+        @group = @user.groups.create(name: 'test')
+        @user.user_groups.find_by(group_id: @group.id).admin!
+      end
+
+      it do
+        expect {
+          get :private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.attributes}
+
+        expect {
+          get :private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.user_groups.map(&:attributes)}
+
+        expect {
+          get :private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.groups.map(&:attributes)}
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'via current_user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        sign_in(@user)
+        @group = @user.groups.create(name: 'test')
+        @group1 = @user.groups.create(name: 'other')
+        @group1.update(streaming: true)
+        @user.user_groups.find_by(group_id: @group1.id).admin!
+        @user.user_groups.find_by(group_id: @group.id).admin!
+        get :private_stream, name: subject.current_user.name, uuid: @group.uuid
+      end
+
+      it do
+        expect(subject.current_user.private_stream).to be_truthy
+        expect(subject.current_user.groups.find_by(uuid: @group.uuid).user_groups.first.admin?).to be_truthy
+        expect(subject.current_user.groups.find_by(uuid: @group.uuid).streaming).to be_truthy
+        expect(subject.current_user.groups.find_by(uuid: @group1.uuid).streaming).to be_falsy
+        expect(subject.current_user.groups.where(streaming: true).count).to eq(1)
+        expect(response).to redirect_to(profile_path(name: subject.current_user.name))
+      end
+    end
+  end
+
+  describe 'GET #stop_private_stream' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        @user.update(private_stream: true)
+        @group = @user.groups.create(name: 'test')
+        @user.user_groups.find_by(group_id: @group.id).admin!
+      end
+
+      it do
+        expect {
+          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.attributes}
+
+        expect {
+          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.user_groups.map(&:attributes)}
+
+        expect {
+          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.groups.map(&:attributes)}
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        @user.update(private_stream: true)
+        sign_in(@other)
+        @group = @user.groups.create(name: 'test')
+        @user.user_groups.find_by(group_id: @group.id).admin!
+      end
+
+      it do
+        expect {
+          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.attributes}
+
+        expect {
+          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.user_groups.map(&:attributes)}
+
+        expect {
+          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+        }.not_to change{@user.groups.map(&:attributes)}
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'via current_user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        sign_in(@user)
+        @user.update(private_stream: true)
+        @group = @user.groups.create(name: 'test')
+        @group.update(streaming: true)
+        @user.user_groups.find_by(group_id: @group.id).admin!
+        get :stop_private_stream, name: subject.current_user.name, uuid: @group.uuid
+      end
+
+      it do
+        expect(subject.current_user.private_stream).to be_falsy
+        expect(subject.current_user.groups.find_by(uuid: @group.uuid).user_groups.first.admin?).to be_truthy
+        expect(subject.current_user.groups.find_by(uuid: @group.uuid).streaming).to be_falsy
+        expect(subject.current_user.groups.where(streaming: true).count).to eq(0)
+        expect(response).to redirect_to(profile_path(name: subject.current_user.name))
+      end
+    end
+  end
+  describe 'POST #record_cateogry'
+  describe 'POST #update_record_title'
 end

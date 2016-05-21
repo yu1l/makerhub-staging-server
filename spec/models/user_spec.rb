@@ -55,6 +55,7 @@ RSpec.describe User, type: :model do
       expect(resource.streaming_key).not_to be_nil
       expect(resource.title).to eq(I18n.t('user.default.title'))
       expect(resource.description).to eq(I18n.t('user.default.description'))
+      expect(resource.private_stream).to be_falsy
       expect(resource.category).to eq(0)
       expect(resource.total).to eq(0)
     end
