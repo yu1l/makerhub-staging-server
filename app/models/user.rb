@@ -123,13 +123,13 @@ class User < ActiveRecord::Base
   end
 
   def tweet_msg(msg)
-    @client = Twitter::REST::Client.new do |config|
-      config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
-      config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-      config.access_token =  token
-      config.access_token_secret = secret
-    end
-    @client.update(msg)
+    # @client = Twitter::REST::Client.new do |config|
+      # config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+      # config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+      # config.access_token =  token
+      # config.access_token_secret = secret
+    # end
+    # @client.update(msg)
     # https://card-dev.twitter.com/validator
     # <meta name="description" content="プログラミングスクール【TechAcademy（テックアカデミー）】のオフィシャルサイト。エンジニアになれるオンラインブートキャンプを開催。大手IT企業を中心に100社以上のプログラミング研修実績あり。" />
     # <meta name="keywords" content="プログラミング, ブートキャンプ, エンジニア, ruby on rails, パーソナルメンター" />
