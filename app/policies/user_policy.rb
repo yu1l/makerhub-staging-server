@@ -6,10 +6,6 @@ class UserPolicy
     @other = other
   end
 
-  def anonymous?
-    @other.nil?
-  end
-
   def other?
     @user != @other
   end

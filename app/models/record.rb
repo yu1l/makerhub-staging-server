@@ -20,12 +20,14 @@
 
 # Record
 class Record < ActiveRecord::Base
+  validates :user_id, presence: true
   belongs_to :user
   belongs_to :group
 
   before_create do
     self.duration = 1.0
     self.category = self.user.category
+    self.uuid = ((0..9).to_a.sample(3) + ('a'..'z').to_a.sample(3)).shuffle.join
   end
 
   def screenshot_url
@@ -92,9 +94,5 @@ class Record < ActiveRecord::Base
     File.delete("public/#{uuid}.mp4")
   rescue
     puts 'Error on app/models/record.rb'
-  end
-
-  before_create do
-    self.uuid = ((0..9).to_a.sample(3) + ('a'..'z').to_a.sample(3)).shuffle.join
   end
 end

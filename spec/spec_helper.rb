@@ -2,6 +2,7 @@ require 'simplecov'
 SimpleCov.profiles.define 'filtering' do
   load_profile 'rails'
   add_filter '.bundle'
+  add_filter 'app/models/follow.rb'
 end
 SimpleCov.start 'filtering'
 

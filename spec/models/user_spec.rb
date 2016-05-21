@@ -58,6 +58,7 @@ RSpec.describe User, type: :model do
       expect(resource.private_stream).to be_falsy
       expect(resource.category).to eq(0)
       expect(resource.total).to eq(0)
+      expect(resource.live).to be_falsy
     end
   end
 
