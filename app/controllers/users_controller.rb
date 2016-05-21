@@ -131,12 +131,6 @@ class UsersController < ApplicationController
     render nothing: true, status: 500
   end
 
-  def stream
-    @user = User.find_by(name: params[:name])
-  rescue
-    redirect_to root_path
-  end
-
   private
 
   def user_params
