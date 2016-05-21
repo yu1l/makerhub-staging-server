@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe HomeController, type: :controller do
   describe 'GET #index' do
-    let(:user) { create(:user, live: true) }
     before do
+      @user = User.find_from_auth(github_hash, nil)
+      @user.update(live: true)
       get :index
     end
 
@@ -12,7 +13,7 @@ RSpec.describe HomeController, type: :controller do
     end
 
     it 'assigns live users' do
-      expect(assigns(:users)).to eq([user])
+      expect(assigns(:users)).to eq([@user])
     end
 
     it do
