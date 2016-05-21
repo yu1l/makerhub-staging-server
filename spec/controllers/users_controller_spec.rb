@@ -415,7 +415,6 @@ RSpec.describe UsersController, type: :controller do
     context 'via anonymous' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        @other = create(:user)
         @user.update(private_stream: true)
         @group = @user.groups.create(name: 'test')
         @user.user_groups.find_by(group_id: @group.id).admin!
@@ -485,6 +484,97 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
-  describe 'POST #record_cateogry'
-  describe 'POST #update_record_title'
+
+  describe 'POST #record_cateogry' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @record = @user.records.create(title: @user.title)
+      end
+
+      it do
+        expect {
+          post :record_category, name: @user.name, uuid: @record.uuid, record: { category: 2 }
+        }.not_to change{@user.records.find_by(uuid: @record.uuid).category}.from(0)
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+        @record = @user.records.create(title: @user.title)
+      end
+
+      it do
+        expect {
+          post :record_category, name: @user.name, uuid: @record.uuid, record: { category: 2 }
+        }.not_to change{@user.records.find_by(uuid: @record.uuid).category}.from(0)
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'via current_user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        sign_in(@user)
+        @record = @user.records.create(title: @user.title)
+      end
+
+      it do
+        expect {
+          post :record_category, name: subject.current_user.name, uuid: @record.uuid, record: { category: 2 }
+        }.to change{subject.current_user.records.find_by(uuid: @record.uuid).category}.from(0).to(2)
+      end
+    end
+  end
+
+  describe 'POST #update_record_title' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @record = @user.records.create(title: @user.title)
+      end
+
+      it do
+        expect {
+          post :update_record_title, name: @user.name, uuid: @record.uuid, record: { title: 'new title' }
+        }.not_to change{@user.records.find_by(uuid: @record.uuid).title}.from(@user.title)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+        @record = @user.records.create(title: @user.title)
+      end
+
+      it do
+        expect {
+          post :update_record_title, name: @user.name, uuid: @record.uuid, record: { title: 'new title' }
+        }.not_to change{@user.records.find_by(uuid: @record.uuid).title}.from(@user.title)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via current_user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        sign_in(@user)
+        @record = @user.records.create(title: @user.title)
+      end
+
+      it do
+        expect {
+          post :update_record_title, name: subject.current_user.name, uuid: @record.uuid, record: { title: 'new title' }
+        }.to change{subject.current_user.records.find_by(uuid: @record.uuid).title}.from(@user.title).to('new title')
+        expect(response.status).to eq(200)
+      end
+    end
+  end
 end

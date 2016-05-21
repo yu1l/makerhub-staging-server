@@ -94,8 +94,12 @@ class UsersController < ApplicationController
   end
 
   def record_category
+    @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     current_user.records.find_by(uuid: params[:uuid]).update(record_params)
     redirect_to play_record_path(name: current_user.name, uuid: params[:uuid])
+  rescue
+    redirect_to root_path
   end
 
   def profile
@@ -131,10 +135,10 @@ class UsersController < ApplicationController
 
   def update_record_title
     @user = User.find_by(name: params[:name])
+    authorize(@user, :me?)
     @record = @user.records.find_by(uuid: params[:uuid])
-    if @record.update(record_params)
-      render :update_record_title
-    end
+    @record.update(record_params)
+    render js: :update_record_title, status: 200
   rescue
     render nothing: true, status: 500
   end
