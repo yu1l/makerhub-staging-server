@@ -43,7 +43,49 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
-  describe 'POST #update_description'
+  describe 'POST #update_description' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+      end
+
+      it do
+        expect {
+          post :update_description, name: @user.name, user: { description: '# Heading' }
+        }.not_to change{@user.description}.from(I18n.t('user.default.description'))
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+      end
+
+      it do
+        expect {
+          post :update_description, name: @user.name, user: { description: '# Heading' }
+        }.not_to change{@user.description}.from(I18n.t('user.default.description'))
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via current_user' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      before do
+        sign_in(user)
+      end
+
+      it do
+        expect {
+          post :update_description, name: subject.current_user.name, user: { description: '# Heading' }
+        }.to change{subject.current_user.description}.from(I18n.t('user.default.description')).to('# Heading')
+        expect(response.status).to eq(200)
+      end
+    end
+  end
 
   describe 'POST #update_title' do
     context 'via anonymous' do

@@ -103,11 +103,11 @@ class UsersController < ApplicationController
 
   def update_description
     @user = User.find_by(name: params[:name])
-    if @user.update(user_params)
-      description = HTML::Pipeline::MarkdownFilter.new(@user.description)
-      @content = description.call
-      render :update_description
-    end
+    authorize(@user, :me?)
+    current_user.update(user_params)
+    description = HTML::Pipeline::MarkdownFilter.new(@user.description)
+    @content = description.call
+    render js: :update_description, status: 200
   rescue
     render nothing: true, status: 500
   end
