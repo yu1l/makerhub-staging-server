@@ -60,8 +60,11 @@ class UsersController < ApplicationController
 
   def follow
     @user = User.find_by(name: params[:name])
-    current_user.follow(@user)
+    authorize(@user, :other?)
+    current_user.follow(@user) unless current_user.following?(@user)
     render nothing: true, status: 200
+  rescue
+    return render nothing: true, status: 500
   end
 
   def unfollow

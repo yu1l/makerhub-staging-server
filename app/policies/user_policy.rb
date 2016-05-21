@@ -10,6 +10,10 @@ class UserPolicy
     @other.nil?
   end
 
+  def other?
+    @user != @other
+  end
+
   def me?
     @user == @other
   end
