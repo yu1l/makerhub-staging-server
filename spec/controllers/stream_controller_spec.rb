@@ -303,7 +303,7 @@ RSpec.describe StreamController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         sign_in(@user)
-        post :chat, name: @user.name, chat: { text: 'hello world' }
+        post :chat, name: @user.name, chat: { text: 'hello world' }, format: :js
       end
 
       it do

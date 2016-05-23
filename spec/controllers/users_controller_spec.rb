@@ -80,7 +80,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_description, name: subject.current_user.name, user: { description: '# Heading' }
+          post :update_description, name: subject.current_user.name, user: { description: '# Heading' }, format: :js
         }.to change{subject.current_user.description}.from(I18n.t('user.default.description')).to('# Heading')
         expect(response.status).to eq(200)
       end
@@ -124,7 +124,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_title, name: subject.current_user.name, user: { title: 'new title' }
+          post :update_title, name: subject.current_user.name, user: { title: 'new title' }, format: :js
         }.to change{subject.current_user.title}.from(I18n.t('user.default.title')).to('new title')
         expect(response.status).to eq(200)
       end
@@ -168,7 +168,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :category, name: subject.current_user.name, user: { category: 2 }
+          post :category, name: subject.current_user.name, user: { category: 2 }, format: :js
         }.to change{subject.current_user.category}.from(0).to(2)
         expect(response).to be_success
       end
@@ -571,7 +571,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_record_title, name: subject.current_user.name, uuid: @record.uuid, record: { title: 'new title' }
+          post :update_record_title, name: subject.current_user.name, uuid: @record.uuid, record: { title: 'new title' }, format: :js
         }.to change{subject.current_user.records.find_by(uuid: @record.uuid).title}.from(@user.title).to('new title')
         expect(response.status).to eq(200)
       end
