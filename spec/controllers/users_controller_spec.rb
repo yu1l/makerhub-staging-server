@@ -401,7 +401,7 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it do
-        expect(subject.current_user.private_stream).to be_truthy
+        expect(subject.current_user.private?).to be_truthy
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).user_groups.first.admin?).to be_truthy
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).streaming).to be_truthy
         expect(subject.current_user.groups.find_by(uuid: @group1.uuid).streaming).to be_falsy
@@ -415,7 +415,7 @@ RSpec.describe UsersController, type: :controller do
     context 'via anonymous' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        @user.update(private_stream: true)
+        @user.update(private: true)
         @group = @user.groups.create(name: 'test')
         @user.user_groups.find_by(group_id: @group.id).admin!
       end
@@ -441,7 +441,7 @@ RSpec.describe UsersController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         @other = create(:user)
-        @user.update(private_stream: true)
+        @user.update(private: true)
         sign_in(@other)
         @group = @user.groups.create(name: 'test')
         @user.user_groups.find_by(group_id: @group.id).admin!
@@ -468,7 +468,7 @@ RSpec.describe UsersController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         sign_in(@user)
-        @user.update(private_stream: true)
+        @user.update(private: true)
         @group = @user.groups.create(name: 'test')
         @group.update(streaming: true)
         @user.user_groups.find_by(group_id: @group.id).admin!
@@ -476,7 +476,7 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it do
-        expect(subject.current_user.private_stream).to be_falsy
+        expect(subject.current_user.private?).to be_falsy
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).user_groups.first.admin?).to be_truthy
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).streaming).to be_falsy
         expect(subject.current_user.groups.where(streaming: true).count).to eq(0)

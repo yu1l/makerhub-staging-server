@@ -2,42 +2,33 @@
 #
 # Table name: users
 #
-#  id                          :integer          not null, primary key
-#  email                       :string           default(""), not null
-#  encrypted_password          :string           default(""), not null
-#  reset_password_token        :string
-#  reset_password_sent_at      :datetime
-#  remember_created_at         :datetime
-#  sign_in_count               :integer          default(0), not null
-#  current_sign_in_at          :datetime
-#  last_sign_in_at             :datetime
-#  current_sign_in_ip          :string
-#  last_sign_in_ip             :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  uuid                        :string
-#  provider                    :string
-#  uid                         :string
-#  name                        :string
-#  twitter_access_token        :string
-#  twitter_access_token_secret :string
-#  twitter_nickname            :string
-#  twitter_image_url           :string
-#  twitter_name                :string
-#  twitter_url                 :string
-#  twitter_description         :string
-#  twitter_location            :string
-#  streaming_key               :string
-#  title                       :string
-#  live                        :boolean          default(FALSE)
-#  description                 :text
-#  total                       :integer
-#  category                    :integer
-#  private_stream              :boolean
-#  github                      :boolean
-#  twitter                     :boolean
-#  twitter_uid                 :string
-#  github_uid                  :string
+#  id                     :integer          not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string
+#  last_sign_in_ip        :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  uuid                   :string
+#  name                   :string
+#  streaming_key          :string
+#  title                  :string
+#  live                   :boolean          default(FALSE)
+#  description            :text
+#  total                  :integer
+#  category               :integer
+#  github                 :boolean
+#  twitter_uid            :string
+#  github_uid             :string
+#  private                :boolean
+#  twitter                :boolean
+#  nickname               :string
 #
 
 require 'rails_helper'
@@ -55,7 +46,7 @@ RSpec.describe User, type: :model do
       expect(resource.streaming_key).not_to be_nil
       expect(resource.title).to eq(I18n.t('user.default.title'))
       expect(resource.description).to eq(I18n.t('user.default.description'))
-      expect(resource.private_stream).to be_falsy
+      expect(resource.private).to be_falsy
       expect(resource.category).to eq(0)
       expect(resource.total).to eq(0)
       expect(resource.live).to be_falsy
@@ -65,6 +56,8 @@ RSpec.describe User, type: :model do
   describe '.find_from_auth with github' do
     before { @user = User.find_from_auth(github_hash, nil) }
     it 'create user' do
+      expect(@user.name).to eq(github_hash['info']['name'])
+      expect(@user.nickname).to eq(github_hash['info']['nickname'])
       expect(Gh.count).to eq(1)
       expect(@user).to be_valid
       expect(@user.github).to be_truthy
