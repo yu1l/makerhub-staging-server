@@ -21,7 +21,7 @@ script
   | $('.editDescription').on('click', function() {
   |   $(this).toggle();
   |   $('.saveDescription').toggle();
-  |   $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_description"><textarea class="textarea" name="user[description]">' + $('.saveDescription').attr('content') + '</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
+  |   $('.description').html('<form id="descriptionForm" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.nickname}/update_description"><textarea class="textarea" name="user[description]">' + $('.saveDescription').attr('content') + '</textarea><input type="submit" value="自己紹介を更新する" class="button is-primary is-inverted" /></form>');
   | });
   | $('.saveDescription').on('click', function() {
   |   $(this).toggle();

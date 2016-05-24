@@ -15,7 +15,7 @@
             <div>
             <% if user_signed_in? && current_user == @user %>
               <span id="stream_title" data-balloon="<%= t('stream.title.edit') %>" data-balloon-pos="up" style="font-size:18pt;"><%= @user.title || t('content.title.default') %></span>
-              <form class="title_form" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.name %>/update_title" style="display:none;height:34px;">
+              <form class="title_form" format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/<%= @user.nickname %>/update_title" style="display:none;height:34px;">
                 <input type="text" name="user[title]" class="input update_title" value="<%= @user.title %>" focus="true" placeholder="Enterで保存" />
               </form>
             <% else %>
@@ -30,7 +30,7 @@
     </div>
     <!-- Open External Chat Window -->
     <div class="column is-4" style="padding-top:0px;padding-bottom:22px;">
-      <a href="/<%= @user.name%>/chat_window" class="button is-info open_chat" style="border-radius:0;" target="_blank">
+      <a href="/<%= @user.nickname %>/chat_window" class="button is-info open_chat" style="border-radius:0;" target="_blank">
         <i class="fa fa-external-link fa-1" aria-hidden="true"></i><span style="padding-left:4px;"><%= t('streaming.open_chat_window') %></span>
       </a>
     </div>
@@ -70,7 +70,7 @@
         <%= render partial: 'chat', locals: { chats: @chats } %>
       </ul>
       <% if user_signed_in? %>
-        <%= form_tag("/#{@user.name}/chat", remote: true, format: :js) do %>
+        <%= form_tag("/#{@user.nickname}/chat", remote: true, format: :js) do %>
           <%= text_field_tag 'chat[text]', :text, class: 'input message', placeholder: 'Message - Enter で送信', value: '', autofocus: true, style: 'margin-bottom: 10px;background-color:#fff;', required: false %>
         <% end %>
         <h2 class="subtitle msg-error" style="display:none;">Message can't be empty.</h2>
@@ -168,7 +168,7 @@
       e.preventDefault();
       $.ajax({
         type: 'GET',
-        url: "/<%= @user.name %>/follow",
+        url: "/<%= @user.nickname %>/follow",
         success: function() {
           $('.follow').hide();
           $('.unfollow').show();
@@ -179,7 +179,7 @@
       e.preventDefault();
       $.ajax({
         type: 'GET',
-        url: "/<%= @user.name %>/unfollow",
+        url: "/<%= @user.nickname %>/unfollow",
         success: function() {
           $('.unfollow').hide();
           $('.follow').show();
@@ -203,11 +203,11 @@
         }
         $('.msg-error').hide();
         $('#comments').append('<% if user_signed_in? %><li>' +
-          '<%= link_to stream_path(name: current_user.name), style: "color: #000", target: "_blank"  do %>' +
+          '<%= link_to stream_path(nickname: current_user.nickname), style: "color: #000", target: "_blank"  do %>' +
             '<article class="media">' +
               '<figure class="media-left">' +
                 '<p class="image is-32x32">' +
-                  '<%= image_tag User.find_by(name: current_user.name).gh.image, alt: current_user.name %>' +
+                  '<%= image_tag User.find_by(nickname: current_user.nickname).gh.image, alt: current_user.name %>' +
                 '</p>' +
               '</figure>' +
               '<div class="media-content">' +
@@ -225,7 +225,7 @@
 //        $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
-          url: "/<%= @user.name %>/chat",
+          url: "/<%= @user.nickname %>/chat",
           data: {
             chat: {
               text: $('.message').val()
@@ -252,7 +252,7 @@
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
       $('#comments').append('<li>' +
-        '<a href="/' + msg.name + '" style="color: #000;" target="_blank">' +
+        '<a href="/' + msg.nickname + '" style="color: #000;" target="_blank">' +
           '<article class="media">' +
             '<figure class="media-left">' +
               '<p class="image is-32x32">' +
@@ -278,7 +278,7 @@
     channel.bind('disconnect', function(msg) {
       $.ajax({
         type: 'POST',
-        url: '/<%= @user.name %>/current'
+        url: '/<%= @user.nickname %>/current'
       });
     });
     channel.bind('view', function(msg) {

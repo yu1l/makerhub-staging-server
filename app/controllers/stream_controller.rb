@@ -3,40 +3,40 @@ class StreamController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish, :chat, :screenshot_done, :current, :on_play]
 
   def screenshot_done
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     return render nothing: true, status: 200 unless @user.live?
-    screenshot_path = "/usr/local/nginx/html/screenshot/#{@user.name}.png"
-    if File.exist?(screenshot_path) && !File.exist?("tmp/#{@user.name}.png") && File.size(screenshot_path) > 0
+    screenshot_path = "/usr/local/nginx/html/screenshot/#{@user.nickname}.png"
+    if File.exist?(screenshot_path) && !File.exist?("tmp/#{@user.nickname}.png") && File.size(screenshot_path) > 0
       puts 'thumbnail created'
-      File.copy_stream(screenshot_path, "tmp/#{@user.name}.png")
+      File.copy_stream(screenshot_path, "tmp/#{@user.nickname}.png")
       File.copy_stream(screenshot_path, "public/#{@user.uuid}_current.png")
     else
-      File.exist?("tmp/#{@user.name}.png")
+      File.exist?("tmp/#{@user.nickname}.png")
       File.exist?("public/#{@user.uuid}_current.png")
     end
     render nothing: true, status: 200
   end
 
   def extract_chat
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     @url = ENV['URL']
     @client_token = ENV['CLIENT_TOKEN']
-    @channel = @user.name
+    @channel = @user.nickname
     @chats = @user.chats.all
     @chat = @user.chats.new
     render layout: false
-  rescue
-    redirect_to root_path
+  # rescue
+    # redirect_to root_path
   end
 
   def current
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     @pushould = Pushould.new(server_token: ENV['SERVER_TOKEN'],
                              url: ENV['URL'],
                              email: ENV['EMAIL'],
                              password: ENV['PASSWORD'])
 
-    @pushould.trigger(room: @user.name,
+    @pushould.trigger(room: @user.nickname,
                       event: 'check',
                       data: {})
     render nothing: true, status: 200
@@ -45,21 +45,21 @@ class StreamController < ApplicationController
   end
 
   def chat
-    @user = User.find_by(name: params['name'])
-    @chat = @user.chats.create(sender: current_user.name, text: params['chat']['text'])
+    @user = User.find_by(nickname: params['nickname'])
+    @chat = @user.chats.create(sender: current_user.nickname, text: params['chat']['text'])
     @chats = @user.chats.all
     @pushould = Pushould.new(server_token: ENV['SERVER_TOKEN'],
                              url: ENV['URL'],
                              email: ENV['EMAIL'],
                              password: ENV['PASSWORD'])
 
-    @sender = User.find_by(name: @chat.sender)
-    @pushould.trigger(room: @user.name,
+    @sender = User.find_by(nickname: @chat.sender)
+    @pushould.trigger(room: @user.nickname,
                       event: 'send',
                       data: {
-                        name: "#{@chat.sender}",
+                        name: "#{@sender.name}",
                         image: "#{@sender.gh.image}",
-                        nickname: "#{@sender.name}",
+                        nickname: "#{@sender.nickname}",
                         text: "#{@chat.text}"
                       })
     render :chat, status: 200
@@ -68,7 +68,7 @@ class StreamController < ApplicationController
   end
 
   def user
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     # return render json: { status: 500 } if @user.private_stream? && !user_signed_in?
     return redirect_to root_path if @user.private? && !user_signed_in?
     @streaming_group = @user.groups.find_by(streaming: true)
@@ -82,7 +82,7 @@ class StreamController < ApplicationController
                                email: ENV['EMAIL'],
                                password: ENV['PASSWORD'])
 
-      @pushould.trigger(room: @user.name,
+      @pushould.trigger(room: @user.nickname,
                         event: 'view',
                         data: {
                           views: total
@@ -98,7 +98,7 @@ class StreamController < ApplicationController
     @content = description.call
     @url = ENV['URL']
     @client_token = ENV['CLIENT_TOKEN']
-    @channel = @user.name
+    @channel = @user.nickname
     @chats = @user.chats.all
     @chat = @user.chats.new
   rescue
@@ -130,14 +130,14 @@ class StreamController < ApplicationController
     @record = @user.records.create
     @record.update(uploaded: false, title: @user.title, total: @user.total)
     @user.update(live: false, total: 0)
-    while !File.exist?("/usr/local/nginx/html/screenshot/#{@user.name}.png") do
+    while !File.exist?("/usr/local/nginx/html/screenshot/#{@user.nickname}.png") do
       sleep 1
     end
     @record.copy_screenshot_to_tmp(params[:path])
     @record.delay.copy_video_to_tmp(params[:path])
     @record.delay.upload_to_s3(params[:path])
     begin
-      File.delete("tmp/#{@user.name}.png")
+      File.delete("tmp/#{@user.nickname}.png")
       File.delete("public/#{@user.uuid}_current.png")
     rescue
       puts 'tmp screenshot does not exist'

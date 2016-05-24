@@ -2,7 +2,7 @@
   <article class="media">
     <div class="media-left">
       <figure class="image is-64x64">
-        <%= link_to stream_path(name: user.name), target: '_blank' do %>
+        <%= link_to stream_path(nickname: user.nickname), target: '_blank' do %>
           <%= image_tag user.gh.image, alt: user.name %>
         <% end %>
       </figure>
@@ -13,7 +13,7 @@
           <span class="tag is-dark is-small" style="float:right;"><%= category(user.category) %></span>
           <strong><%= user.name %></strong>
           <br />
-          <small style="float:left;">@<%= user.name %></small>
+          <small style="float:left;">@<%= user.nickname %></small>
           <br />
           <% if user_signed_in? %>
             <% unless current_user == user %>

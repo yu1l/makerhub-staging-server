@@ -70,11 +70,11 @@
         }
         $('.msg-error').hide();
         $('#comments').append('<% if user_signed_in? %><li>' +
-          '<%= link_to stream_path(name: current_user.name), style: "color: #000", target: "_blank"  do %>' +
+          '<%= link_to stream_path(nickname: current_user.nickname), style: "color: #000", target: "_blank"  do %>' +
             '<article class="media">' +
               '<figure class="media-left">' +
                 '<p class="image is-32x32">' +
-                  '<%= image_tag User.find_by(name: current_user.name).twitter_image_url, alt: current_user.name %>' +
+                  '<%= image_tag User.find_by(nickname: current_user.nickname).gh.image, alt: current_user.name %>' +
                 '</p>' +
               '</figure>' +
               '<div class="media-content">' +
@@ -92,7 +92,7 @@
 //        $('#comments').animate({ scrollTop: $('#comments').prop('scrollHeight') }, "slow");
         $.ajax({
           type: 'POST',
-          url: "/<%= @user.name %>/chat",
+          url: "/<%= @user.nickname %>/chat",
           data: {
             chat: {
               text: $('.message').val()
@@ -108,7 +108,7 @@
     var channel = pushould.subscribe('<%= @channel %>');
     channel.bind('send', function(msg) {
       $('#comments').append('<li>' +
-        '<a href="/' + msg.name + '" style="color: #000;" target="_blank">' +
+        '<a href="/' + msg.nickname + '" style="color: #000;" target="_blank">' +
           '<article class="media">' +
             '<figure class="media-left">' +
               '<p class="image is-32x32">' +
@@ -134,7 +134,7 @@
     channel.bind('disconnect', function(msg) {
       $.ajax({
         type: 'POST',
-        url: '/<%= @user.name %>/current'
+        url: '/<%= @user.nickname %>/current'
       });
     });
     channel.bind('view', function(msg) {

@@ -7,7 +7,7 @@ RSpec.describe StreamController, type: :controller do
     context 'via anonymous' do
       context 'when user does not exist' do
         before do
-          get :user, name: ''
+          get :user, nickname: ''
         end
 
         it do
@@ -19,7 +19,7 @@ RSpec.describe StreamController, type: :controller do
         before do
           @user = User.find_from_auth(github_hash, nil)
           @user.update(live: true)
-          get :user, name: @user.name
+          get :user, nickname: @user.nickname
           @user.reload
         end
 
@@ -36,7 +36,7 @@ RSpec.describe StreamController, type: :controller do
           before do
             @user = User.find_from_auth(github_hash, nil)
             @user.update(live: false)
-            get :user, name: @user.name
+            get :user, nickname: @user.nickname
             @user.reload
           end
 
@@ -53,7 +53,7 @@ RSpec.describe StreamController, type: :controller do
             @user = User.find_from_auth(github_hash, nil)
             @user.update(live: false)
             @user.records.create(total: 10, title: 'test stream')
-            get :user, name: @user.name
+            get :user, nickname: @user.nickname
             @user.reload
           end
 
@@ -74,7 +74,7 @@ RSpec.describe StreamController, type: :controller do
           @user.update(live: true)
           @other = create(:user)
           sign_in(@other)
-          get :user, name: @user.name
+          get :user, nickname: @user.nickname
           @user.reload
         end
 
@@ -93,7 +93,7 @@ RSpec.describe StreamController, type: :controller do
             @user.update(live: false)
             @other = create(:user)
             sign_in(@other)
-            get :user, name: @user.name
+            get :user, nickname: @user.nickname
             @user.reload
           end
 
@@ -112,7 +112,7 @@ RSpec.describe StreamController, type: :controller do
             @other = create(:user)
             sign_in(@other)
             @user.records.create(total: 10, title: 'test stream')
-            get :user, name: @user.name
+            get :user, nickname: @user.nickname
             @user.reload
           end
 
@@ -132,7 +132,7 @@ RSpec.describe StreamController, type: :controller do
           @user = User.find_from_auth(github_hash, nil)
           @user.update(live: true)
           sign_in(@user)
-          get :user, name: @user.name
+          get :user, nickname: @user.nickname
           @user.reload
         end
 
@@ -150,7 +150,7 @@ RSpec.describe StreamController, type: :controller do
             @user = User.find_from_auth(github_hash, nil)
             @user.update(live: false)
             sign_in(@user)
-            get :user, name: @user.name
+            get :user, nickname: @user.nickname
             @user.reload
           end
 
@@ -168,7 +168,7 @@ RSpec.describe StreamController, type: :controller do
             @user.update(live: false)
             sign_in(@user)
             @user.records.create(total: 10, title: 'test stream')
-            get :user, name: @user.name
+            get :user, nickname: @user.nickname
             @user.reload
           end
 
@@ -253,7 +253,7 @@ RSpec.describe StreamController, type: :controller do
     context 'valid params' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        post :current, name: ''
+        post :current, nickname: ''
       end
 
       it do
@@ -264,7 +264,7 @@ RSpec.describe StreamController, type: :controller do
     context 'valid params' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        post :current, name: @user.name
+        post :current, nickname: @user.nickname
       end
 
       it do
@@ -277,7 +277,7 @@ RSpec.describe StreamController, type: :controller do
     context 'via anonymous' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        post :chat, name: @user.name, chat: { text: 'hello world' }
+        post :chat, nickname: @user.nickname, chat: { text: 'hello world' }
       end
 
       it do
@@ -290,7 +290,7 @@ RSpec.describe StreamController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         sign_in(@user)
-        post :chat, name: '', chat: { text: 'hello world' }
+        post :chat, nickname: '', chat: { text: 'hello world' }
       end
 
       it do
@@ -303,7 +303,7 @@ RSpec.describe StreamController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         sign_in(@user)
-        post :chat, name: @user.name, chat: { text: 'hello world' }, format: :js
+        post :chat, nickname: @user.nickname, chat: { text: 'hello world' }, format: :js
       end
 
       it do
@@ -317,7 +317,7 @@ RSpec.describe StreamController, type: :controller do
     context 'invalid username' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        get :extract_chat, name: ''
+        get :extract_chat, nickname: ''
       end
 
       it do
@@ -328,7 +328,7 @@ RSpec.describe StreamController, type: :controller do
     context 'valid username' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        get :extract_chat, name: @user.name
+        get :extract_chat, nickname: @user.nickname
       end
 
       it do

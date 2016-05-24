@@ -9,7 +9,7 @@
             - if current_user == @user
               .stream
                 span#stream_title data-balloon="#{I18n.t('stream.title.edit')}" data-balloon-pos='up' style='font-size:18pt;'= @user.title
-                form.title_form format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.name}/update_title" style="display:none;height:34px;"
+                form.title_form format="js" accept-charset="UTF-8" data-remote="true" method="post" action="/#{@user.nickname}/update_title" style="display:none;height:34px;"
                   input.input.update_title type="text" name="user[title]" value="#{@user.title}" focus="true" placeholder="Enterで保存"
               span style='font-size:14pt;'= @user.name
               span.select.category style='float:right;'= select :user, :category, [['UI/UX', 0], ['Ruby', 1], ['Python', 2]], selected: current_user.category
@@ -89,7 +89,7 @@ script
   |   $(".category > select option:selected").each(function () {
   |     $.ajax({
   |       method: 'POST',
-  |       url: "/#{current_user.name}/category",
+  |       url: "/#{current_user.nickname}/category",
   |       data: {
   |         user: { category: $(this).val() }
   |       },

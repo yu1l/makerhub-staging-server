@@ -2,7 +2,7 @@
 <ul>
   <% @user.records.reverse.each do |record| %>
     <div class='thumbnail' style="display:inline;">
-      <%= link_to play_record_path(name: @user.name, uuid: record.uuid), target: '_blank' do %>
+      <%= link_to play_record_path(nickname: @user.nickname, uuid: record.uuid), target: '_blank' do %>
         <% if record.uploaded? %>
           <%= image_tag record.screenshot_url, alt: record.uuid, style: 'width: 200px;height:200px;' %>
         <% else %>
@@ -12,4 +12,4 @@
     </div>
   <% end %>
 </ul>
-<%= image_tag @user.twitter_image_url, alt: "#{@user.twitter_name}" %>
+<%= image_tag @user.gh.image, alt: "#{@user.gh.name}" %>

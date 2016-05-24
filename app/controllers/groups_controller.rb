@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: groups
+# Table nickname: groups
 #
 #  id         :integer          not null, primary key
 #  name       :string
@@ -13,11 +13,11 @@
 
 class GroupsController < ApplicationController
   def create
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     @group = current_user.groups.create(group_params)
     current_user.user_groups.find_by(group_id: @group.id).admin!
-    redirect_to profile_path(name: current_user.name)
+    redirect_to profile_path(nickname: current_user.nickname)
   rescue
     redirect_to root_path
   end
@@ -28,7 +28,7 @@ class GroupsController < ApplicationController
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @guest = User.find_by(uuid: params[:user_uuid])
     @guest.user_groups.create(group_id: @group.id).guest!
-    redirect_to profile_path(name: current_user.name)
+    redirect_to profile_path(nickname: current_user.nickname)
   rescue
     redirect_to root_path
   end

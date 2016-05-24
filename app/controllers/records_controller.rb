@@ -20,14 +20,14 @@
 
 class RecordsController < ApplicationController
   def play
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     @record = @user.records.find_by(uuid: params[:uuid])
     total = @record.total
     total += 1
     @record.update(total: total)
     @record.reload
   rescue
-    return redirect_to stream_path(name: @user.name) unless @user.nil?
+    return redirect_to stream_path(nickname: @user.nickname) unless @user.nil?
     redirect_to root_path
   end
 end

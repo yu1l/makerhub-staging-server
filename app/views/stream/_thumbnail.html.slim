@@ -1,5 +1,5 @@
 .column.is-3
-  = link_to stream_path(name: user.nickname), target: '_blank' do
+  = link_to stream_path(nickname: user.nickname), target: '_blank' do
     .card
       - if File.exist?("public/#{user.uuid}_current.png")
         .card-image
@@ -10,8 +10,8 @@
           .media-left
             figure.image.is-32x32= image_tag user.gh.image, alt: user.name
           .media-content
-            p.title.is-5= user.nickname
-            p.subtitle.is-6= user.name
+            p.title.is-5= user.name
+            p.subtitle.is-6= user.nickname
           span.tag.is-dark style="float:right;"= category(user.category)
         .content
           p.subtitle.is-5= "#{user.title || I18n.t('content.title.default')}"
