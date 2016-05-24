@@ -25,8 +25,8 @@ class StreamController < ApplicationController
     @chats = @user.chats.all
     @chat = @user.chats.new
     render layout: false
-  # rescue
-    # redirect_to root_path
+  rescue
+    redirect_to root_path
   end
 
   def current
@@ -45,7 +45,7 @@ class StreamController < ApplicationController
   end
 
   def chat
-    @user = User.find_by(nickname: params['nickname'])
+    @user = User.find_by(nickname: params[:nickname])
     @chat = @user.chats.create(sender: current_user.nickname, text: params['chat']['text'])
     @chats = @user.chats.all
     @pushould = Pushould.new(server_token: ENV['SERVER_TOKEN'],
