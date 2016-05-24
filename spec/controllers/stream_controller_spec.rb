@@ -26,7 +26,7 @@ RSpec.describe StreamController, type: :controller do
         it do
           expect(assigns(:total)).to be_nil
           expect(@user.total).to eq(1)
-          expect(@user.private_stream).to be_falsy
+          expect(@user.private?).to be_falsy
           expect(response).to render_template(:user)
         end
       end
@@ -43,7 +43,7 @@ RSpec.describe StreamController, type: :controller do
           it do
             expect(assigns(:total)).to eq(0)
             expect(@user.total).to eq(0)
-            expect(@user.private_stream).to be_falsy
+            expect(@user.private?).to be_falsy
             expect(response).to render_template(:user)
           end
         end
@@ -60,7 +60,7 @@ RSpec.describe StreamController, type: :controller do
           it do
             expect(assigns(:total)).to eq(10)
             expect(@user.total).to eq(0)
-            expect(@user.private_stream).to be_falsy
+            expect(@user.private?).to be_falsy
             expect(response).to render_template(:user)
           end
         end
@@ -81,7 +81,7 @@ RSpec.describe StreamController, type: :controller do
         it do
           expect(assigns(:total)).to be_nil
           expect(@user.total).to eq(1)
-          expect(@user.private_stream).to be_falsy
+          expect(@user.private?).to be_falsy
           expect(response).to render_template(:user)
         end
       end
@@ -100,7 +100,7 @@ RSpec.describe StreamController, type: :controller do
           it do
             expect(assigns(:total)).to eq(0)
             expect(@user.total).to eq(0)
-            expect(@user.private_stream).to be_falsy
+            expect(@user.private?).to be_falsy
             expect(response).to render_template(:user)
           end
         end
@@ -119,7 +119,7 @@ RSpec.describe StreamController, type: :controller do
           it do
             expect(assigns(:total)).to eq(10)
             expect(@user.total).to eq(0)
-            expect(@user.private_stream).to be_falsy
+            expect(@user.private?).to be_falsy
             expect(response).to render_template(:user)
           end
         end
@@ -139,7 +139,7 @@ RSpec.describe StreamController, type: :controller do
         it do
           expect(assigns(:total)).to be_nil
           expect(@user.total).to eq(1)
-          expect(@user.private_stream).to be_falsy
+          expect(@user.private?).to be_falsy
           expect(response).to render_template(:user)
         end
       end
@@ -157,7 +157,7 @@ RSpec.describe StreamController, type: :controller do
           it do
             expect(assigns(:total)).to eq(0)
             expect(@user.total).to eq(0)
-            expect(@user.private_stream).to be_falsy
+            expect(@user.private?).to be_falsy
             expect(response).to render_template(:user)
           end
         end
@@ -175,7 +175,7 @@ RSpec.describe StreamController, type: :controller do
           it do
             expect(assigns(:total)).to eq(10)
             expect(@user.total).to eq(0)
-            expect(@user.private_stream).to be_falsy
+            expect(@user.private?).to be_falsy
             expect(response).to render_template(:user)
           end
         end
