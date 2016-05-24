@@ -66,7 +66,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
       end
 
       it do
-        expect(response).to redirect_to(profile_path(name: user.name))
+        expect(response).to redirect_to(profile_path(nickname: user.nickname))
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
       end
 
       it do
-        expect(response).to redirect_to(profile_path(name: @user.name))
+        expect(response).to redirect_to(profile_path(nickname: @user.nickname))
       end
     end
   end

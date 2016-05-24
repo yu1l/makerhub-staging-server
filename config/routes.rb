@@ -22,32 +22,32 @@ Rails.application.routes.draw do
   get 'streams' => 'stream#all'
 
   # Stream-User
-  get ':name' => 'stream#user', as: :stream
+  get ':nickname' => 'stream#user', as: :stream
 
   # Stream-Current
-  post ':name/current' => 'stream#current'
+  post ':nickname/current' => 'stream#current'
 
   # Stream-Chat
-  get ':name/chat_window' => 'stream#extract_chat', as: :extract_chat
-  post ':name/chat' => 'stream#chat', as: :chat
+  get ':nickname/chat_window' => 'stream#extract_chat', as: :extract_chat
+  post ':nickname/chat' => 'stream#chat', as: :chat
 
   # User-Update-Description
-  post ':name/update_description' => 'users#update_description', as: :update_description
+  post ':nickname/update_description' => 'users#update_description', as: :update_description
 
   # User-Update-Title
-  post ':name/update_title' => 'users#update_title', as: :update_title
+  post ':nickname/update_title' => 'users#update_title', as: :update_title
 
   # User-Update-Record-Title
-  post ':name/record/:uuid/update_title' => 'users#update_record_title', as: :update_record_title
+  post ':nickname/record/:uuid/update_title' => 'users#update_record_title', as: :update_record_title
 
   # User-Profile
-  get ':name/profile' => 'users#profile', as: :profile
+  get ':nickname/profile' => 'users#profile', as: :profile
 
   # User-Play-Record
-  get ':name/record/:uuid' => 'records#play', as: :play_record
+  get ':nickname/record/:uuid' => 'records#play', as: :play_record
 
   # User-Category
-  post ':name/category' => 'users#category'
+  post ':nickname/category' => 'users#category'
 
   # User-Private-Stream
   get ':uuid/stream' => 'users#private_stream', as: :private_stream
@@ -56,16 +56,16 @@ Rails.application.routes.draw do
   get ':uuid/stop_stream' => 'users#stop_private_stream', as: :stop_private_stream
 
   # Record-Category
-  post ':name/record/:uuid/category' => 'users#record_category'
+  post ':nickname/record/:uuid/category' => 'users#record_category'
 
   # Follow
-  get ':name/follow' => 'users#follow', as: :follow
+  get ':nickname/follow' => 'users#follow', as: :follow
 
   # Unfollow
-  get ':name/unfollow' => 'users#unfollow', as: :unfollow
+  get ':nickname/unfollow' => 'users#unfollow', as: :unfollow
 
   # Group
-  post ':name/groups' => 'groups#create'
+  post ':nickname/groups' => 'groups#create'
 
   # Group-Invite
   get '/groups/:uuid/invite/:user_uuid' => 'groups#invite', as: :group_invite

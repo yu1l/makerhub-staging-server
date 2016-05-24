@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: users
+# Table nickname: users
 #
 #  id                          :integer          not null, primary key
 #  email                       :string           default(""), not null
@@ -44,30 +44,30 @@ class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:category]
 
   def stop_private_stream
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.update(private: false)
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: false)
-    redirect_to profile_path(name: current_user.name)
+    redirect_to profile_path(nickname: current_user.nickname)
   rescue
     redirect_to root_path
   end
 
   def private_stream
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.groups.map { |g| g.update(streaming: false) }
     current_user.update(private: true)
     @group = current_user.groups.find_by(uuid: params[:uuid])
     @group.update(streaming: true)
-    redirect_to profile_path(name: current_user.name)
+    redirect_to profile_path(nickname: current_user.nickname)
   rescue
     redirect_to root_path
   end
 
   def follow
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :other?)
     current_user.follow(@user) unless current_user.following?(@user)
     render nothing: true, status: 200
@@ -76,7 +76,7 @@ class UsersController < ApplicationController
   end
 
   def unfollow
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :other?)
     current_user.stop_following(@user) if current_user.following?(@user)
     render nothing: true, status: 200
@@ -85,7 +85,7 @@ class UsersController < ApplicationController
   end
 
   def category
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.update(user_params)
     render :category, status: 200
@@ -94,27 +94,27 @@ class UsersController < ApplicationController
   end
 
   def record_category
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.records.find_by(uuid: params[:uuid]).update(record_params)
-    redirect_to play_record_path(name: current_user.name, uuid: params[:uuid])
+    redirect_to play_record_path(nickname: current_user.nickname, uuid: params[:uuid])
   rescue
     redirect_to root_path
   end
 
   def profile
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     @me = true
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
     @content = description.call
   rescue
-    return redirect_to stream_path(name: @user.name) unless @user.nil?
+    return redirect_to stream_path(nickname: @user.nickname) unless @user.nil?
     redirect_to root_path
   end
 
   def update_description
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.update(user_params)
     description = HTML::Pipeline::MarkdownFilter.new(@user.description)
@@ -125,7 +125,7 @@ class UsersController < ApplicationController
   end
 
   def update_title
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.update(user_params)
     render :update_title, status: 200
@@ -134,7 +134,7 @@ class UsersController < ApplicationController
   end
 
   def update_record_title
-    @user = User.find_by(name: params[:name])
+    @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     @record = @user.records.find_by(uuid: params[:uuid])
     @record.update(record_params)
@@ -146,7 +146,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :title, :description, :category)
+    params.require(:user).permit(:nickname, :title, :description, :category)
   end
 
   def record_params

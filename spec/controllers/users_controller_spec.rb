@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: users
+# Table nickname: users
 #
 #  id                          :integer          not null, primary key
 #  email                       :string           default(""), not null
@@ -51,7 +51,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_description, name: @user.name, user: { description: '# Heading' }
+          post :update_description, nickname: @user.nickname, user: { description: '# Heading' }
         }.not_to change{@user.description}.from(I18n.t('user.default.description'))
         expect(response.status).to eq(500)
       end
@@ -66,7 +66,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_description, name: @user.name, user: { description: '# Heading' }
+          post :update_description, nickname: @user.nickname, user: { description: '# Heading' }
         }.not_to change{@user.description}.from(I18n.t('user.default.description'))
         expect(response.status).to eq(500)
       end
@@ -80,7 +80,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_description, name: subject.current_user.name, user: { description: '# Heading' }, format: :js
+          post :update_description, nickname: subject.current_user.nickname, user: { description: '# Heading' }, format: :js
         }.to change{subject.current_user.description}.from(I18n.t('user.default.description')).to('# Heading')
         expect(response.status).to eq(200)
       end
@@ -95,7 +95,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_title, name: @user.name, user: { title: 'new title' }
+          post :update_title, nickname: @user.nickname, user: { title: 'new title' }
         }.not_to change{@user.title}.from(I18n.t('user.default.title'))
         expect(response.status).to eq(500)
       end
@@ -110,7 +110,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_title, name: @user.name, user: { title: 'new title' }
+          post :update_title, nickname: @user.nickname, user: { title: 'new title' }
         }.not_to change{@user.title}.from(I18n.t('user.default.title'))
         expect(response.status).to eq(500)
       end
@@ -124,7 +124,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_title, name: subject.current_user.name, user: { title: 'new title' }, format: :js
+          post :update_title, nickname: subject.current_user.nickname, user: { title: 'new title' }, format: :js
         }.to change{subject.current_user.title}.from(I18n.t('user.default.title')).to('new title')
         expect(response.status).to eq(200)
       end
@@ -139,7 +139,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :category, name: @user.name, user: { category: 2 }
+          post :category, nickname: @user.nickname, user: { category: 2 }
         }.not_to change{@user.category}.from(0)
         expect(response.status).to eq(500)
       end
@@ -154,7 +154,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :category, name: @user.name, user: { category: 2 }
+          post :category, nickname: @user.nickname, user: { category: 2 }
         }.not_to change{@user.category}.from(0)
         expect(response.status).to eq(500)
       end
@@ -168,7 +168,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :category, name: subject.current_user.name, user: { category: 2 }, format: :js
+          post :category, nickname: subject.current_user.nickname, user: { category: 2 }, format: :js
         }.to change{subject.current_user.category}.from(0).to(2)
         expect(response).to be_success
       end
@@ -183,7 +183,7 @@ RSpec.describe UsersController, type: :controller do
     context 'anonymous' do
       context 'with invalid params' do
         before do
-          get :profile, name: ''
+          get :profile, nickname: ''
         end
 
         it do
@@ -194,12 +194,12 @@ RSpec.describe UsersController, type: :controller do
 
       context 'with valid params' do
         before do
-          get :profile, name: @user.name
+          get :profile, nickname: @user.nickname
         end
 
         it do
           expect(subject.current_user).to be_nil
-          expect(response).to redirect_to(stream_path(name: @user.name))
+          expect(response).to redirect_to(stream_path(nickname: @user.nickname))
         end
       end
     end
@@ -208,20 +208,20 @@ RSpec.describe UsersController, type: :controller do
       let(:other) { create(:user) }
       before do
         sign_in(other)
-        get :profile, name: @user.name
+        get :profile, nickname: @user.nickname
       end
 
       it do
         expect(other).to be_valid
         expect(subject.current_user).not_to be_nil
-        expect(response).to redirect_to(stream_path(name: @user.name))
+        expect(response).to redirect_to(stream_path(nickname: @user.nickname))
       end
     end
 
     context 'current_user' do
       before do
         sign_in(@user)
-        get :profile, name: @user.name
+        get :profile, nickname: @user.nickname
       end
 
       it do
@@ -246,7 +246,7 @@ RSpec.describe UsersController, type: :controller do
     context 'via anonymous user' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        get :follow, name: @user.name
+        get :follow, nickname: @user.nickname
       end
 
       it 'status 500' do
@@ -261,7 +261,7 @@ RSpec.describe UsersController, type: :controller do
         @user = User.find_from_auth(github_hash, nil)
         @other = create(:user)
         sign_in(@other)
-        get :follow, name: @user.name
+        get :follow, nickname: @user.nickname
       end
 
       it 'status 200' do
@@ -279,7 +279,7 @@ RSpec.describe UsersController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         sign_in(@user)
-        get :follow, name: @user.name
+        get :follow, nickname: @user.nickname
       end
 
       it 'status 500' do
@@ -294,7 +294,7 @@ RSpec.describe UsersController, type: :controller do
     context 'via anonymous user' do
       before do
         @user = User.find_from_auth(github_hash, nil)
-        get :unfollow, name: @user.name
+        get :unfollow, nickname: @user.nickname
       end
 
       it 'status 500' do
@@ -309,8 +309,8 @@ RSpec.describe UsersController, type: :controller do
         @user = User.find_from_auth(github_hash, nil)
         @other = create(:user)
         sign_in(@other)
-        get :follow, name: @user.name
-        get :unfollow, name: @user.name
+        get :follow, nickname: @user.nickname
+        get :unfollow, nickname: @user.nickname
       end
 
       it 'status 200' do
@@ -326,7 +326,7 @@ RSpec.describe UsersController, type: :controller do
       before do
         @user = User.find_from_auth(github_hash, nil)
         sign_in(@user)
-        get :unfollow, name: @user.name
+        get :unfollow, nickname: @user.nickname
       end
 
       it 'status 500' do
@@ -347,15 +347,15 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          get :private_stream, name: @user.name, uuid: @group.uuid
+          get :private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.attributes}
 
         expect {
-          get :private_stream, name: @user.name, uuid: @group.uuid
+          get :private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.user_groups.map(&:attributes)}
 
         expect {
-          get :private_stream, name: @user.name, uuid: @group.uuid
+          get :private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.groups.map(&:attributes)}
 
         expect(response).to redirect_to(root_path)
@@ -373,15 +373,15 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          get :private_stream, name: @user.name, uuid: @group.uuid
+          get :private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.attributes}
 
         expect {
-          get :private_stream, name: @user.name, uuid: @group.uuid
+          get :private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.user_groups.map(&:attributes)}
 
         expect {
-          get :private_stream, name: @user.name, uuid: @group.uuid
+          get :private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.groups.map(&:attributes)}
 
         expect(response).to redirect_to(root_path)
@@ -397,7 +397,7 @@ RSpec.describe UsersController, type: :controller do
         @group1.update(streaming: true)
         @user.user_groups.find_by(group_id: @group1.id).admin!
         @user.user_groups.find_by(group_id: @group.id).admin!
-        get :private_stream, name: subject.current_user.name, uuid: @group.uuid
+        get :private_stream, nickname: subject.current_user.nickname, uuid: @group.uuid
       end
 
       it do
@@ -406,7 +406,7 @@ RSpec.describe UsersController, type: :controller do
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).streaming).to be_truthy
         expect(subject.current_user.groups.find_by(uuid: @group1.uuid).streaming).to be_falsy
         expect(subject.current_user.groups.where(streaming: true).count).to eq(1)
-        expect(response).to redirect_to(profile_path(name: subject.current_user.name))
+        expect(response).to redirect_to(profile_path(nickname: subject.current_user.nickname))
       end
     end
   end
@@ -422,15 +422,15 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+          get :stop_private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.attributes}
 
         expect {
-          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+          get :stop_private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.user_groups.map(&:attributes)}
 
         expect {
-          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+          get :stop_private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.groups.map(&:attributes)}
 
         expect(response).to redirect_to(root_path)
@@ -449,15 +449,15 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+          get :stop_private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.attributes}
 
         expect {
-          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+          get :stop_private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.user_groups.map(&:attributes)}
 
         expect {
-          get :stop_private_stream, name: @user.name, uuid: @group.uuid
+          get :stop_private_stream, nickname: @user.nickname, uuid: @group.uuid
         }.not_to change{@user.groups.map(&:attributes)}
 
         expect(response).to redirect_to(root_path)
@@ -472,7 +472,7 @@ RSpec.describe UsersController, type: :controller do
         @group = @user.groups.create(name: 'test')
         @group.update(streaming: true)
         @user.user_groups.find_by(group_id: @group.id).admin!
-        get :stop_private_stream, name: subject.current_user.name, uuid: @group.uuid
+        get :stop_private_stream, nickname: subject.current_user.nickname, uuid: @group.uuid
       end
 
       it do
@@ -480,7 +480,7 @@ RSpec.describe UsersController, type: :controller do
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).user_groups.first.admin?).to be_truthy
         expect(subject.current_user.groups.find_by(uuid: @group.uuid).streaming).to be_falsy
         expect(subject.current_user.groups.where(streaming: true).count).to eq(0)
-        expect(response).to redirect_to(profile_path(name: subject.current_user.name))
+        expect(response).to redirect_to(profile_path(nickname: subject.current_user.nickname))
       end
     end
   end
@@ -494,7 +494,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :record_category, name: @user.name, uuid: @record.uuid, record: { category: 2 }
+          post :record_category, nickname: @user.nickname, uuid: @record.uuid, record: { category: 2 }
         }.not_to change{@user.records.find_by(uuid: @record.uuid).category}.from(0)
         expect(response).to redirect_to(root_path)
       end
@@ -510,7 +510,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :record_category, name: @user.name, uuid: @record.uuid, record: { category: 2 }
+          post :record_category, nickname: @user.nickname, uuid: @record.uuid, record: { category: 2 }
         }.not_to change{@user.records.find_by(uuid: @record.uuid).category}.from(0)
         expect(response).to redirect_to(root_path)
       end
@@ -525,7 +525,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :record_category, name: subject.current_user.name, uuid: @record.uuid, record: { category: 2 }
+          post :record_category, nickname: subject.current_user.nickname, uuid: @record.uuid, record: { category: 2 }
         }.to change{subject.current_user.records.find_by(uuid: @record.uuid).category}.from(0).to(2)
       end
     end
@@ -540,7 +540,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_record_title, name: @user.name, uuid: @record.uuid, record: { title: 'new title' }
+          post :update_record_title, nickname: @user.nickname, uuid: @record.uuid, record: { title: 'new title' }
         }.not_to change{@user.records.find_by(uuid: @record.uuid).title}.from(@user.title)
         expect(response.status).to eq(500)
       end
@@ -556,7 +556,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_record_title, name: @user.name, uuid: @record.uuid, record: { title: 'new title' }
+          post :update_record_title, nickname: @user.nickname, uuid: @record.uuid, record: { title: 'new title' }
         }.not_to change{@user.records.find_by(uuid: @record.uuid).title}.from(@user.title)
         expect(response.status).to eq(500)
       end
@@ -571,7 +571,7 @@ RSpec.describe UsersController, type: :controller do
 
       it do
         expect {
-          post :update_record_title, name: subject.current_user.name, uuid: @record.uuid, record: { title: 'new title' }, format: :js
+          post :update_record_title, nickname: subject.current_user.nickname, uuid: @record.uuid, record: { title: 'new title' }, format: :js
         }.to change{subject.current_user.records.find_by(uuid: @record.uuid).title}.from(@user.title).to('new title')
         expect(response.status).to eq(200)
       end

@@ -13,7 +13,7 @@ nav.nav
     .nav-right.nav-menu
       span.nav-item
         - if user_signed_in?
-          = link_to profile_path(name: current_user.name), class: 'button', target: '_blank'  do
+          = link_to profile_path(nickname: current_user.nickname), class: 'button', target: '_blank'  do
             span= t('mypage')
         - else
           a.button.modal-button#signin_button data-target='#signin'= t('signin.title')

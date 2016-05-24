@@ -2,7 +2,7 @@
   p
     span.title.is-5= I18n.t('user.streaming_token.title')
     button.button.is-small.is-info#streamingKey style="margin-left:5px;margin-top:-3px;"= I18n.t('user.streaming_token.show')
-    h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px;"= "#{@user.name}?token=#{@user.streaming_key}"
+    h2.subtitle.is-6#key style="visibility:hidden; margin-top:5px;"= "#{@user.nickname}?token=#{@user.streaming_key}"
   p= link_to destroy_user_session_path, class: 'button is-danger' do
     span= t('signout')
 script

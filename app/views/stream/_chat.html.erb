@@ -1,16 +1,16 @@
 <% chats.each do |chat| %>
   <li>
-    <%= link_to stream_path(name: chat.sender), target: '_blank', style: 'color:#000;' do %>
+    <%= link_to stream_path(nickname: chat.sender), target: '_blank', style: 'color:#000;' do %>
       <article class="media">
         <figure class="media-left">
           <p class="image is-32x32">
-            <%= image_tag "#{User.find_by(name: chat.sender).gh.image || User.find_by(name: chat.sender).twitter_image_url}", alt: chat.sender %>
+            <%= image_tag "#{User.find_by(nickname: chat.sender).gh.image || User.find_by(nickname: chat.sender).twitter_image_url}", alt: chat.sender %>
           </p>
         </figure>
         <div class="media-content">
           <div class="content">
             <p>
-              <strong><%= chat.sender %></strong>
+              <strong><%= User.find_by(nickname: chat.sender).name %></strong>
               <br>
               <%= chat.text %>
             </p>

@@ -30,8 +30,8 @@ RSpec.describe RecordsController, type: :controller do
         end
 
         it do
-          get :play, name: @user.name, uuid: ''
-          expect(response).to redirect_to(stream_path(name: @user.name))
+          get :play, nickname: @user.nickname, uuid: ''
+          expect(response).to redirect_to(stream_path(nickname: @user.nickname))
         end
       end
 
@@ -42,7 +42,7 @@ RSpec.describe RecordsController, type: :controller do
         end
 
         it do
-          get :play, name: '', uuid: @record.uuid
+          get :play, nickname: '', uuid: @record.uuid
           expect(response).to redirect_to(root_path)
         end
       end
@@ -54,7 +54,7 @@ RSpec.describe RecordsController, type: :controller do
       end
 
       it do
-        get :play, name: @user.name, uuid: @record.uuid
+        get :play, nickname: @user.nickname, uuid: @record.uuid
         expect(response).to render_template(:play)
       end
     end

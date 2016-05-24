@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: groups
+# Table nickname: groups
 #
 #  id         :integer          not null, primary key
 #  name       :string
@@ -23,7 +23,7 @@ RSpec.describe GroupsController, type: :controller do
 
       it do
         expect {
-          post :create, name: @user.name, group: { name: 'test' }
+          post :create, nickname: @user.nickname, group: { name: 'test' }
         }.not_to change{@user.groups.count}.from(0)
         expect(@user.user_groups.count).to eq(0)
         expect(@user.user_groups.count).to eq(0)
@@ -40,7 +40,7 @@ RSpec.describe GroupsController, type: :controller do
 
       it do
         expect {
-          post :create, name: @user.name, group: { name: 'test' }
+          post :create, nickname: @user.nickname, group: { name: 'test' }
         }.not_to change{@user.groups.count}.from(0)
         expect(@user.user_groups.count).to eq(0)
         expect(@user.user_groups.count).to eq(0)
@@ -56,11 +56,11 @@ RSpec.describe GroupsController, type: :controller do
 
       it do
         expect {
-          post :create, name: subject.current_user.name, group: { name: 'test' }
+          post :create, nickname: subject.current_user.nickname, group: { name: 'test' }
         }.to change{subject.current_user.groups.count}.from(0).to(1)
         expect(subject.current_user.user_groups.count).to eq(1)
         expect(subject.current_user.user_groups.last.admin?).to be_truthy
-        expect(response).to redirect_to(profile_path(name: subject.current_user.name))
+        expect(response).to redirect_to(profile_path(nickname: subject.current_user.nickname))
       end
     end
   end
@@ -70,7 +70,7 @@ RSpec.describe GroupsController, type: :controller do
         @user = User.find_from_auth(github_hash, nil)
         @group = @user.groups.create(name: 'test')
         @other = create(:user)
-        post :create, name: @user.name, group: { name: 'test' }
+        post :create, nickname: @user.nickname, group: { name: 'test' }
       end
       it do
         expect {
@@ -101,7 +101,7 @@ RSpec.describe GroupsController, type: :controller do
         @user = User.find_from_auth(github_hash, nil)
         @other = create(:user)
         sign_in(@user)
-        post :create, name: subject.current_user.name, group: { name: 'test' }
+        post :create, nickname: subject.current_user.nickname, group: { name: 'test' }
         @group = @user.groups.last
       end
 
@@ -123,7 +123,7 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       after do
-        expect(response).to redirect_to(profile_path(name: @user.name))
+        expect(response).to redirect_to(profile_path(nickname: @user.nickname))
       end
     end
   end
