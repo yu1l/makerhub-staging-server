@@ -3,7 +3,7 @@ class StreamController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:on_record_done, :on_publish, :chat, :screenshot_done, :current, :on_play]
 
   def screenshot_done
-    @user = User.find_by(nickname: params[:nickname])
+    @user = User.find_by(nickname: params[:name])
     return render nothing: true, status: 200 unless @user.live?
     screenshot_path = "/usr/local/nginx/html/screenshot/#{@user.nickname}.png"
     if File.exist?(screenshot_path) && !File.exist?("tmp/#{@user.nickname}.png") && File.size(screenshot_path) > 0
