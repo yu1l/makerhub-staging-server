@@ -88,8 +88,8 @@ class Record < ActiveRecord::Base
     video.acl = :public_read
 
     update(video_path: video.key, screenshot_path: screenshot.key, uploaded: true, duration: flv.duration)
-    File.delete(input_flv_path)
-    File.delete(screenshot_path)
+    File.delete("/usr/local/nginx/html/hls/#{user.nickname}.flv")
+    File.delete("/usr/local/nginx/html/screenshot/#{user.nickname}.png")
     File.delete("public/#{uuid}.png")
     File.delete("public/#{uuid}.mp4")
   rescue
