@@ -54,6 +54,10 @@ class User < ActiveRecord::Base
          :validatable,
          :omniauthable
 
+  after_create do
+    self.create_channel
+  end
+
   before_create do
     self.live = false
     self.private = false
