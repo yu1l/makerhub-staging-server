@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   acts_as_followable
   acts_as_follower
 
+  has_one :channel
   has_many :user_groups
   has_many :groups, through: :user_groups
   has_many :records
