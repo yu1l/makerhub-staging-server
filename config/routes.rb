@@ -58,6 +58,14 @@ Rails.application.routes.draw do
   # Record-Category
   post ':nickname/record/:uuid/category' => 'users#record_category'
 
+  # Channel - Block
+  resource :channel, only: [] do
+    member do
+      post :block
+      post :unblock
+    end
+  end
+
   # Follow
   get ':nickname/follow' => 'users#follow', as: :follow
 

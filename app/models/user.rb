@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   acts_as_followable
   acts_as_follower
 
+  has_one :channel
   has_many :user_groups
   has_many :groups, through: :user_groups
   has_many :records
@@ -52,6 +53,10 @@ class User < ActiveRecord::Base
          :trackable,
          :validatable,
          :omniauthable
+
+  after_create do
+    self.create_channel
+  end
 
   before_create do
     self.live = false
