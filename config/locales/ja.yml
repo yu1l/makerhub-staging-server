@@ -1,10 +1,10 @@
 ja:
-  title: SiteLogo
+  title: MakerHub
   content:
     title:
       default: タイトル無し
   app:
-    title: SiteLogo
+    title: MakerHub
   chat:
     signin: ログインしてコメントする
     window:
@@ -16,7 +16,7 @@ ja:
   omniauth:
     github: GitHub でログイン
     twitter: Twitter でログイン
-    notice: DnDが勝手に投稿することはありません
+    notice: MakerHubが勝手に投稿することはありません
   mypage: マイページ
   streaming:
     making: 作成中

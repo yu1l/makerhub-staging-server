@@ -1,5 +1,5 @@
 en:
-  title: SiteLogo
+  title: MakerHub
   stream:
     title:
       edit: Click the title and edit
@@ -7,7 +7,7 @@ en:
     title:
       default: Anonymous
   app:
-    title: SiteLogo
+    title: MakerHub
   chat:
     signin: Sign in and Comment
     window:
@@ -19,7 +19,7 @@ en:
   omniauth:
     github: Sign in with GitHub
     twitter: Sign in with Twitter
-    notice: SiteLogo will not post without your permission
+    notice: MakerHub will not post without your permission
   mypage: My Page
   streaming:
     making: making
