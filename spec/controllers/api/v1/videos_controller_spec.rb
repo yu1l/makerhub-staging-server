@@ -70,7 +70,7 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     end
   end
 
-  describe 'PATCH #update_title' do
+  describe 'PATCH #update' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     let(:record) { create(:record) }
     before do
@@ -79,8 +79,23 @@ RSpec.describe Api::V1::VideosController, type: :controller do
 
     it do
       expect {
-      patch :update_title, nickname: user.nickname, uuid: user.records.first.uuid, title: 'hello world', format: :json
+      patch :update, nickname: user.nickname, uuid: user.records.first.uuid, title: 'hello world', format: :json
       }.to change{user.records.first.title}.from(attributes_for(:record)[:title]).to('hello world')
+      expect(response).to be_success
+    end
+  end
+
+  describe 'PATCH #update - category' do
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    let(:record) { create(:record) }
+    before do
+      user.records.create(attributes_for(:record))
+    end
+
+    it do
+      expect {
+      patch :update, nickname: user.nickname, uuid: user.records.first.uuid, category: 'Python', format: :json
+      }.to change{user.records.first.category}.from(attributes_for(:record)[:category]).to(2)
       expect(response).to be_success
     end
   end

@@ -85,7 +85,8 @@ Rails.application.routes.draw do
       get 'videos' => 'videos#all'
       get 'videos/:nickname' => 'videos#user'
       get 'videos/:nickname/:uuid' => 'videos#video'
-      patch 'videos/:nickname/:uuid/title' => 'videos#update_title'
+      patch 'videos/:nickname/:uuid/title' => 'videos#update'
+      patch 'videos/:nickname/:uuid/category' => 'videos#update'
     end
   end
 

@@ -59,14 +59,22 @@ class Api::V1::VideosController < Api::V1::ApiController
     render json: @response
   end
 
-  def update_title
+  def update
     @user = User.find_by(user_params)
     @video = @user.records.find_by(record_params)
+    unless patch_params[:category].nil?
+      return render nothing: true, status: 200 if @video.update(category: text_to_int_category(patch_params[:category]))
+      return render nothing: true, status: 500
+    end
     if @video.update(patch_params)
       render nothing: true, status: 200
     else
       render nothing: true, status: 500
     end
+  end
+
+  def text_to_int_category(text)
+    %w(UI/UX Ruby Python).each_with_index { |lang, index| return index if lang == text }
   end
 
   private
@@ -80,6 +88,6 @@ class Api::V1::VideosController < Api::V1::ApiController
   end
 
   def patch_params
-    params.permit(:title)
+    params.permit(:title, :category)
   end
 end
