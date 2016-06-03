@@ -79,5 +79,12 @@ Rails.application.routes.draw do
   # Group-Invite
   get '/groups/:uuid/invite/:user_uuid' => 'groups#invite', as: :group_invite
 
+  # API
+  namespace :api, format: :json do
+    namespace :v1 do
+      get 'videos' => 'videos#all'
+    end
+  end
+
   get '*path' => redirect('/')
 end
