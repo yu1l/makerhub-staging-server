@@ -84,6 +84,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'videos' => 'videos#all'
       get 'videos/:nickname' => 'videos#user'
+      get 'videos/:nickname/:uuid' => 'videos#video'
     end
   end
 
