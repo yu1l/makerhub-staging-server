@@ -83,6 +83,7 @@ Rails.application.routes.draw do
   namespace :api, format: :json do
     namespace :v1 do
       get 'videos' => 'videos#all'
+      get 'videos/:nickname' => 'videos#user'
     end
   end
 
