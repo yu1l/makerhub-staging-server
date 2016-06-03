@@ -59,6 +59,16 @@ class Api::V1::VideosController < Api::V1::ApiController
     render json: @response
   end
 
+  def update_title
+    @user = User.find_by(user_params)
+    @video = @user.records.find_by(record_params)
+    if @video.update(patch_params)
+      render nothing: true, status: 200
+    else
+      render nothing: true, status: 500
+    end
+  end
+
   private
 
   def user_params
@@ -67,5 +77,9 @@ class Api::V1::VideosController < Api::V1::ApiController
 
   def record_params
     params.permit(:uuid)
+  end
+
+  def patch_params
+    params.permit(:title)
   end
 end

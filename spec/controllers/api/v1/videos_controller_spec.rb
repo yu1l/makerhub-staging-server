@@ -69,4 +69,19 @@ RSpec.describe Api::V1::VideosController, type: :controller do
       expect(sample['user']['avatar']).to eq(user.gh.image)
     end
   end
+
+  describe 'PATCH #update_title' do
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    let(:record) { create(:record) }
+    before do
+      user.records.create(attributes_for(:record))
+    end
+
+    it do
+      expect {
+      patch :update_title, nickname: user.nickname, uuid: user.records.first.uuid, title: 'hello world', format: :json
+      }.to change{user.records.first.title}.from(attributes_for(:record)[:title]).to('hello world')
+      expect(response).to be_success
+    end
+  end
 end
