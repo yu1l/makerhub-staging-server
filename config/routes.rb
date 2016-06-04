@@ -82,11 +82,14 @@ Rails.application.routes.draw do
   # API
   namespace :api, format: :json do
     namespace :v1 do
-      get 'videos' => 'videos#all'
-      get 'videos/:nickname' => 'videos#user'
-      get 'videos/:nickname/:uuid' => 'videos#video'
-      patch 'videos/:nickname/:uuid/title' => 'videos#update'
-      patch 'videos/:nickname/:uuid/category' => 'videos#update'
+      scope :videos do
+        get '' => 'videos#all'
+        get '/' => 'videos#all'
+        get '/:nickname' => 'videos#user'
+        get '/:nickname/:uuid' => 'videos#video'
+        patch '/:nickname/:uuid/title' => 'videos#update'
+        patch '/:nickname/:uuid/category' => 'videos#update'
+      end
 
       get 'streams' => 'streams#all'
       get 'streams/:nickname' => 'streams#user'
