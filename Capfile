@@ -17,6 +17,7 @@ require "capistrano/deploy"
 #
 # require 'capistrano/rvm'
 require 'capistrano/rbenv'
+require 'capistrano/ndenv'
 require 'capistrano/rails'
 # require 'capistrano/chruby'
 require 'capistrano/bundler'
@@ -25,11 +26,17 @@ require 'capistrano/rails/migrations'
 require 'capistrano/puma'
 # require 'capistrano/passenger'
 
-set :rbenv_custom_path, "/home/ubuntu/.rbenv"
+set :rbenv_path, "/home/ubuntu/.rbenv"
 set :rbenv_ruby, '2.2.3'
 set :rbenv_type, :user
 set :rbenv_map_bins, %w(rake gem bundle ruby rails)
 set :rbenv_roles, :web
+
+set :ndenv_custom_path, "/home/ubuntu/.ndenv"
+set :ndenv_type, :user
+set :ndenv_node, 'v6.0.0'
+set :ndenv_map_bins, %w(npm node)
+set :ndenv_roles, :web
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
