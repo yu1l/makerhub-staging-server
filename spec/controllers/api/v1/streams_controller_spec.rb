@@ -59,7 +59,21 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
   end
 
   describe 'GET #comments' do
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    before do
+      user.chats.create(text: 'hello world', sender: user.gh.nickname)
+      get :comments, nickname: user.gh.nickname, format: :json
+    end
 
+    it do
+      parsed_response = JSON.parse(response.body)
+      sample = parsed_response['comments'][0]
+      expect(sample['text']).not_to be_nil
+      expect(sample['user']['name']).not_to be_nil
+      expect(sample['user']['nickname']).not_to be_nil
+      expect(sample['user']['avatar']).not_to be_nil
+      expect(response).to be_success
+    end
   end
 
   describe 'POST #comments' do

@@ -40,6 +40,22 @@ class Api::V1::StreamsController < Api::V1::ApiController
     render nothing: true, status: 500
   end
 
+  def comments
+    @user = User.find_by(user_params)
+    @chats = @user.chats.all.map do |c|
+      u = User.find_by(nickname: c.sender)
+      {
+        text: c.text,
+        user: {
+          name: u.name,
+          nickname: u.gh.nickname,
+          avatar: u.gh.image
+        }
+      }
+    end
+    render json: { comments: @chats }
+  end
+
   private
 
   def user_params
