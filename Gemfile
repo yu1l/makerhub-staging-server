@@ -60,7 +60,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-ndenv'
   gem 'capistrano-rbenv'
-  gem 'capistrano-bundler', require: false
+  gem 'capistrano-bundler'
   gem 'capistrano3-nginx',  require: false
   gem 'capistrano-rails',   require: false
   gem 'capistrano3-puma'
