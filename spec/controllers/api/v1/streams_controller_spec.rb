@@ -44,7 +44,18 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
   end
 
   describe 'PATCH #update - title' do
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    before do
+      @user = user
+      @user.update(title: 'before')
+      patch :update, nickname: @user.gh.nickname, title: 'after', format: :json
+      @user.reload
+    end
 
+    it do
+      expect(@user.title).to eq('after')
+      expect(response).to be_success
+    end
   end
 
   describe 'GET #comments' do

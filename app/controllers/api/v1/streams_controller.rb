@@ -34,9 +34,19 @@ class Api::V1::StreamsController < Api::V1::ApiController
     render json: @user
   end
 
+  def update
+    @user = User.find_by(user_params)
+    return render nothing: true, status: 200 if @user.update(update_params)
+    render nothing: true, status: 500
+  end
+
   private
 
   def user_params
     params.permit(:nickname)
+  end
+
+  def update_params
+    params.permit(:title)
   end
 end
