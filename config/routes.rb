@@ -96,6 +96,9 @@ Rails.application.routes.draw do
       get 'streams/:nickname/block_list' => 'streams#block_list'
       post 'streams/:nickname/block' => 'streams#block'
       post 'streams/:nickname/unblock' => 'streams#unblock'
+
+      get '/:nickname/followings' => 'users#followings'
+      get '/:nickname/followers' => 'users#followers'
     end
   end
 
