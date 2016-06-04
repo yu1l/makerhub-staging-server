@@ -1,11 +1,11 @@
 module ApplicationHelper
   def stream_url
-    return '52.192.182.78' if Rails.env.production?
+    return 'makerhub.live' if Rails.env.production?
     return '192.168.179.2' if Rails.env.development?
   end
 
   def category(index)
-    %w(UI/UX Ruby Python)[index]
+    %w(UI/UX Ruby Python Javascript Elixir Haskell Rust Go)[index]
   end
 
   def app_title(params)
