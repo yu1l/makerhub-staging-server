@@ -27,7 +27,7 @@ set :pty, true
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 
 # Default value for linked_dirs is []
-set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system')
+set :linked_dirs, fetch(:linked_dirs, ['bin', 'public/assets', 'vendor/bundle']).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system')
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -35,11 +35,17 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :rbenv_custom_path, "/home/ubuntu/.rbenv"
+set :rbenv_ruby, '2.2.3'
+set :rbenv_type, :user
+set :rbenv_map_bins, %w(rake gem bundle ruby rails)
+set :rbenv_roles, :all
+
 set :ndenv_custom_path, "/home/ubuntu/.ndenv"
 set :ndenv_type, :user
 set :ndenv_node, 'v6.0.0'
 set :ndenv_map_bins, %w(npm node)
-set :ndenv_roles, :web
+set :ndenv_roles, :all
 
 set :puma_init_active_record, true
 

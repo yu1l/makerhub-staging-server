@@ -26,11 +26,5 @@ require 'capistrano/rails/migrations'
 require 'capistrano/puma'
 # require 'capistrano/passenger'
 
-set :rbenv_custom_path, "/home/ubuntu/.rbenv"
-set :rbenv_ruby, '2.2.3'
-set :rbenv_type, :user
-set :rbenv_map_bins, %w(rake gem bundle ruby rails)
-set :rbenv_roles, :web
-
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
