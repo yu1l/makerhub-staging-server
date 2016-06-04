@@ -10,6 +10,7 @@
 set :nginx_sites_available_path, "/usr/local/nginx/conf/nginx.conf"
 set :nginx_sites_enabled_path, "/usr/local/nginx/conf/nginx.conf"
 set :puma_bind, %w(tcp://0.0.0.0:9292 unix:///tmp/puma.sock)
+set :puma_init_active_record, true
 
 # role-based syntax
 # ==================

@@ -52,8 +52,6 @@ set :ndenv_node, 'v6.0.0'
 set :ndenv_map_bins, %w(npm node)
 set :ndenv_roles, :web
 
-set :puma_init_active_record, true
-
 namespace :deploy do
 
   after :restart, :clear_cache do
