@@ -24,7 +24,23 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
   end
 
   describe 'GET #user' do
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    before do
+      user.update(live: true)
+      get :user, nickname: user.gh.nickname, format: :json
+      expect(response).to be_success
+    end
 
+    it do
+      sample = JSON.parse(response.body)
+      expect(sample['title']).not_to be_nil
+      expect(sample['summary']).not_to be_nil
+      expect(sample['viewers']).not_to be_nil
+      expect(sample['category']).not_to be_nil
+      expect(sample['user']['name']).not_to be_nil
+      expect(sample['user']['nickname']).not_to be_nil
+      expect(sample['user']['avatar']).not_to be_nil
+    end
   end
 
   describe 'PATCH #update - title' do
