@@ -35,6 +35,12 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :ndenv_custom_path, "/home/ubuntu/.ndenv"
+set :ndenv_type, :user
+set :ndenv_node, 'v6.0.0'
+set :ndenv_map_bins, %w(npm node)
+set :ndenv_roles, :web
+
 set :puma_init_active_record, true
 
 namespace :deploy do
