@@ -1,0 +1,1 @@
+(function(){$(function(){return $(".nav-toggle").click(function(){return $(this).toggleClass("is-active"),$(".nav-menu").toggleClass("is-active")}),$(".modal-close").on("click",function(){return $("#signin").removeClass("is-active")}),$("#signin_button").on("click",function(){return $("#signin").addClass("is-active")})})}).call(this);

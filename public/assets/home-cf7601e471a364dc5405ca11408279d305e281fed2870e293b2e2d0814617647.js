@@ -1,0 +1,1 @@
+(function(){$(function(){return $("#records").click(function(){return $(this).addClass("is-active"),$("#streams").removeClass("is-active"),$("#re").show(),$("#st").hide()}),$("#streams").click(function(){return $(this).addClass("is-active"),$("#records").removeClass("is-active"),$("#st").show(),$("#re").hide()})})}).call(this);
