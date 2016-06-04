@@ -59,7 +59,7 @@ group :development do
   gem 'hirb-unicode'
   gem 'capistrano'
   gem 'capistrano-ndenv'
-  gem 'capistrano-rbenv'  , require: false
+  gem 'capistrano-rbenv'
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-nginx',  require: false
   gem 'capistrano-rails',   require: false
