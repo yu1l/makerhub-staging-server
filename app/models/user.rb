@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   acts_as_followable
   acts_as_follower
 
+  has_one :channel
   has_many :user_groups
   has_many :groups, through: :user_groups
   has_many :records
@@ -52,6 +53,10 @@ class User < ActiveRecord::Base
          :trackable,
          :validatable,
          :omniauthable
+
+  after_create do
+    self.create_channel
+  end
 
   before_create do
     self.live = false
@@ -138,5 +143,9 @@ class User < ActiveRecord::Base
     # <meta name="twitter:title" content="未経験からプロを育てるオンラインブートキャンプ | TechAcademy [テックアカデミー]" />
     # <meta name="twitter:description" content="プログラミング学習で、もう挫折しない。パーソナルメンターがつくオンラインブートキャンプ。" />
     # <meta name="twitter:image" content="https://techacademy.jp/assets/og-image-6415b5a10c909883007740c2694dab82.jpg" />
+  end
+
+  def category_in_text
+    %w(UI/UX Ruby Python)[category]
   end
 end

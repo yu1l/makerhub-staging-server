@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
@@ -58,6 +59,14 @@ Rails.application.routes.draw do
   # Record-Category
   post ':nickname/record/:uuid/category' => 'users#record_category'
 
+  # Channel - Block
+  resource :channel, only: [] do
+    member do
+      post :block
+      post :unblock
+    end
+  end
+
   # Follow
   get ':nickname/follow' => 'users#follow', as: :follow
 
@@ -69,6 +78,34 @@ Rails.application.routes.draw do
 
   # Group-Invite
   get '/groups/:uuid/invite/:user_uuid' => 'groups#invite', as: :group_invite
+
+  # API
+  namespace :api, format: :json do
+    namespace :v1 do
+      scope :videos do
+        get '' => 'videos#all'
+        get '/' => 'videos#all'
+        get '/:nickname' => 'videos#user'
+        get '/:nickname/:uuid' => 'videos#video'
+        # patch '/:nickname/:uuid/title' => 'videos#update'
+        # patch '/:nickname/:uuid/category' => 'videos#update'
+      end
+
+      scope :streams do
+        get '' => 'streams#all'
+        get '/:nickname' => 'streams#user'
+        # patch '/:nickname/title' => 'streams#update'
+        get '/:nickname/comments' => 'streams#comments'
+        # post '/:nickname/comments' => 'streams#create_comment'
+        # get '/:nickname/block_list' => 'streams#block_list'
+        # post '/:nickname/block' => 'streams#block'
+        # post '/:nickname/unblock' => 'streams#unblock'
+      end
+
+      get '/:nickname/followings' => 'users#followings'
+      get '/:nickname/followers' => 'users#followers'
+    end
+  end
 
   get '*path' => redirect('/')
 end

@@ -92,6 +92,8 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20160310)
       unf (>= 0.0.5, < 1.0.0)
+    doorkeeper (3.1.0)
+      railties (>= 3.2)
     equalizer (0.0.10)
     erubis (2.7.0)
     execjs (2.7.0)
@@ -371,6 +373,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
+  doorkeeper
   factory_girl_rails
   faker
   font-awesome-rails
