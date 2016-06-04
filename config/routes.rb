@@ -87,18 +87,20 @@ Rails.application.routes.draw do
         get '/' => 'videos#all'
         get '/:nickname' => 'videos#user'
         get '/:nickname/:uuid' => 'videos#video'
-        patch '/:nickname/:uuid/title' => 'videos#update'
-        patch '/:nickname/:uuid/category' => 'videos#update'
+        # patch '/:nickname/:uuid/title' => 'videos#update'
+        # patch '/:nickname/:uuid/category' => 'videos#update'
       end
 
-      get 'streams' => 'streams#all'
-      get 'streams/:nickname' => 'streams#user'
-      patch 'streams/:nickname/title' => 'streams#update'
-      get 'streams/:nickname/comments' => 'streams#comments'
-      post 'streams/:nickname/comments' => 'streams#create_comment'
-      get 'streams/:nickname/block_list' => 'streams#block_list'
-      post 'streams/:nickname/block' => 'streams#block'
-      post 'streams/:nickname/unblock' => 'streams#unblock'
+      scope :streams do
+        get '' => 'streams#all'
+        get '/:nickname' => 'streams#user'
+        # patch '/:nickname/title' => 'streams#update'
+        get '/:nickname/comments' => 'streams#comments'
+        # post '/:nickname/comments' => 'streams#create_comment'
+        # get '/:nickname/block_list' => 'streams#block_list'
+        # post '/:nickname/block' => 'streams#block'
+        # post '/:nickname/unblock' => 'streams#unblock'
+      end
 
       get '/:nickname/followings' => 'users#followings'
       get '/:nickname/followers' => 'users#followers'

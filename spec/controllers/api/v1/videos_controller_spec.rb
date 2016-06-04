@@ -70,7 +70,7 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     end
   end
 
-  describe 'PATCH #update' do
+  skip describe 'PATCH #update' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     let(:record) { create(:record) }
     before do
@@ -85,7 +85,7 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     end
   end
 
-  describe 'PATCH #update - category' do
+  skip describe 'PATCH #update - category' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     let(:record) { create(:record) }
     before do

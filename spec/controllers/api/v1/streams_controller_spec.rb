@@ -43,7 +43,7 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
     end
   end
 
-  describe 'PATCH #update - title' do
+  skip describe 'PATCH #update - title' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     before do
       @user = user
