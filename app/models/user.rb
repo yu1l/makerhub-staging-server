@@ -144,4 +144,8 @@ class User < ActiveRecord::Base
     # <meta name="twitter:description" content="プログラミング学習で、もう挫折しない。パーソナルメンターがつくオンラインブートキャンプ。" />
     # <meta name="twitter:image" content="https://techacademy.jp/assets/og-image-6415b5a10c909883007740c2694dab82.jpg" />
   end
+
+  def category_in_text
+    %w(UI/UX Ruby Python)[category]
+  end
 end

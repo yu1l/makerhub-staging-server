@@ -95,4 +95,8 @@ class Record < ActiveRecord::Base
   rescue
     puts 'Error on app/models/record.rb'
   end
+
+  def category_in_text
+    %w(UI/UX Ruby Python)[category]
+  end
 end
