@@ -26,7 +26,7 @@ require 'capistrano/rails/migrations'
 require 'capistrano/puma'
 # require 'capistrano/passenger'
 
-set :rbenv_path, "/home/ubuntu/.rbenv"
+set :rbenv_custom_path, "/home/ubuntu/.rbenv"
 set :rbenv_ruby, '2.2.3'
 set :rbenv_type, :user
 set :rbenv_map_bins, %w(rake gem bundle ruby rails)
