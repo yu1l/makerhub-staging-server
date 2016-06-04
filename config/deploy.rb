@@ -35,6 +35,11 @@ set :linked_dirs, fetch(:linked_dirs, ['bin', 'public/assets', 'vendor/bundle'])
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+# Migration/Assets
+set :migration_role, 'migrator'
+set :conditionally_migrate, true
+set :assets_roles, [:web]
+
 set :rbenv_custom_path, "/home/ubuntu/.rbenv"
 set :rbenv_ruby, '2.2.3'
 set :rbenv_type, :user
