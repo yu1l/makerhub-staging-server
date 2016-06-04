@@ -35,6 +35,13 @@ set :linked_dirs, fetch(:linked_dirs, ['bin', 'public/assets', 'vendor/bundle'])
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :ndenv_custom_path, "/home/ubuntu/.ndenv"
+set :ndenv_node, 'v6.0.0'
+set :ndenv_prefix, "NDENV_ROOT=#{fetch(:ndenv_custom_path)} NDENV_VERSION=#{fetch(:ndenv_node)} #{fetch(:ndenv_custom_path)}/bin/ndenv exec"
+set :ndenv_type, :user
+set :ndenv_map_bins, %w(npm node)
+set :ndenv_roles, :web
+
 # Migration/Assets
 set :migration_role, 'migrator'
 set :conditionally_migrate, true
@@ -45,12 +52,6 @@ set :rbenv_ruby, '2.2.3'
 set :rbenv_type, :user
 set :rbenv_map_bins, %w(rake gem bundle ruby rails)
 set :rbenv_roles, :web
-
-set :ndenv_custom_path, "/home/ubuntu/.ndenv"
-set :ndenv_type, :user
-set :ndenv_node, 'v6.0.0'
-set :ndenv_map_bins, %w(npm node)
-set :ndenv_roles, :web
 
 namespace :deploy do
 
