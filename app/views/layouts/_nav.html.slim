@@ -2,7 +2,7 @@ nav.nav
   .container
     .nav-left
       = link_to root_path, class: 'nav-item' do
-        = image_tag 'makerhub2x', alt: 'logo'
+        = image_tag asset_path('makerhub2x.png'), alt: 'logo'
       / = link_to streams_path, class: 'nav-item' do
         / span= t('streams')
     .nav-center= link_to 'Still in beta', '#', class: 'nav-item'
