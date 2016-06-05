@@ -2,7 +2,7 @@ nav.nav
   .container
     .nav-left
       = link_to root_path, class: 'nav-item' do
-        img src='https://s3-ap-northeast-1.amazonaws.com/live-streaming-staging/logo2x.png' alt='logo'
+        = image_tag 'makerhub2x', alt: 'logo'
       / = link_to streams_path, class: 'nav-item' do
         / span= t('streams')
     .nav-center= link_to 'Still in beta', '#', class: 'nav-item'
