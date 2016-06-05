@@ -52,7 +52,7 @@
 <div class="container">
   <%= render partial: 'all', locals: { records: @user.records.select { |r| r.duration.ceil > 0 } } %>
 </div>
-
+<%= javascript_include_tag 'stream' %>
 <script>
   $(function() {
     $('.follow').click(function(e) {

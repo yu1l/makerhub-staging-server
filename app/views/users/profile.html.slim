@@ -47,6 +47,8 @@
     / Integration
     #it style='display:none;'= render partial: 'users/integrations', locals: { user: current_user }
 
+= javascript_include_tag 'stream'
+
 script
   |  $('#integration').click(function() {
   |    $(this).addClass('is-active');

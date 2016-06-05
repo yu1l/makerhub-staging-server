@@ -1,5 +1,5 @@
 $ ->
-  $('.init').each ->
+  $('.init').map ->
     elem = @
     $.ajax
       method: 'GET'
