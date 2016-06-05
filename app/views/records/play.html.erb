@@ -55,6 +55,36 @@
 <%= javascript_include_tag 'stream' %>
 <script>
   $(function() {
+    var update = function() {
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "300",
+        "timeOut": "1000",
+        "extendedTimeOut": "300",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+      toastr.success('更新しました')
+    }
+
+    $('form').submit(function() {
+      update();
+      $('#stream_title').show();
+      $('#stream_title').html('<span data-balloon="タイトルをクリックして編集できます" data-balloon-pos="up" style="font-size:18pt;">' + $('.update_title').val() + '</span><br />');
+      $('.title_form').hide();
+      $('.update_title').focusout();
+      return true;
+    });
+
     $('.follow').click(function(e) {
       e.preventDefault();
       $.ajax({

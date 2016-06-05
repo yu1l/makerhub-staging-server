@@ -41,7 +41,7 @@
 #
 
 class UsersController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:category]
+  skip_before_action :verify_authenticity_token, only: [:category, :update]
 
   def stop_private_stream
     @user = User.find_by(nickname: params[:nickname])
@@ -85,10 +85,9 @@ class UsersController < ApplicationController
   end
 
   def category
-    @user = User.find_by(nickname: params[:nickname])
-    authorize(@user, :me?)
+    return unless user_signed_in?
     current_user.update(user_params)
-    render :category, status: 200
+    render json: { title: current_user.title, description: current_user.description }, status: 200
   rescue
     render nothing: true, status: 500
   end
@@ -124,11 +123,19 @@ class UsersController < ApplicationController
     render nothing: true, status: 500
   end
 
+  def update
+    return unless user_signed_in?
+    current_user.update(user_params)
+    render json: { title: current_user.title, description: current_user.description }, status: 200
+  rescue
+    render nothing: true, status: 500
+  end
+
   def update_title
     @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
     current_user.update(user_params)
-    render :update_title, status: 200
+    render nothing: true, status: 200
   rescue
     render nothing: true, status: 500
   end
