@@ -16,5 +16,6 @@
 !/log/.keep
 /tmp
 public/*.mp4
+public/assets
 erd.pdf
 coverage

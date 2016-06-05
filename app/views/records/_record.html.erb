@@ -3,7 +3,7 @@
   <%= link_to play_record_path(nickname: user.nickname, uuid: record.uuid), target: '_blank' do %>
     <div class="card">
       <div class="card-image">
-        <figure class="image is-4by3"><%= image_tag record.screenshot_url, alt: record.uuid %></figure>
+        <figure class="image is-4by3"><%= image_tag asset_path('loading.gif'), alt: record.uuid, class: "video-uuid #{record.uuid} init", uid: record.uuid, owner: user.nickname %></figure>
         <% unless record.uploaded? %>
           <span class="tag is-danger"><%= t('streaming.making') %></span>
         <% else %>

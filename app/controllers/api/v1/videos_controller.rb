@@ -16,7 +16,7 @@ class Api::V1::VideosController < Api::V1::ApiController
         }
       }
     end
-    render json: @videos
+    render json: { videos: @videos }
   end
 
   def user

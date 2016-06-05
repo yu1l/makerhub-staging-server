@@ -37,6 +37,8 @@ Rails.application.routes.draw do
 
   # User-Update-Title
   post ':nickname/update_title' => 'users#update_title', as: :update_title
+  post 'profile/update' => 'users#update'
+  post 'profile/category' => 'users#category'
 
   # User-Update-Record-Title
   post ':nickname/record/:uuid/update_title' => 'users#update_record_title', as: :update_record_title
@@ -46,9 +48,6 @@ Rails.application.routes.draw do
 
   # User-Play-Record
   get ':nickname/record/:uuid' => 'records#play', as: :play_record
-
-  # User-Category
-  post ':nickname/category' => 'users#category'
 
   # User-Private-Stream
   get ':uuid/stream' => 'users#private_stream', as: :private_stream
