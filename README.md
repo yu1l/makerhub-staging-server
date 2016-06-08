@@ -1,4 +1,5 @@
-# :ballot_box_with_check: API Endpoints
+# :ballot_box_with_check: API Endpoints - **deprecated**
+# Moved to [here](https://github.com/MakerHubLive/doc/blob/master/Endpoint.md)
 
 ## Summary
 
