@@ -63,16 +63,17 @@ class Api::V1::VideosController < Api::V1::ApiController
 
   def update
     @user = User.find_by(user_params)
+    return render nothing: true, status: 500 unless @user.gh.nickname == params[:current_user_nickname]
+
     @video = @user.records.find_by(record_params)
-    unless patch_params[:category].nil?
+    if patch_params[:category].present?
       return render nothing: true, status: 200 if @video.update(category: text_to_int_category(patch_params[:category]))
-      return render nothing: true, status: 500
     end
-    if @video.update(patch_params)
-      render nothing: true, status: 200
-    else
-      render nothing: true, status: 500
-    end
+
+    return  render nothing: true, status: 200 if params[:title].present? && @video.update(patch_params)
+    render nothing: true, status: 500
+  rescue
+    render nothing: true, status: 500
   end
 
   def text_to_int_category(text)

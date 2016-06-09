@@ -38,7 +38,9 @@ class Api::V1::StreamsController < Api::V1::ApiController
 
   def update
     @user = User.find_by(user_params)
+    return render nothing: true, status: 500 unless @user.gh.nickname == params[:current_user_nickname]
     return render nothing: true, status: 200 if @user.update(update_params)
+  rescue
     render nothing: true, status: 500
   end
 

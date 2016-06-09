@@ -48,18 +48,47 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
     end
   end
 
-  skip describe 'PATCH #update - title' do
-    let(:user) { User.find_from_auth(github_hash, nil) }
-    before do
-      @user = user
-      @user.update(title: 'before')
-      patch :update, nickname: @user.gh.nickname, title: 'after', format: :json
-      @user.reload
+  describe 'PATCH #update - title' do
+    context 'via anonymous or other' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      before do
+        @other = create(:user)
+        @user = user
+        @user.update(title: 'before')
+        patch :update, nickname: @user.gh.nickname, current_user_nickname: @other.nickname, title: 'after', format: :json
+        @user.reload
+      end
+
+      it do
+        expect(@user.title).to eq('before')
+        expect(response.status).to eq(500)
+      end
     end
 
-    it do
-      expect(@user.title).to eq('after')
-      expect(response).to be_success
+    context 'invalid params' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      before do
+        patch :update, nickname: '', current_user_nickname: '', title: 'after', format: :json
+      end
+
+      it do
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via user' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      before do
+        @user = user
+        @user.update(title: 'before')
+        patch :update, nickname: @user.gh.nickname, current_user_nickname: @user.gh.nickname, title: 'after', format: :json
+        @user.reload
+      end
+
+      it do
+        expect(@user.title).to eq('after')
+        expect(response).to be_success
+      end
     end
   end
 
@@ -85,15 +114,15 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
 
   end
 
-  describe 'GET #block_list' do
+  skip describe 'GET #block_list' do
 
   end
 
-  describe 'POST #block' do
+  skip describe 'POST #block' do
 
   end
 
-  describe 'POST #unblock' do
+  skip describe 'POST #unblock' do
 
   end
 end

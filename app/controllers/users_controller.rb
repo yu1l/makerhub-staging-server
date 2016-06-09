@@ -125,7 +125,8 @@ class UsersController < ApplicationController
   end
 
   def update
-    return unless user_signed_in?
+    return render nothing: true, status: 500 unless user_signed_in?
+    return render nothing: true, status: 500 unless current_user.gh.nickname == params[:nickname]
     current_user.update(user_params)
     render json: { title: current_user.title, description: current_user.description }, status: 200
   rescue

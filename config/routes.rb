@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  use_doorkeeper do
-    controllers application: 'oauth/applications'
-  end
+  use_doorkeeper
 
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
@@ -92,16 +90,16 @@ Rails.application.routes.draw do
         get '/' => 'videos#all'
         get '/:nickname' => 'videos#user'
         get '/:nickname/:uuid' => 'videos#video'
-        # patch '/:nickname/:uuid/title' => 'videos#update'
-        # patch '/:nickname/:uuid/category' => 'videos#update'
+        patch '/:nickname/:uuid/title' => 'videos#update'
+        patch '/:nickname/:uuid/category' => 'videos#update'
       end
 
       scope :streams do
         get '' => 'streams#all'
         get '/:nickname' => 'streams#user'
-        # patch '/:nickname/title' => 'streams#update'
+        patch '/:nickname/title' => 'streams#update'
         get '/:nickname/comments' => 'streams#comments'
-        # post '/:nickname/comments' => 'streams#create_comment'
+        post '/:nickname/comments' => 'streams#create_comment'
         # get '/:nickname/block_list' => 'streams#block_list'
         # post '/:nickname/block' => 'streams#block'
         # post '/:nickname/unblock' => 'streams#unblock'

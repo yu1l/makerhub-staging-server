@@ -75,22 +75,42 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     end
   end
 
-  skip describe 'PATCH #update' do
-    let(:user) { User.find_from_auth(github_hash, nil) }
-    let(:record) { create(:record) }
-    before do
-      user.records.create(attributes_for(:record))
+  describe 'PATCH #update' do
+    context 'via invalid params' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      let(:record) { create(:record) }
+      before do
+        user.records.create(attributes_for(:record))
+      end
+
+      it do
+        expect {
+          patch :update, nickname: '', uuid: user.records.first.uuid, title: nil, current_user_nickname: user.nickname, format: :json
+        }.not_to change{user.records.first.title}.from(attributes_for(:record)[:title])
+        expect {
+          patch :update, nickname: user.nickname, uuid: user.records.first.uuid, title: nil, current_user_nickname: user.nickname, format: :json
+        }.not_to change{user.records.first.title}.from(attributes_for(:record)[:title])
+        expect(response.status).to eq(500)
+      end
     end
 
-    it do
-      expect {
-      patch :update, nickname: user.nickname, uuid: user.records.first.uuid, title: 'hello world', format: :json
-      }.to change{user.records.first.title}.from(attributes_for(:record)[:title]).to('hello world')
-      expect(response).to be_success
+    context 'via user' do
+      let(:user) { User.find_from_auth(github_hash, nil) }
+      let(:record) { create(:record) }
+      before do
+        user.records.create(attributes_for(:record))
+      end
+
+      it do
+        expect {
+          patch :update, nickname: user.nickname, uuid: user.records.first.uuid, title: 'hello world', current_user_nickname: user.nickname, format: :json
+        }.to change{user.records.first.title}.from(attributes_for(:record)[:title]).to('hello world')
+        expect(response).to be_success
+      end
     end
   end
 
-  skip describe 'PATCH #update - category' do
+  describe 'PATCH #update - category' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     let(:record) { create(:record) }
     before do
@@ -99,7 +119,7 @@ RSpec.describe Api::V1::VideosController, type: :controller do
 
     it do
       expect {
-      patch :update, nickname: user.nickname, uuid: user.records.first.uuid, category: 'Python', format: :json
+        patch :update, nickname: user.nickname, uuid: user.records.first.uuid, category: 'Python', current_user_nickname: user.nickname, format: :json
       }.to change{user.records.first.category}.from(attributes_for(:record)[:category]).to(2)
       expect(response).to be_success
     end
