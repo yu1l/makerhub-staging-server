@@ -56,6 +56,7 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
         @user = user
         @user.update(title: 'before')
         patch :update, nickname: @user.gh.nickname, current_user_nickname: @other.nickname, title: 'after', format: :json
+        patch :update, nickname: @user.gh.nickname, current_user_nickname: @user.gh.nickname, title: nil, format: :json
         @user.reload
       end
 
@@ -110,7 +111,7 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
     end
   end
 
-  describe 'POST #comments' do
+  skip describe 'POST #create_comment' do
 
   end
 

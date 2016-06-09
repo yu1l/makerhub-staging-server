@@ -99,7 +99,7 @@ Rails.application.routes.draw do
         get '/:nickname' => 'streams#user'
         patch '/:nickname/title' => 'streams#update'
         get '/:nickname/comments' => 'streams#comments'
-        post '/:nickname/comments' => 'streams#create_comment'
+        # post '/:nickname/comments' => 'streams#create_comment'
         # get '/:nickname/block_list' => 'streams#block_list'
         # post '/:nickname/block' => 'streams#block'
         # post '/:nickname/unblock' => 'streams#unblock'
