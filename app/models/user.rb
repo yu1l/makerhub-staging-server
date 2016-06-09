@@ -29,10 +29,12 @@
 #  private                :boolean
 #  twitter                :boolean
 #  nickname               :string
+#  role                   :integer          default(0)
 #
 
 # User
 class User < ActiveRecord::Base
+  enum role: { guest: 0, admin: 1 }
   acts_as_followable
   acts_as_follower
 

@@ -29,6 +29,7 @@
 #  private                :boolean
 #  twitter                :boolean
 #  nickname               :string
+#  role                   :integer          default(0)
 #
 
 require 'rails_helper'

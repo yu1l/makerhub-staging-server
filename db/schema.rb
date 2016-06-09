@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609090359) do
+ActiveRecord::Schema.define(version: 20160609101830) do
 
   create_table "channels", force: :cascade do |t|
     t.integer  "user_id"
@@ -206,6 +206,7 @@ ActiveRecord::Schema.define(version: 20160609090359) do
     t.boolean  "private"
     t.boolean  "twitter"
     t.string   "nickname"
+    t.integer  "role",                   default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

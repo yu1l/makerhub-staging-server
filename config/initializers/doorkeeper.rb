@@ -17,7 +17,7 @@ Doorkeeper.configure do
   #   # Put your admin authentication logic here.
   #   # Example implementation:
   #   Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
-    current_user && current_user.gh.email == 'yhoshino11@gmail.com' || redirect_to(new_user_session_url)
+    current_user && current_user.admin? || redirect_to(new_user_session_url)
   end
 
   # Authorization Code expiration time (default 10 minutes).
