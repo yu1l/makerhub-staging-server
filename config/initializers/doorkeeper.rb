@@ -47,7 +47,7 @@ Doorkeeper.configure do
   # Optional parameter :confirmation => true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  # enable_application_owner :confirmation => false
+  enable_application_owner :confirmation => false
 
   # Define access token scopes for your provider
   # For more information go to
@@ -102,8 +102,8 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
   skip_authorization do |resource_owner, client|
-    client.uid == 'd7325aa83ed7c470a4b6c850e8d92d08d704dd390e12a212e38efaacb1ef4893'
-  #   client.superapp? or resource_owner.admin?
+    resource_owner.admin?
+    # client.superapp? or resource_owner.admin?
   end
 
   # WWW-Authenticate Realm (default "Doorkeeper").

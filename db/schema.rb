@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609101830) do
+ActiveRecord::Schema.define(version: 20160609104727) do
 
   create_table "channels", force: :cascade do |t|
     t.integer  "user_id"
@@ -127,8 +127,11 @@ ActiveRecord::Schema.define(version: 20160609101830) do
     t.string   "scopes",       default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
+  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true
 
   create_table "records", force: :cascade do |t|

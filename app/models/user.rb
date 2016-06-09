@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   has_many :chats
   has_one :tw
   has_one :gh
+  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
