@@ -3,6 +3,7 @@ module Users
     def callback_from_providers
       @user = User.find_from_auth(request.env['omniauth.auth'], current_user)
       sign_in(@user)
+      return redirect_to session[:return_to] if session[:return_to]
       redirect_to profile_path(nickname: @user.nickname)
     rescue
       redirect_to new_user_session_path

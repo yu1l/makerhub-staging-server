@@ -87,6 +87,50 @@ RSpec.describe UsersController, type: :controller do
     end
   end
 
+  describe 'POST #update' do
+    context 'via anonymous' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+      end
+
+      it do
+        expect {
+          post :update, nickname: @user.nickname, user: { title: 'hello' }
+        }.not_to change{@user.title}.from(@user.title)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via other' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        @other = create(:user)
+        sign_in(@other)
+      end
+
+      it do
+        expect {
+          post :update, nickname: @user.nickname, user: { title: 'hello' }
+        }.not_to change{@user.title}.from(@user.title)
+        expect(response.status).to eq(500)
+      end
+    end
+
+    context 'via user' do
+      before do
+        @user = User.find_from_auth(github_hash, nil)
+        sign_in(@user)
+        post :update, nickname: @user.gh.nickname, user: { title: 'hello' }
+        @user.reload
+      end
+
+      it do
+        expect(@user.title).to eq('hello')
+        expect(response.status).to eq(200)
+      end
+    end
+  end
+
   describe 'POST #update_title' do
     context 'via anonymous' do
       before do

@@ -1,6 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
+  let(:token) { double acceptable?: true }
+  before do
+    allow(controller).to receive(:doorkeeper_token) {token}
+  end
+
+  describe 'GET #me' do
+    let!(:application) { create(:application) }
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    let!(:token)       { create(:access_token, :application => application, :resource_owner_id => user.id) }
+
+    it 'responds with 200' do
+      get :me, :format => :json, :access_token => token.token
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the user as json' do
+      get :me, :format => :json, :access_token => token.token
+      expect(response.body).to eq( { user: { uuid: user.uuid, email: user.gh.email, name: user.gh.name, nickname: user.gh.nickname } }.to_json)
+    end
+  end
+
   describe 'GET #followings' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     before do
