@@ -1,4 +1,6 @@
 class Api::V1::StreamsController < Api::V1::ApiController
+  skip_before_action :doorkeeper_authorize!, only: [:all, :user, :comments]
+
   def all
     @users = User.where(live: true).map do |u|
       {

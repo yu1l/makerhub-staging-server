@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::VideosController, type: :controller do
+  let(:token) { double acceptable?: true }
+  before do
+    allow(controller).to receive(:doorkeeper_token) {token}
+  end
+
   describe 'GET #all' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     let(:record) { create(:record) }
@@ -11,7 +16,7 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     end
 
     it do
-      sample = JSON.parse(response.body)[0]
+      sample = JSON.parse(response.body)['videos'][0]
       expect(sample['title']).not_to be_nil
       expect(sample['video_url']).not_to be_nil
       expect(sample['thumbnail_url']).not_to be_nil

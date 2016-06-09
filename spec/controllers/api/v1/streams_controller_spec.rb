@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::StreamsController, type: :controller do
+  let(:token) { double acceptable?: true }
+  before do
+    allow(controller).to receive(:doorkeeper_token) {token}
+  end
+
   describe 'GET #all' do
     let(:user) { User.find_from_auth(github_hash, nil) }
     before do

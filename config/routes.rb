@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  use_doorkeeper do
+    controllers application: 'oauth/applications'
+  end
+
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
+
   root 'home#index'
 
   ### OBS-Start
@@ -81,6 +85,8 @@ Rails.application.routes.draw do
   # API
   namespace :api, format: :json do
     namespace :v1 do
+      get 'me' => 'users#me'
+
       scope :videos do
         get '' => 'videos#all'
         get '/' => 'videos#all'

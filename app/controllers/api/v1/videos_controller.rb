@@ -1,4 +1,6 @@
 class Api::V1::VideosController < Api::V1::ApiController
+  skip_before_action :doorkeeper_authorize!, only: [:all, :user, :video]
+
   def all
     @videos = Record.all.map do |r|
       {
