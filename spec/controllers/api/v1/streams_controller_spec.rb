@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::StreamsController, type: :controller do
   let(:token) { double acceptable?: true }
   before do
-    allow(controller).to receive(:doorkeeper_token) {token}
+    allow(controller).to receive(:doorkeeper_token) { token }
   end
 
   describe 'GET #all' do
@@ -112,18 +112,14 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
   end
 
   skip describe 'POST #create_comment' do
-
   end
 
   skip describe 'GET #block_list' do
-
   end
 
   skip describe 'POST #block' do
-
   end
 
   skip describe 'POST #unblock' do
-
   end
 end

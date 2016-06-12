@@ -81,6 +81,29 @@ class User < ActiveRecord::Base
     self.total = 0
   end
 
+  Contract None => Hash
+  def public_attributes
+    {
+      title: title,
+      summary: description,
+      viewers: total,
+      category: category_in_text,
+      user: basic_info
+    }
+  end
+
+  Contract None => Hash
+  def public_attributes_with_thumbnail
+    {
+      thumbnail: "http://makerhub.live/screenshot/#{gh.nickname}.png",
+      title: title,
+      summary: description,
+      viewers: total,
+      category: category_in_text,
+      user: basic_info
+    }
+  end
+
   Contract Hash, Any => User
   def self.find_from_auth(auth, sign_in_resource=nil)
     return sign_in_resource.add_twitter(auth) if sign_in_resource.present? && auth['provider'] == 'twitter'
@@ -158,5 +181,13 @@ class User < ActiveRecord::Base
   Contract Num => String
   def category_in_text
     %w(UI/UX Ruby Python)[category]
+  end
+
+  def basic_info
+    {
+      name: name,
+      nickname: gh.nickname,
+      avatar: gh.image
+    }
   end
 end
