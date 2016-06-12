@@ -81,6 +81,26 @@ class User < ActiveRecord::Base
     self.total = 0
   end
 
+  Contract None => ArrayOf[Hash]
+  def following_people
+    all_following.map(&:basic_info)
+  end
+
+  Contract None => ArrayOf[Hash]
+  def follower_people
+    followers.map(&:basic_info)
+  end
+
+  Contract None => Hash
+  def api_info
+    {
+      uuid: uuid,
+      email: gh.email,
+      name: gh.name,
+      nickname: gh.nickname
+    }
+  end
+
   Contract None => Hash
   def public_attributes
     {
