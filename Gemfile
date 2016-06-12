@@ -33,6 +33,8 @@ gem 'pushould'
 gem 'twitter'
 gem 'acts_as_follower'
 
+gem 'contracts'
+
 group :development, :test do
   gem 'simplecov',            require: false
   gem 'rails_best_practices', require: false

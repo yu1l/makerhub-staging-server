@@ -20,6 +20,9 @@
 
 # Record
 class Record < ActiveRecord::Base
+  include Contracts::Core
+  include Contracts::Builtin
+
   validates :user_id, presence: true
   belongs_to :user
   belongs_to :group
@@ -30,22 +33,24 @@ class Record < ActiveRecord::Base
     self.uuid = ((0..9).to_a.sample(3) + ('a'..'z').to_a.sample(3)).shuffle.join
   end
 
+  Contract None => String
   def screenshot_url
     return "/#{uuid}.png" unless uploaded?
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
-    obj = bucket.objects["#{screenshot_path}"]
+    obj = bucket.objects[screenshot_path.to_s]
     # obj.acl = :public_read
     obj.public_url.to_param
   end
 
+  Contract None => String
   def video_url
     return "/#{uuid}.mp4" unless uploaded?
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
-    obj = bucket.objects["#{video_path}"]
+    obj = bucket.objects[video_path.to_s]
     # obj.acl = :public_read
     obj.public_url.to_param
   end
@@ -93,6 +98,7 @@ class Record < ActiveRecord::Base
     puts 'Error on app/models/record.rb'
   end
 
+  Contract Num => String
   def category_in_text
     %w(UI/UX Ruby Python)[category]
   end

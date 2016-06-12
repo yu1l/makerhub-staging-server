@@ -1,4 +1,7 @@
 class ChannelsController < ApplicationController
+  include Contracts::Core
+  include Contracts::Builtin
+
   before_action :authenticate_user!
 
   def block
@@ -13,6 +16,9 @@ class ChannelsController < ApplicationController
     render nothing: true, status: 200
   end
 
+  private
+
+  Contract Hash => Hash
   def user_params
     params.require(:user).permit(:nickname)
   end

@@ -1,6 +1,10 @@
 class Api::V1::StreamsController < Api::V1::ApiController
+  include Contracts::Core
+  include Contracts::Builtin
+
   skip_before_action :doorkeeper_authorize!, only: [:all, :user, :comments]
 
+  Contract None => ArrayOf[String]
   def all
     @users = User.where(live: true).map do |u|
       {
@@ -20,6 +24,7 @@ class Api::V1::StreamsController < Api::V1::ApiController
     render json: { streams: @users }
   end
 
+  Contract Hash => ArrayOf[String]
   def user
     u = User.find_by(user_params)
     @user =  {
@@ -45,6 +50,7 @@ class Api::V1::StreamsController < Api::V1::ApiController
     render nothing: true, status: 500
   end
 
+  Contract Hash => ArrayOf[String]
   def comments
     @user = User.find_by(user_params)
     @chats = @user.chats.all.map do |c|
@@ -63,10 +69,12 @@ class Api::V1::StreamsController < Api::V1::ApiController
 
   private
 
+  Contract Hash => Hash
   def user_params
     params.permit(:nickname)
   end
 
+  Contract Hash => Hash
   def update_params
     params.permit(:title)
   end
