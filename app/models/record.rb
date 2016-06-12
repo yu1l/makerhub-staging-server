@@ -33,6 +33,19 @@ class Record < ActiveRecord::Base
     self.uuid = ((0..9).to_a.sample(3) + ('a'..'z').to_a.sample(3)).shuffle.join
   end
 
+  def public_attributes_with_thumbnail
+    {
+      uuid: uuid,
+      title: title,
+      play_url: video_url,
+      thumbnail: screenshot_url,
+      duration: duration,
+      pv: total,
+      category: category_in_text,
+      user: user.basic_info
+    }
+  end
+
   Contract None => String
   def screenshot_url
     return "/#{uuid}.png" unless uploaded?

@@ -18,14 +18,14 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     it do
       sample = JSON.parse(response.body)['videos'][0]
       expect(sample['title']).not_to be_nil
-      expect(sample['video_url']).not_to be_nil
-      expect(sample['thumbnail_url']).not_to be_nil
+      expect(sample['play_url']).not_to be_nil
+      expect(sample['thumbnail']).not_to be_nil
       expect(sample['duration']).not_to be_nil
       expect(sample['pv']).not_to be_nil
       expect(sample['category']).not_to be_nil
       expect(sample['user']['name']).not_to be_nil
       expect(sample['user']['nickname']).not_to be_nil
-      expect(sample['user']['thumbnail']).not_to be_nil
+      expect(sample['user']['avatar']).not_to be_nil
     end
   end
 
@@ -41,14 +41,14 @@ RSpec.describe Api::V1::VideosController, type: :controller do
     it do
       sample = JSON.parse(response.body)[0]
       expect(sample['title']).not_to be_nil
-      expect(sample['video_url']).not_to be_nil
-      expect(sample['thumbnail_url']).not_to be_nil
+      expect(sample['play_url']).not_to be_nil
+      expect(sample['thumbnail']).not_to be_nil
       expect(sample['duration']).not_to be_nil
       expect(sample['pv']).not_to be_nil
       expect(sample['category']).not_to be_nil
       expect(sample['user']['name']).to eq(user.name)
       expect(sample['user']['nickname']).to eq(user.nickname)
-      expect(sample['user']['thumbnail']).to eq(user.gh.image)
+      expect(sample['user']['avatar']).to eq(user.gh.image)
     end
   end
 
