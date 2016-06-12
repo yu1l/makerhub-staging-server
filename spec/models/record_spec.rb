@@ -24,6 +24,7 @@ RSpec.describe Record, type: :model do
   it { should validate_presence_of(:user_id) }
   it { should belong_to(:user) }
   it { should belong_to(:group) }
+
   describe '#screenshot_url' do
     context 'when not uploaded' do
       before do
@@ -47,6 +48,7 @@ RSpec.describe Record, type: :model do
       end
     end
   end
+
   describe '#video_url' do
     context 'when not uploaded' do
       before do
@@ -70,7 +72,22 @@ RSpec.describe Record, type: :model do
       end
     end
   end
-  describe '#copy_screenshot_to_tmp'
-  describe '#copy_video_to_tmp'
-  describe '#upload_to_s3'
+
+  describe '#copy_screenshot_to_tmp' do
+    before do
+      allow(File).to receive(:exist?).with('/usr/local/nginx/html/hls/yhoshino11.flv').and_return(true)
+      allow(File).to receive(:exist?).with('/usr/local/nginx/html/screenshot/yhoshino11.png').and_return(true)
+      @user = User.find_from_auth(github_hash, nil)
+      @record = @user.records.create(uploaded: false)
+      @record.copy_screenshot_to_tmp('/usr/local/nginx/html/screenshot/yhoshino11.png')
+    end
+
+    it do
+      @record.reload
+      expect(@record.screenshot_path).to eq("public/#{@record.uuid}.png")
+    end
+  end
+
+  skip describe '#copy_video_to_tmp'
+  skip describe '#upload_to_s3'
 end

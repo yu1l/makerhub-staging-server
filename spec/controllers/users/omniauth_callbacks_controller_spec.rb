@@ -5,6 +5,22 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
     request.env["devise.mapping"] = Devise.mappings[:user]
   end
 
+  describe 'via React Frontend' do
+    let(:user) { User.find_from_auth(github_hash, nil) }
+    before do
+      request.env['omniauth.auth'] = OmniAuth.config.add_mock(:github, github_hash)
+      session[:return_to] = 'http://front.com'
+    end
+
+    it do
+      expect {
+        post :github, provider: :github
+      }.to change{User.count}.by(1)
+      expect(User.count).to eq(1)
+      expect(response).to redirect_to('http://front.com')
+      expect(session[:return_to]).to be_nil
+    end
+  end
 
   describe 'invalid' do
     before do

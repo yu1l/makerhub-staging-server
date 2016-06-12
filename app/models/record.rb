@@ -62,10 +62,7 @@ class Record < ActiveRecord::Base
   end
 
   def copy_video_to_tmp(input_flv_path)
-    flv = FFMPEG::Movie.new("/usr/local/nginx/html/hls/#{user.nickname}.flv")
-    options = '-vcodec copy -acodec copy'
-    mp4_path = "public/#{uuid}.mp4"
-    flv.transcode(mp4_path, options) do |progress|
+    FFMPEG::Movie.new("/usr/local/nginx/html/hls/#{user.nickname}.flv").transcode("public/#{uuid}.mp4", '-vcodec copy -acodec copy') do |progress|
       puts progress
     end
     update(video_path: "public/#{uuid}.mp4")

@@ -7,7 +7,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'GET #me' do
-    let!(:application) { create(:application) }
+    let!(:application) { user.oauth_applications.create(attributes_for(:application)) }
     let(:user) { User.find_from_auth(github_hash, nil) }
     let!(:token)       { create(:access_token, :application => application, :resource_owner_id => user.id) }
 
