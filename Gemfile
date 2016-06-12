@@ -34,16 +34,16 @@ gem 'twitter'
 gem 'acts_as_follower'
 
 group :development, :test do
-  gem 'rails_best_practices'
-  gem 'brakeman'
-  gem 'guard-rspec'
-  gem 'guard-shell'
+  gem 'simplecov',            require: false
+  gem 'rails_best_practices', require: false
+  gem 'brakeman',             require: false
+  gem 'guard-rspec',          require: false
+  gem 'guard-shell',          require: false
   gem 'rspec-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'faker'
   gem 'factory_girl_rails'
-  gem 'simplecov', require: false
 end
 
 group :test do
