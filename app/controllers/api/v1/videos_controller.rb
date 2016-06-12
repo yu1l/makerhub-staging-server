@@ -49,7 +49,7 @@ module Api
       def invalid_user_from_api(params, user)
         return true if params[:current_user_nickname].nil?
         return true if user.nil?
-        return true if user.gh.nickname != params[:current_user_nickname]
+        return true if user.default_nickname != params[:current_user_nickname]
         false
       end
 

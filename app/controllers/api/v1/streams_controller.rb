@@ -39,7 +39,7 @@ module Api
         return false if params[:title].nil?
         return false if params[:current_user_nickname].nil?
         return false if user.nil?
-        return false if user.gh.nickname != params[:current_user_nickname]
+        return false if user.default_nickname != params[:current_user_nickname]
         true
       end
 

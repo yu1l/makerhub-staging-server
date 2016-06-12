@@ -73,6 +73,7 @@ end
 #   watch(%r{file/path}) { `command(s)` }
 #
 guard :shell do
-  # watch(%r{coverage\/.last_run.json}) { `bundle exec rails_best_practices -f html;bundle exec brakeman . -f html > brakeman_output.html` }
+  watch(%r{coverage\/.last_run.json}) { `bundle exec rails_best_practices -f html` }
+  watch(%r{coverage\/.last_run.json}) { `bundle exec brakeman . -f html > brakeman_output.html` }
   # watch(/(.*).txt/) { |m| `tail #{m[0]}` }
 end

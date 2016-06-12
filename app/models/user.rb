@@ -81,6 +81,10 @@ class User < ActiveRecord::Base
     self.total = 0
   end
 
+  def default_nickname
+    gh.nickname
+  end
+
   Contract None => ArrayOf[Hash]
   def following_people
     all_following.map(&:basic_info)
