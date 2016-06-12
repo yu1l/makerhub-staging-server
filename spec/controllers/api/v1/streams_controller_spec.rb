@@ -1,5 +1,34 @@
 require 'rails_helper'
 
+RSpec.shared_context 'invalid params' do
+  it do
+    expect(response.status).to eq(500)
+  end
+end
+
+RSpec.shared_context 'valid params' do
+  it do
+    expect(response.status).to eq(200)
+  end
+end
+
+RSpec.shared_context 'show user basic info' do
+  it do
+    expect(@sample['user']['name']).not_to be_nil
+    expect(@sample['user']['nickname']).not_to be_nil
+    expect(@sample['user']['avatar']).not_to be_nil
+  end
+end
+
+RSpec.shared_context 'show stream detail info' do
+  it do
+    expect(@sample['title']).not_to be_nil
+    expect(@sample['summary']).not_to be_nil
+    expect(@sample['viewers']).not_to be_nil
+    expect(@sample['category']).not_to be_nil
+  end
+end
+
 RSpec.describe Api::V1::StreamsController, type: :controller do
   let(:token) { double acceptable?: true }
   before do
@@ -11,20 +40,14 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
     before do
       user.update(live: true)
       get :all, format: :json
-      expect(response).to be_success
+      @sample = JSON.parse(response.body)['streams'][0]
     end
 
+    it_behaves_like 'valid params'
+    it_behaves_like 'show stream detail info', @sample
+    it_behaves_like 'show user basic info',    @sample
     it do
-      parsed_response = JSON.parse(response.body)['streams']
-      sample = parsed_response[0]
-      expect(sample['title']).not_to be_nil
-      expect(sample['thumbnail']).not_to be_nil
-      expect(sample['summary']).not_to be_nil
-      expect(sample['viewers']).not_to be_nil
-      expect(sample['category']).not_to be_nil
-      expect(sample['user']['name']).not_to be_nil
-      expect(sample['user']['nickname']).not_to be_nil
-      expect(sample['user']['avatar']).not_to be_nil
+      expect(@sample['thumbnail']).not_to be_nil
     end
   end
 
@@ -33,19 +56,12 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
     before do
       user.update(live: true)
       get :user, nickname: user.gh.nickname, format: :json
-      expect(response).to be_success
+      @sample = JSON.parse(response.body)
     end
 
-    it do
-      sample = JSON.parse(response.body)
-      expect(sample['title']).not_to be_nil
-      expect(sample['summary']).not_to be_nil
-      expect(sample['viewers']).not_to be_nil
-      expect(sample['category']).not_to be_nil
-      expect(sample['user']['name']).not_to be_nil
-      expect(sample['user']['nickname']).not_to be_nil
-      expect(sample['user']['avatar']).not_to be_nil
-    end
+    it_behaves_like 'valid params'
+    it_behaves_like 'show stream detail info', @sample
+    it_behaves_like 'show user basic info', @sample
   end
 
   describe 'PATCH #update - title' do
@@ -60,9 +76,9 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
         @user.reload
       end
 
+      it_behaves_like 'invalid params'
       it do
         expect(@user.title).to eq('before')
-        expect(response.status).to eq(500)
       end
     end
 
@@ -72,9 +88,7 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
         patch :update, nickname: '', current_user_nickname: '', title: 'after', format: :json
       end
 
-      it do
-        expect(response.status).to eq(500)
-      end
+      it_behaves_like 'invalid params'
     end
 
     context 'via user' do
@@ -86,9 +100,9 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
         @user.reload
       end
 
+      it_behaves_like 'valid params'
       it do
         expect(@user.title).to eq('after')
-        expect(response).to be_success
       end
     end
   end
@@ -98,16 +112,14 @@ RSpec.describe Api::V1::StreamsController, type: :controller do
     before do
       user.chats.create(text: 'hello world', sender: user.gh.nickname)
       get :comments, nickname: user.gh.nickname, format: :json
+      parsed_response = JSON.parse(response.body)
+      @sample = parsed_response['comments'][0]
     end
 
+    it_behaves_like 'valid params'
+    it_behaves_like 'show user basic info', @sample
     it do
-      parsed_response = JSON.parse(response.body)
-      sample = parsed_response['comments'][0]
-      expect(sample['text']).not_to be_nil
-      expect(sample['user']['name']).not_to be_nil
-      expect(sample['user']['nickname']).not_to be_nil
-      expect(sample['user']['avatar']).not_to be_nil
-      expect(response).to be_success
+      expect(@sample['text']).not_to be_nil
     end
   end
 
