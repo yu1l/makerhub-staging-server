@@ -34,7 +34,10 @@ gem 'twitter'
 gem 'acts_as_follower'
 
 group :development, :test do
+  gem 'rails_best_practices'
+  gem 'brakeman'
   gem 'guard-rspec'
+  gem 'guard-shell'
   gem 'rspec-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
