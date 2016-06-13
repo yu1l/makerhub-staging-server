@@ -21,14 +21,14 @@
 require 'rails_helper'
 
 RSpec.describe RecordsController, type: :controller do
-  describe 'GET #play' do
-    context 'invalid' do
-      context 'record does not exist' do
-        before do
-          @user = User.find_from_auth(github_hash, nil)
-          @record = @user.records.create(title: @user.title, total: @user.total)
-        end
+  before do
+    @user = User.find_from_auth(github_hash, nil)
+    @record = @user.records.create(title: @user.title, total: @user.total)
+  end
 
+  describe 'GET #play' do
+    context 'invalid params' do
+      context 'record does not exist' do
         it do
           get :play, nickname: @user.nickname, uuid: ''
           expect(response).to redirect_to(stream_path(nickname: @user.nickname))
@@ -36,23 +36,14 @@ RSpec.describe RecordsController, type: :controller do
       end
 
       context 'user does not exist' do
-        before do
-          @user = User.find_from_auth(github_hash, nil)
-          @record = @user.records.create(title: @user.title, total: @user.total)
-        end
-
         it do
           get :play, nickname: '', uuid: @record.uuid
           expect(response).to redirect_to(root_path)
         end
       end
     end
-    context 'valid' do
-      before do
-        @user = User.find_from_auth(github_hash, nil)
-        @record = @user.records.create(title: @user.title, total: @user.total)
-      end
 
+    context 'valid params' do
       it do
         get :play, nickname: @user.nickname, uuid: @record.uuid
         expect(response).to render_template(:play)

@@ -1,8 +1,35 @@
 require 'rails_helper'
 
 RSpec.describe StreamController, type: :controller do
-  describe 'POST #on_record_done'
-  describe 'POST #screenshot_done'
+  describe 'POST #on_record_done' do
+    before do
+      allow(File).to receive(:exist?).with('/usr/local/nginx/html/hls/yhoshino11.flv').and_return(true)
+      allow(File).to receive(:exist?).with('/usr/local/nginx/html/screenshot/yhoshino11.png').and_return(true)
+      @user = User.find_from_auth(github_hash, nil)
+      @user.update(live: true)
+      post :on_record_done, token: @user.streaming_key
+    end
+
+    it do
+      expect(response).to be_success
+    end
+  end
+
+  describe 'POST #screenshot_done' do
+    before do
+      allow(File).to receive(:exist?).with('tmp/yhoshino11.png').and_return(false)
+      allow(File).to receive(:exist?).with('/usr/local/nginx/html/screenshot/yhoshino11.png').and_return(true)
+      allow(File).to receive(:size).and_return(1)
+      @user = User.find_from_auth(github_hash, nil)
+      @user.update(live: true)
+      post :screenshot_done, name: 'yhoshino11'
+    end
+
+    it do
+      expect(response).to be_success
+    end
+  end
+
   describe 'GET #user' do
     context 'via anonymous' do
       context 'when user does not exist' do

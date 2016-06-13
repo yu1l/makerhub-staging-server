@@ -34,6 +34,9 @@
 
 # User
 class User < ActiveRecord::Base
+  include Contracts::Core
+  include Contracts::Builtin
+
   enum role: { guest: 0, admin: 1 }
   acts_as_followable
   acts_as_follower
@@ -78,11 +81,60 @@ class User < ActiveRecord::Base
     self.total = 0
   end
 
+  def default_nickname
+    gh.nickname
+  end
+
+  Contract None => ArrayOf[Hash]
+  def following_people
+    all_following.map(&:basic_info)
+  end
+
+  Contract None => ArrayOf[Hash]
+  def follower_people
+    followers.map(&:basic_info)
+  end
+
+  Contract None => Hash
+  def api_info
+    {
+      uuid: uuid,
+      email: gh.email,
+      name: gh.name,
+      nickname: gh.nickname
+    }
+  end
+
+  Contract None => Hash
+  def public_attributes
+    {
+      title: title,
+      summary: description,
+      viewers: total,
+      category: category_in_text,
+      user: basic_info
+    }
+  end
+
+  Contract None => Hash
+  def public_attributes_with_thumbnail
+    {
+      thumbnail: "http://makerhub.live/screenshot/#{gh.nickname}.png",
+      title: title,
+      summary: description,
+      viewers: total,
+      category: category_in_text,
+      user: basic_info
+    }
+  end
+
+  Contract Hash, Any => User
   def self.find_from_auth(auth, sign_in_resource=nil)
     return sign_in_resource.add_twitter(auth) if sign_in_resource.present? && auth['provider'] == 'twitter'
     return sign_in_with_github(auth) if auth['provider'] == 'github'
   end
 
+  Contract Hash => User
   def add_twitter(auth)
     update(twitter: true, twitter_uid: auth['uid'])
     tw ||= create_tw(provider: 'twitter', uid: auth['uid'])
@@ -98,6 +150,7 @@ class User < ActiveRecord::Base
     self
   end
 
+  Contract Hash => User
   def self.sign_in_with_github(auth)
     @user = find_or_create_by(github: true, github_uid: auth['uid']) do |user|
       user.nickname = auth['info']['nickname']
@@ -111,6 +164,7 @@ class User < ActiveRecord::Base
     @user
   end
 
+  Contract Hash => Gh
   def add_github_info(auth)
     update(github: true, github_uid: auth['uid'])
     gh ||= create_gh(provider: 'github', uid: auth['uid'])
@@ -123,7 +177,7 @@ class User < ActiveRecord::Base
     gh
   end
 
-  def tweet_msg(msg)
+  # def tweet_msg(msg)
     # @client = Twitter::REST::Client.new do |config|
       # config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
       # config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
@@ -146,9 +200,18 @@ class User < ActiveRecord::Base
     # <meta name="twitter:title" content="未経験からプロを育てるオンラインブートキャンプ | TechAcademy [テックアカデミー]" />
     # <meta name="twitter:description" content="プログラミング学習で、もう挫折しない。パーソナルメンターがつくオンラインブートキャンプ。" />
     # <meta name="twitter:image" content="https://techacademy.jp/assets/og-image-6415b5a10c909883007740c2694dab82.jpg" />
-  end
+  # end
 
+  Contract Num => String
   def category_in_text
     %w(UI/UX Ruby Python)[category]
+  end
+
+  def basic_info
+    {
+      name: name,
+      nickname: gh.nickname,
+      avatar: gh.image
+    }
   end
 end

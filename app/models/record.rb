@@ -20,6 +20,9 @@
 
 # Record
 class Record < ActiveRecord::Base
+  include Contracts::Core
+  include Contracts::Builtin
+
   validates :user_id, presence: true
   belongs_to :user
   belongs_to :group
@@ -30,22 +33,37 @@ class Record < ActiveRecord::Base
     self.uuid = ((0..9).to_a.sample(3) + ('a'..'z').to_a.sample(3)).shuffle.join
   end
 
+  def public_attributes_with_thumbnail
+    {
+      uuid: uuid,
+      title: title,
+      play_url: video_url,
+      thumbnail: screenshot_url,
+      duration: duration,
+      pv: total,
+      category: category_in_text,
+      user: user.basic_info
+    }
+  end
+
+  Contract None => String
   def screenshot_url
     return "/#{uuid}.png" unless uploaded?
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
-    obj = bucket.objects["#{screenshot_path}"]
+    obj = bucket.objects[screenshot_path.to_s]
     # obj.acl = :public_read
     obj.public_url.to_param
   end
 
+  Contract None => String
   def video_url
     return "/#{uuid}.mp4" unless uploaded?
     s3 = AWS::S3.new
     bucket = s3.buckets['live-streaming-staging']
     bucket.acl = :public_read
-    obj = bucket.objects["#{video_path}"]
+    obj = bucket.objects[video_path.to_s]
     # obj.acl = :public_read
     obj.public_url.to_param
   end
@@ -62,10 +80,7 @@ class Record < ActiveRecord::Base
   end
 
   def copy_video_to_tmp(input_flv_path)
-    flv = FFMPEG::Movie.new("/usr/local/nginx/html/hls/#{user.nickname}.flv")
-    options = '-vcodec copy -acodec copy'
-    mp4_path = "public/#{uuid}.mp4"
-    flv.transcode(mp4_path, options) do |progress|
+    FFMPEG::Movie.new("/usr/local/nginx/html/hls/#{user.nickname}.flv").transcode("public/#{uuid}.mp4", '-vcodec copy -acodec copy') do |progress|
       puts progress
     end
     update(video_path: "public/#{uuid}.mp4")
@@ -96,6 +111,7 @@ class Record < ActiveRecord::Base
     puts 'Error on app/models/record.rb'
   end
 
+  Contract Num => String
   def category_in_text
     %w(UI/UX Ruby Python)[category]
   end

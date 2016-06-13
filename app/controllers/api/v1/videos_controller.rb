@@ -1,94 +1,73 @@
-class Api::V1::VideosController < Api::V1::ApiController
-  skip_before_action :doorkeeper_authorize!, only: [:all, :user, :video]
+module Api
+  module V1
+    class VideosController < Api::V1::ApiController
+      include Contracts::Core
+      include Contracts::Builtin
 
-  def all
-    @videos = Record.all.map do |r|
-      {
-        uuid: r[:uuid],
-        title: r[:title],
-        video_url: r.video_url,
-        thumbnail_url: r.screenshot_url,
-        duration: r[:duration],
-        pv: r[:total],
-        category: r.category_in_text,
-        user: {
-          name: r.user.name,
-          nickname: r.user.gh.nickname,
-          thumbnail: r.user.gh.image
-        }
-      }
+      skip_before_action :doorkeeper_authorize!, only: [:all, :user, :video]
+
+      def all
+        @videos = Record.all.map(&:public_attributes_with_thumbnail)
+        render json: { videos: @videos }
+      end
+
+      def user
+        @user = User.find_by(user_params)
+        @videos = @user.records.map(&:public_attributes_with_thumbnail)
+        render json: @videos
+      end
+
+      def video
+        @user = User.find_by(user_params)
+        @video = @user.records.find_by(record_params)
+        render json: @video.public_attributes_with_thumbnail
+      end
+
+      def update
+        @user = User.find_by(user_params)
+        @video = @user.records.find_by(record_params)
+        return render nothing: true, status: 500 if invalid_user_from_api(params, @user)
+        return render nothing: true, status: 200 if update_category(patch_params[:category], @video)
+        return render nothing: true, status: 200 if update_title(params[:title], @video, patch_params)
+        render nothing: true, status: 500
+      rescue
+        render nothing: true, status: 500
+      end
+
+      private
+
+      def update_title(title, video, title_params)
+        return true if title.present? && video.update(title_params)
+        false
+      end
+
+      def update_category(category_text, video)
+        return true if category_text.present? && video.update(category: text_to_int_category(category_text))
+        false
+      end
+
+      def invalid_user_from_api(params, user)
+        return true if params[:current_user_nickname].nil?
+        return true if user.nil?
+        return true if user.default_nickname != params[:current_user_nickname]
+        false
+      end
+
+      def text_to_int_category(text)
+        %w(UI/UX Ruby Python).each_with_index { |lang, index| return index if lang == text }
+      end
+
+      def user_params
+        params.permit(:nickname)
+      end
+
+      def record_params
+        params.permit(:uuid)
+      end
+
+      def patch_params
+        params.permit(:title, :category)
+      end
     end
-    render json: { videos: @videos }
-  end
-
-  def user
-    @user = User.find_by(user_params)
-    @videos = @user.records.map do |r|
-      {
-        uuid: r[:uuid],
-        title: r[:title],
-        video_url: r.video_url,
-        thumbnail_url: r.screenshot_url,
-        duration: r[:duration],
-        pv: r[:total],
-        category: r.category_in_text,
-        user: {
-          name: @user.name,
-          nickname: @user.gh.nickname,
-          thumbnail: @user.gh.image
-        }
-      }
-    end
-    render json: @videos
-  end
-
-  def video
-    @user = User.find_by(user_params)
-    @video = @user.records.find_by(record_params)
-    @response = {
-      play_url: @video.video_url,
-      thumbnail: @video.screenshot_url,
-      title: @video.title,
-      duration: @video.duration,
-      pv: @video.total,
-      category: @video.category_in_text,
-      user: {
-        name: @user.name,
-        nickname: @user.nickname,
-        avatar: @user.gh.image
-      }
-    }
-    render json: @response
-  end
-
-  def update
-    @user = User.find_by(user_params)
-    return render nothing: true, status: 500 unless @user.gh.nickname == params[:current_user_nickname]
-
-    @video = @user.records.find_by(record_params)
-
-    return render nothing: true, status: 200 if patch_params[:category].present? && @video.update(category: text_to_int_category(patch_params[:category]))
-    return  render nothing: true, status: 200 if params[:title].present? && @video.update(patch_params)
-    render nothing: true, status: 500
-  rescue
-    render nothing: true, status: 500
-  end
-
-  def text_to_int_category(text)
-    %w(UI/UX Ruby Python).each_with_index { |lang, index| return index if lang == text }
-  end
-
-  private
-
-  def user_params
-    params.permit(:nickname)
-  end
-
-  def record_params
-    params.permit(:uuid)
-  end
-
-  def patch_params
-    params.permit(:title, :category)
   end
 end

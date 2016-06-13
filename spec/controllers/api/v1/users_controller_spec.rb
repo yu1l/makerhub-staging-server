@@ -1,24 +1,38 @@
 require 'rails_helper'
 
+RSpec.shared_context 'valid params' do
+  it do
+    expect(response.status).to eq(200)
+  end
+end
+
+RSpec.shared_context 'show user basic info' do
+  it do
+    expect(@sample['name']).not_to be_nil
+    expect(@sample['nickname']).not_to be_nil
+    expect(@sample['avatar']).not_to be_nil
+  end
+end
+
 RSpec.describe Api::V1::UsersController, type: :controller do
   let(:token) { double acceptable?: true }
   before do
-    allow(controller).to receive(:doorkeeper_token) {token}
+    allow(controller).to receive(:doorkeeper_token) { token }
   end
 
   describe 'GET #me' do
-    let!(:application) { create(:application) }
-    let(:user) { User.find_from_auth(github_hash, nil) }
-    let!(:token)       { create(:access_token, :application => application, :resource_owner_id => user.id) }
+    let!(:application) { user.oauth_applications.create(attributes_for(:application)) }
+    let(:user)         { User.find_from_auth(github_hash, nil) }
+    let!(:token)       { create(:access_token, application: application, resource_owner_id: user.id) }
 
     it 'responds with 200' do
-      get :me, :format => :json, :access_token => token.token
+      get :me, format: :json, access_token: token.token
       expect(response.status).to eq(200)
     end
 
     it 'returns the user as json' do
-      get :me, :format => :json, :access_token => token.token
-      expect(response.body).to eq( { user: { uuid: user.uuid, email: user.gh.email, name: user.gh.name, nickname: user.gh.nickname } }.to_json)
+      get :me, format: :json, access_token: token.token
+      expect(response.body).to eq({ user: { uuid: user.uuid, email: user.gh.email, name: user.gh.name, nickname: user.gh.nickname } }.to_json)
     end
   end
 
@@ -39,20 +53,17 @@ RSpec.describe Api::V1::UsersController, type: :controller do
                                'urls' => {
                                  'GitHub' => 'https://github.com/other_p',
                                  'Blog' => ''
-                               }})
+                               }
+                             })
       @user = user
       @user.follow(@other)
       get :followings, nickname: @user.gh.nickname, format: :json
-      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      @sample = parsed_response['followings'][0]
     end
 
-    it do
-      parsed_response = JSON.parse(response.body)
-      sample = parsed_response['followings'][0]
-      expect(sample['name']).not_to be_nil
-      expect(sample['nickname']).not_to be_nil
-      expect(sample['avatar']).not_to be_nil
-    end
+    it_behaves_like 'valid params'
+    it_behaves_like 'show user basic info'
   end
 
   describe 'GET #followers' do
@@ -72,19 +83,16 @@ RSpec.describe Api::V1::UsersController, type: :controller do
                                'urls' => {
                                  'GitHub' => 'https://github.com/other_p',
                                  'Blog' => ''
-                               }})
+                               }
+                             })
       @user = user
       @other.follow(@user)
       get :followers, nickname: @user.gh.nickname, format: :json
-      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      @sample = parsed_response['followers'][0]
     end
 
-    it do
-      parsed_response = JSON.parse(response.body)
-      sample = parsed_response['followers'][0]
-      expect(sample['name']).not_to be_nil
-      expect(sample['nickname']).not_to be_nil
-      expect(sample['avatar']).not_to be_nil
-    end
+    it_behaves_like 'valid params'
+    it_behaves_like 'show user basic info'
   end
 end

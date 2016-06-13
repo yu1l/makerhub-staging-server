@@ -11,4 +11,11 @@
 #
 
 class Chat < ActiveRecord::Base
+  def detail
+    @user = User.find_by(nickname: sender)
+    {
+      text: text,
+      user: @user.basic_info
+    }
+  end
 end

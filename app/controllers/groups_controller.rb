@@ -12,6 +12,9 @@
 #
 
 class GroupsController < ApplicationController
+  include Contracts::Core
+  include Contracts::Builtin
+
   def create
     @user = User.find_by(nickname: params[:nickname])
     authorize(@user, :me?)
@@ -35,6 +38,7 @@ class GroupsController < ApplicationController
 
   private
 
+  Contract Hash => Hash
   def group_params
     params.require(:group).permit(:name)
   end

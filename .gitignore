@@ -19,3 +19,5 @@ public/*.mp4
 public/assets
 erd.pdf
 coverage
+brakeman_output.html
+rails_best_practices_output.html

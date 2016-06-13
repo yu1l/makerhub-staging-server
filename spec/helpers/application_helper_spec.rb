@@ -1,6 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationHelper, type: :helper do
+  describe 'stream_url - production' do
+    before do
+      Rails.env = 'production'
+    end
+
+    it do
+      expect(stream_url).to eq('makerhub.live')
+    end
+  end
+
+  describe 'stream_url' do
+    before do
+      Rails.env = 'development'
+    end
+
+    it do
+      expect(stream_url).to eq('192.168.179.2')
+    end
+  end
+
   describe 'category' do
     it do
       expect(category(0)).to eq('UI/UX')

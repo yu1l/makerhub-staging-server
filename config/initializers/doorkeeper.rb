@@ -14,9 +14,9 @@ Doorkeeper.configure do
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
   admin_authenticator do
-  #   # Put your admin authentication logic here.
-  #   # Example implementation:
-  #   Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
+    # Put your admin authentication logic here.
+    # Example implementation:
+    # Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
     current_user && current_user.admin? || redirect_to(new_user_session_url)
   end
 
@@ -47,7 +47,7 @@ Doorkeeper.configure do
   # Optional parameter :confirmation => true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  enable_application_owner :confirmation => false
+  enable_application_owner confirmation: true
 
   # Define access token scopes for your provider
   # For more information go to
@@ -101,7 +101,7 @@ Doorkeeper.configure do
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
-  skip_authorization do |resource_owner, client|
+  skip_authorization do |resource_owner, _client|
     resource_owner.admin?
     # client.superapp? or resource_owner.admin?
   end
